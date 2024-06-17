@@ -1,1 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.primary {
+  color: #bc0505;
+}
+.secondary {
+  color: #eaeaea;
+}
+.error {
+  color: #e00f25;
+}
+.success {
+  color: #27bc26;
+}
+.info {
+  color: #4589e2;
+}
+.accentColor {
+  color: #f2494e;
+}
+
+.bg-primary {
+  background-color: #bc0505;
+}
+.bg-secondary {
+  background-color: #eaeaea;
+}
+.bg-error {
+  background-color: #e00f25;
+}
+.bg-success {
+  background-color: #27bc26;
+}
+.bg-info {
+  background-color: #4589e2;
+}
+.bg-accentColor {
+  background-color: #f2494e;
+}
