@@ -10,18 +10,25 @@
           <img src="assets/img/lock.svg" alt="roundedImg" />
         </div>
       </div>
-      <form class="form">
+      <form class="form" [formGroup]="verifyEmailForm">
         <p>
           Ingresa el codigo de verificacion que enviamos a tu número de telefono
         </p>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Ingresa el codigo de verificación</mat-label>
-            <input matInput />
+            <input
+              matInput
+              formControlName="code"
+              (input)="onFormatCode($event)"
+            />
+            <mat-error *ngIf="verifyEmailForm.get('code')?.hasError('required')"
+              >El código es obligatorio</mat-error
+            >
           </mat-form-field>
         </div>
 
-        <button class="buttonLogin bg-primary" type="button">
+        <button class="buttonLogin bg-primary" type="button" (click)="verify()">
           Enviar codigo
         </button>
       </form>

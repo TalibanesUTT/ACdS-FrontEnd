@@ -8,20 +8,33 @@
         <img src="assets/img/lock.svg" alt="roundedImg" />
       </div>
       <h1>Iniciar sesión</h1>
-      <form class="form">
+      <form [formGroup]="loginForm" class="form">
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Correo electronico</mat-label>
-            <input matInput />
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+              >El correo electrónico es obligatorio</mat-error
+            >
+            <mat-error *ngIf="loginForm.get('email')?.hasError('pattern')"
+              >Correo electrónico no válido</mat-error
+            >
           </mat-form-field>
         </div>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
-            <input matInput />
+            <input matInput formControlName="password" />
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+              >La contraseña es obligatoria</mat-error
+            >
+            <mat-error *ngIf="loginForm.get('password')?.hasError('pattern')"
+              >Debe tener al menos 8 caracteres, una letra y un
+              número</mat-error
+            >
           </mat-form-field>
         </div>
-        <button class="buttonLogin bg-primary" type="button">
+        <button class="buttonLogin bg-primary" type="button" (click)="login()">
           Iniciar sesión
         </button>
       </form>

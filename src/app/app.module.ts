@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 //components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -43,6 +44,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -52,6 +54,7 @@ import { MatTreeModule } from '@angular/material/tree';
     LoginComponent,
     registerComponent,
     BrowserAnimationsModule,
+    HttpClientModule,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -92,5 +95,6 @@ import { MatTreeModule } from '@angular/material/tree';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  providers: [provideHttpClient()],
 })
 export class AppModule {}
