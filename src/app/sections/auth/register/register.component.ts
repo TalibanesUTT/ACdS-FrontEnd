@@ -93,6 +93,7 @@ export class registerComponent {
       this.registerForm.value.password !==
       this.registerForm.value.passwordConfirmation
     ) {
+      SweetAlert.error('Error', 'Las contraseñas no coinciden');
       this.passwordNotMatch = true;
       return;
     }
@@ -124,7 +125,6 @@ export class registerComponent {
     event.target.value = input;
     this.registerForm.get('phone')?.setValue(input, { emitWidget: false });
   }
-
   DeleteMiddleDash(text: string): string {
     return text.replace(/-/g, '');
   }
