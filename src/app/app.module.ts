@@ -5,8 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 //components
 import { AppComponent } from './app.component';
-import { LoginComponent } from './auth/login/login.component';
-import { registerComponent } from './auth/register/register.component';
+import { LoginComponent } from './sections/auth/login/login.component';
+import { registerComponent } from './sections/auth/register/register.component';
+import { HomeComponent } from './sections/panel/home/home.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -50,11 +51,12 @@ import { provideHttpClient } from '@angular/common/http';
   imports: [
     BrowserModule,
     RouterModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     //components
     LoginComponent,
     registerComponent,
-    BrowserAnimationsModule,
-    HttpClientModule,
+    HomeComponent,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,

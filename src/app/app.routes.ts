@@ -4,20 +4,29 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./auth/login/login.component').then((m) => m.LoginComponent),
+      import('./sections/auth/login/login.component').then(
+        (m) => m.LoginComponent
+      ),
   },
   {
     path: 'register',
     loadComponent: () =>
-      import('./auth/register/register.component').then(
+      import('./sections/auth/register/register.component').then(
         (m) => m.registerComponent
       ),
   },
   {
     path: 'verifyEmail',
     loadComponent: () =>
-      import('./auth/verifyEmail/verifyEmail.component').then(
+      import('./sections/auth/verifyEmail/verifyEmail.component').then(
         (m) => m.verifyEmailComponent
+      ),
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./sections/panel/home/home.component').then(
+        (m) => m.HomeComponent
       ),
   },
   {

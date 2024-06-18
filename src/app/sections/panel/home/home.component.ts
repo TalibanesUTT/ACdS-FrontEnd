@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   FormGroup,
   FormControl,
@@ -13,9 +14,11 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-home',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,15 +30,19 @@ import {
     RouterLink,
     ReactiveFormsModule,
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class LoginComponent {
+export class HomeComponent {
   title = 'acds-frontend';
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.newFormControls();
   }
 
@@ -60,11 +67,18 @@ export class LoginComponent {
     });
   }
   login(): void {
-    console.log(this.loginForm.value);
-    if (this.loginForm.invalid) {
-      console.log('Formulario invalido');
-    } else {
-      console.log('Formulario valido');
+    if (!this.loginForm.valid) {
+      SweetAlert.info('Error', 'Por favor, revisa los campos');
+      return;
     }
+    this.authService.login(this.loginForm.value).subscribe(
+      (res) => {
+        SweetAlert.success('Exito', 'Inicio de sesion exitoso');
+        this.router.navigate(['/home']);
+      },
+      (err) => {
+        SweetAlert.error('Error', err.error.message);
+      }
+    );
   }
 }

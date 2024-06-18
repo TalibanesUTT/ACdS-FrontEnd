@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { SweetAlert } from '../../../shared/SweetAlert';
 import {
   FormGroup,
   FormControl,
@@ -12,7 +13,8 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -32,8 +34,13 @@ import { AuthService } from '../../services/auth.service';
 export class registerComponent {
   title = 'acds-frontend';
   registerForm: FormGroup;
+  passwordNotMatch = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.registerForm = this.newFormControls();
   }
 
@@ -64,7 +71,7 @@ export class registerComponent {
           Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
         ],
       ],
-      confirmPassword: [
+      passwordConfirmation: [
         '',
         [
           Validators.required,
@@ -75,12 +82,31 @@ export class registerComponent {
   }
 
   onSubmit(): void {
+    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
+    this.registerForm.value.phone = newPhone;
     console.log(this.registerForm.value);
-    if (this.registerForm.valid) {
-      console.log('Formulario valido');
-    } else {
-      console.log('Formulario invalido');
+    if (!this.registerForm.valid) {
+      SweetAlert.info('Error', 'Por favor, revisa los campos');
+      return;
     }
+    if (
+      this.registerForm.value.password !==
+      this.registerForm.value.passwordConfirmation
+    ) {
+      this.passwordNotMatch = true;
+      return;
+    }
+    this.passwordNotMatch = false;
+    this.authService.register(this.registerForm.value).subscribe(
+      (response) => {
+        this.router.navigate(['/login']);
+        // console.log(response);
+      },
+      (error) => {
+        // console.error(error);
+        SweetAlert.error('Error', error.error.message);
+      }
+    );
   }
   /**
    * Formats the phone number input value by removing non-digit characters,
@@ -97,5 +123,9 @@ export class registerComponent {
     input = input.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
     event.target.value = input;
     this.registerForm.get('phone')?.setValue(input, { emitWidget: false });
+  }
+
+  DeleteMiddleDash(text: string): string {
+    return text.replace(/-/g, '');
   }
 }

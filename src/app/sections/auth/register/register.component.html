@@ -79,16 +79,23 @@
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Confirmar contraseña</mat-label>
-            <input matInput formControlName="confirmPassword" />
+            <input matInput formControlName="passwordConfirmation" />
             <mat-error
-              *ngIf="registerForm.get('confirmPassword')?.hasError('required')"
+              *ngIf="
+                registerForm.get('passwordConfirmation')?.hasError('required')
+              "
               >La confirmación de la contraseña es obligatoria</mat-error
             >
             <mat-error
-              *ngIf="registerForm.get('confirmPassword')?.hasError('pattern')"
+              *ngIf="
+                registerForm.get('passwordConfirmation')?.hasError('pattern')
+              "
               >Debe tener al menos 8 caracteres, una letra y un
               número</mat-error
             >
+            <mat-error *ngIf="passwordNotMatch"
+              >Las contraseñas no coinciden
+            </mat-error>
           </mat-form-field>
         </div>
 

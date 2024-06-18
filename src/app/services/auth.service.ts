@@ -8,8 +8,8 @@ export class AuthService {
   API_URL = environments.API_URL + '/auth';
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(this.API_URL + '/login', { email, password });
+  login(form: { email: string; password: string }): Observable<any> {
+    return this.http.post(this.API_URL + '/login', form);
   }
 
   register(form: any): Observable<any> {
