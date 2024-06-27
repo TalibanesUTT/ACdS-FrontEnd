@@ -1,0 +1,142 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.headerPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end; /* Cambiado a flex-end para alinear a la derecha */
+  width: 100%;
+  height: 60px;
+}
+
+.aLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  width: 140px;
+  height: 44px;
+  background-color: #bc0505;
+  border-radius: 100px;
+}
+
+.aRegister {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #bc0505;
+  width: 140px;
+  height: 44px;
+  border-radius: 100px;
+  font-size: 16px;
+}
+
+.firstSection {
+  width: 100%;
+  height: 500px;
+  position: relative;
+}
+.firstSectionDiv {
+  display: flex;
+  flex-direction: column;
+  font-size: 40px;
+  line-height: 50px;
+  width: 600px;
+  height: 300px;
+  font-family: "SF Pro Text", sans-serif;
+  padding-left: 80px;
+}
+.imgCar {
+  width: 45%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.h1Font {
+  font-family: "Shadows Into Light Two", cursive;
+  font-size: 86px;
+  padding-left: 35px;
+}
+
+.SectcionDivP {
+  font-size: 30px;
+  line-height: 40px;
+}
+/*ServicesCSS*/
+.sectionServices {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.containerServices {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 65px;
+  padding-bottom: 100px;
+}
+.servicesCard {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: white;
+  border: 1px solid #e5e5e5;
+}
+.servicesCard:hover {
+  background-color: #f5f5f5;
+}
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .h1Font {
+    font-family: "Shadows Into Light Two", cursive;
+    font-size: 30px;
+  }
+  .imgCar {
+    width: 100%;
+    height: 70%;
+    display: none;
+  }
+  .firstSection {
+    width: 100%;
+    height: 125px;
+    position: relative;
+  }
+  .firstSectionDiv {
+    display: flex;
+    flex-direction: column;
+    width: 94%;
+    height: 150px;
+    font-family: "SF Pro Text", sans-serif;
+    padding-left: 0px;
+    padding: 10px;
+  }
+
+  .SectcionDivP {
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}

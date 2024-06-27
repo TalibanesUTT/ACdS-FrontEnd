@@ -23,6 +23,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'ACdS',
+    loadComponent: () =>
+      import('./sections/landingPage/landingPage.component').then(
+        (m) => m.LandingPageComponent
+      ),
+  },
+  {
     path: 'home',
     loadComponent: () =>
       import('./sections/panel/home/home.component').then(
@@ -31,7 +38,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'ACdS',
     pathMatch: 'full',
   },
 ];

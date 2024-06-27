@@ -1,0 +1,34 @@
+<main class="mainContainer">
+  <header class="headerPage">
+    <a routerLink="/login" class="aRegister">Registrarse</a>
+    <a routerLink="/register" class="aLogin">Iniciar Sesión</a>
+  </header>
+  <p class="h1Font">¿Problemas con tu auto?</p>
+
+  <section class="firstSection">
+    <div class="firstSectionDiv">
+      <p class="SectcionDivP">
+        Soluciones Rápidas y Confiables para
+        <strong>Mantenerte en Movimiento</strong>
+      </p>
+      <a routerLink="/login" class="aLogin">Agendar ahora</a>
+    </div>
+    <img src="assets/img/carElectric.svg" alt="s" class="imgCar" />
+  </section>
+  <!--Avisos-->
+  <section>
+    <h1></h1>
+    <div></div>
+  </section>
+  <!--Nuestros servicios-->
+  <section class="sectionServices" style="text-align: center">
+    <p class="h1Font">Nuestros servicios</p>
+    <div class="containerServices">
+      <div *ngFor="let card of cards" class="servicesCard">
+        <h2>{{ card.title }}</h2>
+        <img [src]="card.img" [alt]="card.title" />
+        <p>{{ card.description }}</p>
+      </div>
+    </div>
+  </section>
+</main>

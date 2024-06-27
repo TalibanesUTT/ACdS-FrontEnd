@@ -65,7 +65,7 @@
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
-            <input matInput formControlName="password" />
+            <input matInput formControlName="password" type="password" />
             <mat-error
               *ngIf="registerForm.get('password')?.hasError('required')"
               >La contraseña es obligatoria</mat-error
@@ -79,7 +79,11 @@
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Confirmar contraseña</mat-label>
-            <input matInput formControlName="passwordConfirmation" />
+            <input
+              matInput
+              formControlName="passwordConfirmation"
+              type="password"
+            />
             <mat-error
               *ngIf="
                 registerForm.get('passwordConfirmation')?.hasError('required')
