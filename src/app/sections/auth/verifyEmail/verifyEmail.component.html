@@ -5,31 +5,38 @@
   <section class="column2">
     <div class="card">
       <div class="titleHeader">
-        <h1>Verificación a dos pasos</h1>
+        <h1>Verificación en dos pasos</h1>
         <div class="containerRoundedImg">
           <img src="assets/img/lock.svg" alt="roundedImg" />
         </div>
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
         <p>
-          Ingresa el codigo de verificacion que enviamos a tu número de telefono
+          Ingresa el código de verificación que enviamos a tu número de teléfono
         </p>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
-            <mat-label>Ingresa el codigo de verificación</mat-label>
+            <mat-label>Ingresa el código de verificación</mat-label>
             <input
               matInput
               formControlName="code"
               (input)="onFormatCode($event)"
             />
-            <mat-error *ngIf="verifyEmailForm.get('code')?.hasError('required')"
-              >El código es obligatorio</mat-error
+            <mat-error
+              *ngIf="verifyEmailForm.get('code')?.hasError('required')"
             >
+              El código es obligatorio
+            </mat-error>
           </mat-form-field>
         </div>
 
-        <button class="buttonLogin bg-primary" type="button" (click)="verify()">
-          Enviar codigo
+        <button
+          class="buttonLogin bg-primary"
+          type="button"
+          (click)="verify()"
+          [disabled]="sendCode.length < 8"
+        >
+          Enviar código
         </button>
       </form>
     </div>

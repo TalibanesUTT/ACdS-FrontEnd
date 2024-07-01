@@ -100,7 +100,7 @@ export class registerComponent {
     this.passwordNotMatch = false;
     this.authService.register(this.registerForm.value).subscribe(
       (response) => {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/verifyEmail']);
         // console.log(response);
       },
       (error) => {

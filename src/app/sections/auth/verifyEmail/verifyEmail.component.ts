@@ -33,6 +33,7 @@ import {
 export class verifyEmailComponent {
   title = 'acds-frontend';
   verifyEmailForm: FormGroup;
+  sendCode: string = '';
 
   constructor(private fb: FormBuilder) {
     this.verifyEmailForm = this.newFormControls();
@@ -45,7 +46,8 @@ export class verifyEmailComponent {
   }
 
   verify(): void {
-    console.log(this.verifyEmailForm.value);
+    this.sendCode = this.verifyEmailForm.value.code.replace(/-/g, '');
+    console.log(this.sendCode);
   }
 
   /**
@@ -58,7 +60,6 @@ export class verifyEmailComponent {
     if (input.length > 8) {
       input = input.slice(0, 8);
     }
-
     input = input.replace(
       /(\d{2})(\d{2})?(\d{2})?(\d{2})?/,
       (match: string, p1: string, p2: string, p3: string, p4: string) => {
@@ -71,5 +72,6 @@ export class verifyEmailComponent {
     );
     event.target.value = input;
     this.verifyEmailForm.get('code')?.setValue(input, { emitEvent: false });
+    this.sendCode = input.replace(/-/g, '');
   }
 }

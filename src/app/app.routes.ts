@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    //Auth
     path: 'login',
     loadComponent: () =>
       import('./sections/auth/login/login.component').then(
@@ -23,6 +24,7 @@ export const routes: Routes = [
       ),
   },
   {
+    //LandingPage
     path: 'ACdS',
     loadComponent: () =>
       import('./sections/landingPage/landingPage.component').then(
@@ -30,6 +32,7 @@ export const routes: Routes = [
       ),
   },
   {
+    //Application
     path: 'home',
     loadComponent: () =>
       import('./sections/panel/home/home.component').then(
@@ -37,6 +40,7 @@ export const routes: Routes = [
       ),
   },
   {
+    //RouteDefault
     path: '',
     redirectTo: 'ACdS',
     pathMatch: 'full',

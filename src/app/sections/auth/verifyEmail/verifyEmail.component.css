@@ -82,6 +82,10 @@
   border: none;
   font-size: 18px;
 }
+
+.buttonLogin:disabled {
+  opacity: 0.5;
+}
 .links {
   display: flex;
   flex-direction: row;
