@@ -59,7 +59,7 @@ export class registerComponent {
         [
           Validators.required,
           Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
           ),
         ],
       ],
@@ -68,14 +68,18 @@ export class registerComponent {
         '',
         [
           Validators.required,
-          Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
+          Validators.pattern(
+            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
+          ),
         ],
       ],
       passwordConfirmation: [
         '',
         [
           Validators.required,
-          Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
+          Validators.pattern(
+            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
+          ),
         ],
       ],
     });
