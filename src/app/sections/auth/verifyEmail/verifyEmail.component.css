@@ -81,6 +81,7 @@
   padding: 10px;
   border: none;
   font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .buttonLogin:disabled {

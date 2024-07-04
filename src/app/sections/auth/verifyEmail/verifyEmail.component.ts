@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 import {
   FormGroup,
   FormControl,
@@ -13,6 +14,8 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SweetAlert } from '../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-login',
@@ -34,8 +37,14 @@ export class verifyEmailComponent {
   title = 'acds-frontend';
   verifyEmailForm: FormGroup;
   sendCode: string = '';
+  user = JSON.parse(localStorage.getItem('user') || '{}');
+  resendCodeDisabled = true;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.verifyEmailForm = this.newFormControls();
   }
 
@@ -46,8 +55,25 @@ export class verifyEmailComponent {
   }
 
   verify(): void {
+    const url = localStorage.getItem('url') || '';
     this.sendCode = this.verifyEmailForm.value.code.replace(/-/g, '');
     console.log(this.sendCode);
+    this.authService.verifyEmail(url, this.sendCode).subscribe(
+      (res) => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          SweetAlert.success('Éxito', res.message);
+          this.router.navigate(['/home']);
+          this.resendCodeDisabled = true;
+          return;
+        }
+        SweetAlert.success('Éxito', res.message);
+        this.router.navigate(['/login']);
+      },
+      (err) => {
+        SweetAlert.error('Error', 'El código ingresado es incorrecto');
+      }
+    );
   }
 
   /**
@@ -57,21 +83,32 @@ export class verifyEmailComponent {
    */
   onFormatCode(event: any): void {
     let input = event.target.value.replace(/\D/g, '');
-    if (input.length > 8) {
-      input = input.slice(0, 8);
+    if (input.length > 6) {
+      input = input.slice(0, 6);
     }
     input = input.replace(
-      /(\d{2})(\d{2})?(\d{2})?(\d{2})?/,
-      (match: string, p1: string, p2: string, p3: string, p4: string) => {
+      /(\d{2})(\d{2})?(\d{2})?/,
+      (match: string, p1: string, p2: string, p3: string) => {
         let result = p1;
         if (p2) result += '-' + p2;
         if (p3) result += '-' + p3;
-        if (p4) result += '-' + p4;
         return result;
       }
     );
     event.target.value = input;
     this.verifyEmailForm.get('code')?.setValue(input, { emitEvent: false });
     this.sendCode = input.replace(/-/g, '');
+  }
+  resendCode(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const url = localStorage.getItem('url') || '';
+    this.authService.resendCode(user.id).subscribe(
+      (res) => {
+        SweetAlert.success('Éxito', res.message);
+      },
+      (err) => {
+        SweetAlert.error('Error', 'El código ingresado es incorrecto');
+      }
+    );
   }
 }

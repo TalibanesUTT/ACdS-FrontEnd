@@ -9,15 +9,20 @@ export class AuthService {
   API_URL = environments.API_URL + '/auth';
   constructor(private http: HttpClient) {}
 
-  login(form: IUser): Observable<IUser> {
+  login(form: IUser): Observable<any> {
     return this.http.post(this.API_URL + '/login', form);
   }
 
-  register(form: IUser): Observable<IUser> {
+  register(form: IUser): Observable<any> {
     return this.http.post(this.API_URL + '/register', form);
   }
 
-  verifyEmail(code: string): Observable<any> {
-    return this.http.post(this.API_URL + '/verify-email', { code });
+  verifyEmail(url: string, code: string): Observable<any> {
+    //sendo code como param
+    return this.http.get(url + '&code=' + code);
+  }
+
+  resendCode(id: number): Observable<any> {
+    return this.http.get(this.API_URL + '/resendVerificationCode/' + id);
   }
 }

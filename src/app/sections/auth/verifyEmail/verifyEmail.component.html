@@ -12,7 +12,8 @@
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
         <p>
-          Ingresa el código de verificación que enviamos a tu número de teléfono
+          Ingresa el codigo de verificación que se envio al correo
+          <strong>{{ user.email }}</strong>
         </p>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
@@ -34,9 +35,17 @@
           class="buttonLogin bg-primary"
           type="button"
           (click)="verify()"
-          [disabled]="sendCode.length < 8"
+          [disabled]="sendCode.length < 6"
         >
           Enviar código
+        </button>
+        <button
+          class="buttonLogin bg-primary"
+          type="button"
+          (click)="resendCode()"
+          [disabled]="resendCodeDisabled"
+        >
+          Reenviar código
         </button>
       </form>
     </div>

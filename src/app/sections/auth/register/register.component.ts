@@ -100,6 +100,9 @@ export class registerComponent {
     this.passwordNotMatch = false;
     this.authService.register(this.registerForm.value).subscribe(
       (response) => {
+        console.log(response);
+        localStorage.setItem('url', response.url);
+        localStorage.setItem('user', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
         // console.log(response);
       },

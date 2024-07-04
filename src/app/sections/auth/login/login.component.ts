@@ -74,8 +74,14 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
         console.log(res);
-        localStorage.setItem('token', res.access_token || '');
-        SweetAlert.success('Exito', 'Inicio de sesion exitoso');
+        localStorage.setItem('url', res.url || '');
+        if (res.data) {
+          localStorage.setItem('user', JSON.stringify(res.data) || '');
+          if (res.data.role === 'admin') {
+            this.router.navigate(['/verifyEmail']);
+            return;
+          }
+        }
         this.router.navigate(['/home']);
       },
       (err) => {
