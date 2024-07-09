@@ -73,6 +73,7 @@
   padding: 10px;
   border: none;
   font-size: 18px;
+  margin-top: 10px;
 }
 .buttonLogin:disabled {
   opacity: 0.5;

@@ -16,7 +16,8 @@ import {
 } from '@angular/forms';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { AuthService } from '../../../services/auth.service';
-
+import { headerComponent } from '../../../components/header/header.component';
+import { sideBarComponent } from '../../../components/sidebar/sideBar.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -29,6 +30,8 @@ import { AuthService } from '../../../services/auth.service';
     MatButtonModule,
     RouterLink,
     ReactiveFormsModule,
+    headerComponent,
+    sideBarComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './sections/auth/login/login.component';
 import { registerComponent } from './sections/auth/register/register.component';
 import { HomeComponent } from './sections/panel/home/home.component';
+import { sideBarComponent } from './components/sidebar/sideBar.component';
+import { headerComponent } from './components/header/header.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -49,6 +51,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
+    AppComponent,
     BrowserModule,
     RouterModule,
     BrowserAnimationsModule,
@@ -57,6 +60,8 @@ import { provideHttpClient } from '@angular/common/http';
     LoginComponent,
     registerComponent,
     HomeComponent,
+    sideBarComponent,
+    headerComponent,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -95,8 +100,9 @@ import { provideHttpClient } from '@angular/common/http';
     MatTooltipModule,
     MatTreeModule,
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
+  exports: [headerComponent, sideBarComponent],
+  declarations: [],
+  bootstrap: [],
   providers: [provideHttpClient()],
 })
 export class AppModule {}

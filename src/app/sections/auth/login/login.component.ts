@@ -87,7 +87,7 @@ export class LoginComponent {
         this.router.navigate(['/home']);
       },
       (err) => {
-        SweetAlert.error('Error', err.error.message);
+        SweetAlert.error('Error', err.error.error.message);
       }
     );
   }

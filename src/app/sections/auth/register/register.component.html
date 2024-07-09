@@ -18,7 +18,7 @@
                 El nombre es obligatorio
               </mat-error>
               <mat-error *ngIf="registerForm.get('name')?.hasError('pattern')">
-                El nombre no puede contener números
+                No puede contener números
               </mat-error>
             </mat-form-field>
           </div>
@@ -34,7 +34,7 @@
               <mat-error
                 *ngIf="registerForm.get('lastName')?.hasError('pattern')"
               >
-                Los apellidos no pueden contener números
+                No pueden contener números
               </mat-error>
             </mat-form-field>
           </div>
@@ -59,8 +59,8 @@
               formControlName="phone"
               (input)="onPhoneFormat($event)"
             />
-            <mat-error *ngIf="registerForm.get('phone')?.hasError('required')">
-              El teléfono es obligatorio
+            <mat-error *ngIf="registerForm.get('phone')?.hasError('pattern')">
+              El teléfono es inválido
             </mat-error>
           </mat-form-field>
         </div>
@@ -102,6 +102,11 @@
             >
               Debe tener al menos 8 caracteres, una letra y un número
             </mat-error>
+            <mat-error
+              *ngIf="registerForm.hasError('passwordsMismatch')"
+              style="margin-top: -10px"
+              >Las contraseñas no coinciden</mat-error
+            >
           </mat-form-field>
         </div>
 

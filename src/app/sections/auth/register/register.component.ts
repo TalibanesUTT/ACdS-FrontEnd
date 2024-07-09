@@ -8,10 +8,12 @@ import { RouterLink } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import {
   FormGroup,
-  FormControl,
   FormBuilder,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
@@ -45,45 +47,75 @@ export class registerComponent {
   }
 
   newFormControls(): FormGroup {
-    return this.fb.group({
-      name: [
-        '',
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$')],
-      ],
-      lastName: [
-        '',
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$')],
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
-          ),
+    return this.fb.group(
+      {
+        name: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$'),
+          ],
         ],
-      ],
-      phone: ['', [Validators.required]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$'),
+          ],
         ],
-      ],
-      passwordConfirmation: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
+            ),
+          ],
         ],
-      ],
-    });
+        phone: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern('^[0-9]{3}-[0-9]{3}-[0-9]{4}$'),
+          ],
+        ],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
+            ),
+          ],
+        ],
+        passwordConfirmation: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
+            ),
+          ],
+        ],
+      },
+      { validators: this.validatorMatchPassword } // Aplica el validador personalizado aquí
+    );
   }
+
+  validatorMatchPassword: ValidatorFn = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    const password = control.get('password');
+    const confirmPassword = control.get('passwordConfirmation');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value === confirmPassword.value
+      ? null
+      : { passwordsMismatch: true };
+  };
 
   onSubmit(): void {
     let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
@@ -93,10 +125,7 @@ export class registerComponent {
       SweetAlert.info('Error', 'Por favor, revisa los campos');
       return;
     }
-    if (
-      this.registerForm.value.password !==
-      this.registerForm.value.passwordConfirmation
-    ) {
+    if (this.registerForm.hasError('passwordsMismatch')) {
       SweetAlert.error('Error', 'Las contraseñas no coinciden');
       this.passwordNotMatch = true;
       return;
@@ -116,13 +145,7 @@ export class registerComponent {
       }
     );
   }
-  /**
-   * Formats the phone number input value by removing non-digit characters,
-   * limiting the length to 10 digits, and adding dashes for better readability.
-   * Also updates the value of the 'phone' form control.
-   *
-   * @param event - The event object representing the input event.
-   */
+
   onPhoneFormat(event: any): void {
     let input = event.target.value.replace(/\D/g, '');
     if (input.length > 10) {
@@ -132,6 +155,7 @@ export class registerComponent {
     event.target.value = input;
     this.registerForm.get('phone')?.setValue(input, { emitWidget: false });
   }
+
   DeleteMiddleDash(text: string): string {
     return text.replace(/-/g, '');
   }

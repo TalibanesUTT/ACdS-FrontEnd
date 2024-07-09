@@ -11,10 +11,16 @@
         </div>
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
-        <p>
+        <p *ngIf="role" style="line-height: 30px; margin-bottom: 30px">
           Ingresa el codigo de verificación que se envio al correo
           <strong>{{ user.email }}</strong>
         </p>
+        <p *ngIf="!role" style="line-height: 30px; margin-bottom: 30px">
+          Se enviara un correo <strong>{{ user.email }}</strong> para verificar
+          tu cuenta y posteriormente recibiras un codigo de verificación a tu
+          número de teléfono
+        </p>
+
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Ingresa el código de verificación</mat-label>
@@ -30,7 +36,9 @@
             </mat-error>
           </mat-form-field>
         </div>
-
+        <div class="divLabel">
+          <a (click)="resendCode()" class="labelSend">Reenviar código</a>
+        </div>
         <button
           class="buttonLogin bg-primary"
           type="button"
@@ -38,14 +46,6 @@
           [disabled]="sendCode.length < 6"
         >
           Enviar código
-        </button>
-        <button
-          class="buttonLogin bg-primary"
-          type="button"
-          (click)="resendCode()"
-          [disabled]="resendCodeDisabled"
-        >
-          Reenviar código
         </button>
       </form>
     </div>

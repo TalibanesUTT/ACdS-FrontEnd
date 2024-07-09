@@ -39,6 +39,7 @@ export class verifyEmailComponent {
   sendCode: string = '';
   user = JSON.parse(localStorage.getItem('user') || '{}');
   resendCodeDisabled = true;
+  role = this.user.role;
 
   constructor(
     private fb: FormBuilder,
@@ -105,6 +106,7 @@ export class verifyEmailComponent {
     this.authService.resendCode(user.id).subscribe(
       (res) => {
         SweetAlert.success('Éxito', res.message);
+        localStorage.setItem('url', res.url);
       },
       (err) => {
         SweetAlert.error('Error', 'El código ingresado es incorrecto');
