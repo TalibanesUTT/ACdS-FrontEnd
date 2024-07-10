@@ -1,1 +1,24 @@
-<h1>SideBar</h1>
+<div class="sideBar">
+  <ul>
+    <li (click)="getRoute()">
+      <img src="assets/icons/home.svg" alt="" />
+      <a
+        routerLink="/home"
+        routerLinkActive="active-link"
+        class="nav-link"
+        [ngClass]="{ 'active-link': urlSidebar === '/home' }"
+        >Home</a
+      >
+    </li>
+    <li (click)="getRoute()">
+      <img src="assets/icons/profile.svg" alt="" />
+      <a
+        routerLink="/home/perfil"
+        routerLinkActive="active-link"
+        class="nav-link"
+        [ngClass]="{ 'active-link': urlSidebar === '/home/perfil' }"
+        >Perfil</a
+      >
+    </li>
+  </ul>
+</div>

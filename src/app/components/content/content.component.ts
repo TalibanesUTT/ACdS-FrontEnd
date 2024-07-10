@@ -18,7 +18,7 @@ import {
 import { SweetAlert } from '../../shared/SweetAlert';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-content',
   standalone: true,
   imports: [
     CommonModule,
@@ -31,10 +31,10 @@ import { SweetAlert } from '../../shared/SweetAlert';
     ReactiveFormsModule,
     MatIconModule,
   ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+  templateUrl: './content.component.html',
+  styleUrl: './content.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class headerComponent {
+export class contentComponent {
   title = 'acds-frontend';
 }

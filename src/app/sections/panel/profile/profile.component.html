@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="containerCards">
+    <div class="card1ViewProfile">
+      <section class="sectionImg">
+        <div class="circleImg">
+          <img src="assets/img/Afinacion.svg" alt="" />
+        </div>
+      </section>
+      <section class="sectionText">
+        <p class="fontSFPro">Hola</p>
+        <p class="fontSFProBold">Riley Doe</p>
+      </section>
+      <section class="sectionButtonEdit">
+        <button class="buttonEdit">Editar Perfil</button>
+      </section>
+    </div>
+    <div class="card2DataProfile">
+      <h1>Informacion Personal</h1>
+      <section>
+        <form class="form" [formGroup]="registerForm">
+          <div class="containerTwoInputs">
+            <div class="inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+            </div>
+            <div class="inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>Apellidos</mat-label>
+                <input matInput formControlName="lastName" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput formControlName="email" />
+            </mat-form-field>
+          </div>
+          <div class="inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>Teléfono</mat-label>
+              <input matInput formControlName="phone" />
+            </mat-form-field>
+          </div>
+          <div class="inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>Contraseña</mat-label>
+              <input matInput formControlName="password" type="password" />
+            </mat-form-field>
+          </div>
+          <div class="inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>Confirmar contraseña</mat-label>
+              <input
+                matInput
+                formControlName="passwordConfirmation"
+                type="password"
+              />
+            </mat-form-field>
+          </div>
+        </form>
+      </section>
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: end;
+        "
+      >
+        <button class="buttonChangePassword">Cambiar Contraseña</button>
+      </div>
+    </div>
+  </div>
+</div>

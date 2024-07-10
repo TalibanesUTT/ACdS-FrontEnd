@@ -12,7 +12,7 @@
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Correo electrónico</mat-label>
-            <input matInput formControlName="email" />
+            <input matInput formControlName="email" autocomplete="email" />
             <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
               El correo electrónico es obligatorio
             </mat-error>

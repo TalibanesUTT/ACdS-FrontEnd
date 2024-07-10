@@ -1,0 +1,25 @@
+.sideBar {
+  width: 300px;
+  height: 90vh;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+li {
+  list-style: none;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  gap: 25px;
+  font-size: 20px;
+}
+
+.nav-link {
+  color: grey;
+  text-decoration: none;
+}
+
+.active-link {
+  color: red !important; /* Añadir !important para asegurar que no sea sobrescrito */
+}

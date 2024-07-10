@@ -38,6 +38,15 @@ export const routes: Routes = [
       import('./sections/panel/home/home.component').then(
         (m) => m.HomeComponent
       ),
+    children: [
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./sections/panel/profile/profile.component').then(
+            (m) => m.profileComponent
+          ),
+      },
+    ],
   },
   {
     //RouteDefault

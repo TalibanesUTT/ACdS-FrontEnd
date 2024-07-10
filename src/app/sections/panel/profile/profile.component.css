@@ -1,0 +1,148 @@
+.container {
+  width: 100%;
+  height: 90vh;
+  background-color: #f5f7fa;
+}
+
+.containerCards {
+  width: 95%;
+  gap: 50px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.card1ViewProfile {
+  width: 50%;
+  background-color: white;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  gap: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.circleImg {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: white 10px solid;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.sectionImg {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.sectionButtonEdit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.sectionText {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-left: 30px;
+}
+
+.fontSFPro {
+  font-family: "SF Pro Display", sans-serif;
+  font-size: 40px;
+  font-weight: 100;
+  color: black;
+}
+
+.fontSFProBold {
+  font-family: "SF Pro Display", sans-serif;
+  font-size: 50px;
+  font-weight: 500;
+  color: black;
+}
+
+.buttonEdit {
+  background-color: #f5f7fa;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 46px;
+}
+
+.card2DataProfile {
+  width: 70%;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.buttonChangePassword {
+  color: white;
+  background-color: #f2494e;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  height: 46px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f5f7fa;
+}
+
+.containerTwoInputs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.containerTwoInputs .inputContainer {
+  flex: 1;
+}
+
+mat-form-field {
+  width: 100%;
+}

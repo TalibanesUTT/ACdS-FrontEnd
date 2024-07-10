@@ -18,6 +18,7 @@ import { SweetAlert } from '../../../shared/SweetAlert';
 import { AuthService } from '../../../services/auth.service';
 import { headerComponent } from '../../../components/header/header.component';
 import { sideBarComponent } from '../../../components/sidebar/sideBar.component';
+import { contentComponent } from '../../../components/content/content.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -32,6 +33,7 @@ import { sideBarComponent } from '../../../components/sidebar/sideBar.component'
     ReactiveFormsModule,
     headerComponent,
     sideBarComponent,
+    contentComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

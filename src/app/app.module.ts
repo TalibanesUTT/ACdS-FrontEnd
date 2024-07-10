@@ -10,6 +10,8 @@ import { registerComponent } from './sections/auth/register/register.component';
 import { HomeComponent } from './sections/panel/home/home.component';
 import { sideBarComponent } from './components/sidebar/sideBar.component';
 import { headerComponent } from './components/header/header.component';
+import { contentComponent } from './components/content/content.component';
+import { profileComponent } from './sections/panel/profile/profile.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -62,6 +64,8 @@ import { provideHttpClient } from '@angular/common/http';
     HomeComponent,
     sideBarComponent,
     headerComponent,
+    contentComponent,
+    profileComponent,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -100,7 +104,7 @@ import { provideHttpClient } from '@angular/common/http';
     MatTooltipModule,
     MatTreeModule,
   ],
-  exports: [headerComponent, sideBarComponent],
+  exports: [headerComponent, sideBarComponent, contentComponent],
   declarations: [],
   bootstrap: [],
   providers: [provideHttpClient()],

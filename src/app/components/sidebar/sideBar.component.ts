@@ -30,9 +30,20 @@ import { SweetAlert } from '../../shared/SweetAlert';
     ReactiveFormsModule,
   ],
   templateUrl: './sideBar.component.html',
-  styleUrl: './sideBar.component.css',
+  styleUrls: ['./sideBar.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
 export class sideBarComponent {
   title = 'acds-frontend';
+  urlSidebar = '';
+
+  constructor(private router: Router) {
+    this.getRoute();
+  }
+
+  getRoute() {
+    //obtener ruta actual
+    this.urlSidebar = this.router.url;
+    console.log(this.urlSidebar);
+  }
 }
