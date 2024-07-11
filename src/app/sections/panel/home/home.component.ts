@@ -1,12 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { MatFormField } from '@angular/material/form-field';
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
-import { Router } from '@angular/router';
 import {
   FormGroup,
   FormControl,
@@ -18,6 +15,7 @@ import { SweetAlert } from '../../../shared/SweetAlert';
 import { AuthService } from '../../../services/auth.service';
 import { headerComponent } from '../../../components/header/header.component';
 import { sideBarComponent } from '../../../components/sidebar/sideBar.component';
+import { UsersTableComponent } from '../../users-table/users-table.component';
 import { contentComponent } from '../../../components/content/content.component';
 @Component({
   selector: 'app-home',
@@ -34,6 +32,7 @@ import { contentComponent } from '../../../components/content/content.component'
     headerComponent,
     sideBarComponent,
     contentComponent,
+    UsersTableComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

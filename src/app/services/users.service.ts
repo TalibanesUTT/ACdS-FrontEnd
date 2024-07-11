@@ -3,11 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environments } from '../../environments/environments';
 import { IUser } from '../interfaces/Users';
+import { AuthService } from './auth.service';
+import { UserInterface } from '../sections/users-table/users-table.component';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
-  API_URL = environments.API_URL + '/auth';
-  constructor(private http: HttpClient) {}
+export class UsersService {
+  API_URL = environments.API_URL + '/user-management';
+
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  getAllUsers(): Observable<any> {
+    return this.http.get(this.API_URL + '/users', { headers:{
+      Authorization: 'Bearer ' + this.authService.getToken()
+    }});
+  }
 
   login(form: IUser): Observable<any> {
     return this.http.post(this.API_URL + '/login', form);
@@ -26,7 +35,9 @@ export class AuthService {
     return this.http.get(this.API_URL + '/resendVerificationCode/' + id);
   }
 
-  getToken(): string {
-    return localStorage.getItem('token') ?? '';
+  updateUser( path: string, form: any): Observable<any> {
+    return this.http.put(environments.API_URL + '/' + path, form, { headers: {
+      Authorization: 'Bearer ' + this.authService.getToken()
+    }});
   }
 }
