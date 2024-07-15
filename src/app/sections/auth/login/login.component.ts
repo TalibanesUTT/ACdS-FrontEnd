@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { AuthService } from '../../../services/auth.service';
+import { CustomValidators } from '../../../shared/validation';
 
 @Component({
   selector: 'app-login',
@@ -48,24 +49,8 @@ export class LoginComponent {
 
   newFormControls(): FormGroup {
     return this.fb.group({
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
-          ),
-        ],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
-        ],
-      ],
+      email: ['', [Validators.required, CustomValidators.emailPattern]],
+      password: ['', [Validators.required, CustomValidators.passwordPattern]],
     });
   }
   login(): void {
@@ -76,6 +61,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
         console.log(res);
+        localStorage.setItem('token', res.access_token || '');
         localStorage.setItem('url', res.url || '');
         if (res.data) {
           localStorage.setItem('user', JSON.stringify(res.data) || '');
@@ -84,7 +70,7 @@ export class LoginComponent {
             return;
           }
         }
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/dashboard']);
       },
       (err) => {
         SweetAlert.error('Error', err.error.error.message);

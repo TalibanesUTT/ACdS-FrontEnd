@@ -40,6 +40,20 @@ export const routes: Routes = [
       ),
     children: [
       {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./sections/panel/dashboard/dashboard.component').then(
+            (m) => m.dashboardComponent
+          ),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./sections/panel/users/users.component').then(
+            (m) => m.usersComponent
+          ),
+      },
+      {
         path: 'perfil',
         loadComponent: () =>
           import('./sections/panel/profile/profile.component').then(

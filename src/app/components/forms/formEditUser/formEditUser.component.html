@@ -1,0 +1,70 @@
+<form class="form" [formGroup]="registerForm">
+  <div class="containerTwoInputs">
+    <div class="inputContainer">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" (input)="userChange()" />
+        <mat-error *ngIf="registerForm.get('name')?.hasError('required')">
+          El nombre es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="inputContainer">
+      <mat-form-field appearance="outline">
+        <mat-label>Apellidos</mat-label>
+        <input matInput formControlName="lastName" (input)="userChange()" />
+        <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')">
+          Los apellidos son requeridos
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="inputContainer">
+    <mat-form-field appearance="outline">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput formControlName="email" (input)="userChange()" />
+      <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+        El correo electrónico es requerido
+      </mat-error>
+      <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+        El correo electrónico no es válido
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="inputContainer">
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input
+        matInput
+        formControlName="phoneNumber"
+        (input)="onPhoneFormat($event)"
+        (input)="userChange()"
+      />
+      <mat-error *ngIf="registerForm.get('phone')?.hasError('required')">
+        El teléfono es requerido
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="inputContainer">
+    <mat-form-field appearance="outline">
+      <mat-label>Rol</mat-label>
+      <input
+        matInput
+        formControlName="rol"
+        type="text"
+        [readonly]="true"
+        [disabled]="true"
+      />
+      <mat-error *ngIf="registerForm.get('rol')?.hasError('required')">
+        El rol es requerido
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>
+<div
+  style="width: 100%; display: flex; align-items: center; justify-content: end"
+>
+  <button class="buttonChangePassword" (click)="PasswordChange()">
+    Cambiar Contraseña
+  </button>
+</div>

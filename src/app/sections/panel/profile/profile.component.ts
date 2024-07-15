@@ -14,6 +14,10 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { formEditUserComponent } from '../../../components/forms/formEditUser/formEditUser.component';
+import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,62 +31,63 @@ import {
     MatButtonModule,
     RouterLink,
     ReactiveFormsModule,
+    formEditUserComponent,
+    formEditPasswordUserComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
 export class profileComponent {
-  title = 'acds-frontend';
-  registerForm: FormGroup;
+  editProfile: boolean = false;
+  PasswordSwitch: boolean = true;
+  id: number = 1;
+  userData: any = {
+    id: 1,
+    name: 'Riley',
+    lastName: 'Doe',
+    email: 'riley.doe@example.com',
+    phoneNumber: '123-456-7890',
+    role: 'Admin',
+  };
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.registerForm = this.newFormControls();
+  constructor(private profileService: ProfileService) {
+    this.getProfile();
   }
-  newFormControls(): FormGroup {
-    return this.fb.group({
-      name: [
-        '',
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$')],
-      ],
-      lastName: [
-        '',
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$')],
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
-          ),
-        ],
-      ],
-      phone: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]{3}-[0-9]{3}-[0-9]{4}$'),
-        ],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
-        ],
-      ],
-      passwordConfirmation: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
-        ],
-      ],
+
+  getProfile() {
+    this.profileService.getProfile().subscribe((res) => {
+      console.log(res);
+      this.userData = res;
+      this.id = res.id;
+      this.onPhoneFormat(this.userData.phoneNumber);
     });
+  }
+  onPhoneFormat(phoneNumber: string): void {
+    let input = phoneNumber.replace(/\D/g, '');
+    if (input.length > 10) {
+      input = input.slice(0, 10);
+    }
+    input = input.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    this.userData.phoneNumber = input;
+  }
+  changeEditProfile() {
+    if (this.editProfile) {
+      this.userData.id = this.id;
+      SweetAlert.success('Profile Updated', 'Your profile has been updated');
+    }
+    this.editProfile = !this.editProfile;
+  }
+
+  editProfileChange(event: boolean) {
+    this.editProfile = event;
+  }
+
+  PasswordSwitchChange(event: boolean) {
+    this.PasswordSwitch = event;
+  }
+
+  userDataChange(event: any) {
+    this.userData = event;
   }
 }

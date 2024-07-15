@@ -64,7 +64,7 @@ export class verifyEmailComponent {
         if (res.token) {
           localStorage.setItem('token', res.token);
           SweetAlert.success('Éxito', res.message);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home/dashboard']);
           this.resendCodeDisabled = true;
           return;
         }

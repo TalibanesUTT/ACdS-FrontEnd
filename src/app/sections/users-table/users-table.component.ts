@@ -5,24 +5,39 @@ import { UsersService } from '../../services/users.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { NgIf,NgFor } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from './confirm-dialog.component';
 import { ActiveDialog } from './active-dialog.component';
 
-
 @Component({
-  selector: 'users-table',
+  selector: 'app-users-table',
   styleUrl: 'users-table.component.css',
   templateUrl: 'users-table.component.html',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatIconModule, MatFormField, FormsModule, NgIf, NgFor, MatSlideToggle],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatFormField,
+    FormsModule,
+    NgIf,
+    NgFor,
+    MatSlideToggle,
+  ],
 })
-
 export class UsersTableComponent implements AfterViewInit {
-
-  displayedColumns: string[] = ['name', 'email', 'phone', 'role', 'phoneConfirmed', 'emailConfirmed', 'active', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'email',
+    'phone',
+    'role',
+    'phoneConfirmed',
+    'emailConfirmed',
+    'active',
+    'actions',
+  ];
   readonly dialog = inject(MatDialog);
   readonly activeDialog = inject(MatDialog);
 
@@ -31,17 +46,16 @@ export class UsersTableComponent implements AfterViewInit {
   roles = [
     {
       value: 3,
-      viewValue: 'admin'
+      viewValue: 'admin',
     },
     {
       value: 1,
-      viewValue: 'customer'
+      viewValue: 'customer',
     },
     {
       value: 4,
-      viewValue: 'mechanic'
-    }
-
+      viewValue: 'mechanic',
+    },
   ];
 
   @ViewChild(MatPaginator)
@@ -62,14 +76,18 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   editUser(id: number) {
-    const user = this.dataSource.data.find((user: UserInterface) => user.id === id);
+    const user = this.dataSource.data.find(
+      (user: UserInterface) => user.id === id
+    );
     if (user) {
       user.isEditing = true;
     }
   }
 
   updateUser(id: number) {
-    const user = this.dataSource.data.find((user: UserInterface) => user.id === id);
+    const user = this.dataSource.data.find(
+      (user: UserInterface) => user.id === id
+    );
     if (user) {
       user.isEditing = false;
       const userToSend = {
@@ -79,14 +97,16 @@ export class UsersTableComponent implements AfterViewInit {
         email: user.email,
         role: user.role,
         active: user.active,
-      }
+      };
 
       this.usersService.updateUser(user.updateURL, userToSend).subscribe();
     }
   }
 
   cancelEdit(id: number) {
-    const user = this.dataSource.data.find((user: UserInterface) => user.id === id);
+    const user = this.dataSource.data.find(
+      (user: UserInterface) => user.id === id
+    );
     if (user) {
       user.isEditing = false;
     }
@@ -103,7 +123,9 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   toggleActive(id: number) {
-    const user = this.dataSource.data.find((user: UserInterface) => user.id === id);
+    const user = this.dataSource.data.find(
+      (user: UserInterface) => user.id === id
+    );
     if (user) {
       const dialog = this.activeDialog.open(ActiveDialog);
 
@@ -130,4 +152,3 @@ export interface UserInterface {
   emailConfirmed: boolean;
   isEditing: boolean;
 }
-

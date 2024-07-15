@@ -1,16 +1,37 @@
 <div class="sideBar">
   <ul>
-    <li (click)="getRoute()">
+    <li
+      (click)="getRoute()"
+      [ngClass]="{ 'active-border': urlSidebar === '/home/dashboard' }"
+    >
       <img src="assets/icons/home.svg" alt="" />
       <a
-        routerLink="/home"
+        routerLink="/home/dashboard"
         routerLinkActive="active-link"
         class="nav-link"
-        [ngClass]="{ 'active-link': urlSidebar === '/home' }"
+        [ngClass]="{ 'active-link': urlSidebar === '/home/dashboard' }"
         >Home</a
       >
     </li>
-    <li (click)="getRoute()">
+    <li
+      *ngIf="role === 'root'"
+      (click)="getRoute()"
+      [ngClass]="{ 'active-border': urlSidebar === '/home/users' }"
+    >
+      <img src="assets/icons/profile.svg" alt="" />
+      <a
+        routerLink="/home/users"
+        routerLinkActive="active-link"
+        class="nav-link"
+        [ngClass]="{ 'active-link': urlSidebar === '/home/users' }"
+        >Users</a
+      >
+    </li>
+
+    <li
+      (click)="getRoute()"
+      [ngClass]="{ 'active-border': urlSidebar === '/home/perfil' }"
+    >
       <img src="assets/icons/profile.svg" alt="" />
       <a
         routerLink="/home/perfil"

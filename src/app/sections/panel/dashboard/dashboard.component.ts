@@ -5,7 +5,6 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import {
@@ -15,10 +14,13 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SweetAlert } from '../../shared/SweetAlert';
+import { formEditUserComponent } from '../../../components/forms/formEditUser/formEditUser.component';
+import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
-  selector: 'app-content',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
@@ -29,12 +31,11 @@ import { SweetAlert } from '../../shared/SweetAlert';
     MatButtonModule,
     RouterLink,
     ReactiveFormsModule,
-    MatIconModule,
+    formEditUserComponent,
+    formEditPasswordUserComponent,
   ],
-  templateUrl: './content.component.html',
-  styleUrl: './content.component.css',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class contentComponent {
-  title = 'acds-frontend';
-}
+export class dashboardComponent {}

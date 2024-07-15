@@ -17,6 +17,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { CustomValidators } from '../../../shared/validation';
 
 @Component({
   selector: 'app-register',
@@ -49,73 +50,19 @@ export class registerComponent {
   newFormControls(): FormGroup {
     return this.fb.group(
       {
-        name: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$'),
-          ],
-        ],
-        lastName: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$'),
-          ],
-        ],
-        email: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(
-              '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'
-            ),
-          ],
-        ],
-        phone: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern('^[0-9]{3}-[0-9]{3}-[0-9]{4}$'),
-          ],
-        ],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(
-              '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-            ),
-          ],
-        ],
+        name: ['', [Validators.required, CustomValidators.namePattern]],
+        lastName: ['', [Validators.required, CustomValidators.namePattern]],
+        email: ['', [Validators.required, CustomValidators.emailPattern]],
+        phone: ['', [Validators.required, CustomValidators.phonePattern]],
+        password: ['', [Validators.required, CustomValidators.passwordPattern]],
         passwordConfirmation: [
           '',
-          [
-            Validators.required,
-            Validators.pattern(
-              '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-            ),
-          ],
+          [Validators.required, CustomValidators.passwordPattern],
         ],
       },
-      { validators: this.validatorMatchPassword } // Aplica el validador personalizado aquí
+      { validators: CustomValidators.validatorMatchPassword } // Aplica el validador personalizado aquí
     );
   }
-
-  validatorMatchPassword: ValidatorFn = (
-    control: AbstractControl
-  ): ValidationErrors | null => {
-    const password = control.get('password');
-    const confirmPassword = control.get('passwordConfirmation');
-
-    if (!password || !confirmPassword) {
-      return null;
-    }
-
-    return password.value === confirmPassword.value
-      ? null
-      : { passwordsMismatch: true };
-  };
 
   onSubmit(): void {
     let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);

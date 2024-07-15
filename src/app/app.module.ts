@@ -10,8 +10,10 @@ import { registerComponent } from './sections/auth/register/register.component';
 import { HomeComponent } from './sections/panel/home/home.component';
 import { sideBarComponent } from './components/sidebar/sideBar.component';
 import { headerComponent } from './components/header/header.component';
-import { contentComponent } from './components/content/content.component';
 import { profileComponent } from './sections/panel/profile/profile.component';
+import { formEditUserComponent } from './components/forms/formEditUser/formEditUser.component';
+import { formEditPasswordUserComponent } from './components/forms/formEditPasswordUser/formEditPasswordUser.component';
+import { UsersTableComponent } from './sections/users-table/users-table.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -32,7 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatNativeDateModule, MatRippleModule} from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -48,7 +50,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
-import { UsersTableComponent } from './sections/users-table/users-table.component';
 
 @NgModule({
   imports: [
@@ -63,9 +64,10 @@ import { UsersTableComponent } from './sections/users-table/users-table.componen
     HomeComponent,
     sideBarComponent,
     headerComponent,
-    contentComponent,
     profileComponent,
     UsersTableComponent,
+    formEditUserComponent,
+    formEditPasswordUserComponent,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,
@@ -104,7 +106,13 @@ import { UsersTableComponent } from './sections/users-table/users-table.componen
     MatTooltipModule,
     MatTreeModule,
   ],
-  exports: [headerComponent, sideBarComponent, contentComponent],
+  exports: [
+    headerComponent,
+    sideBarComponent,
+    formEditUserComponent,
+    formEditPasswordUserComponent,
+    UsersTableComponent,
+  ],
   declarations: [],
   bootstrap: [],
   providers: [provideHttpClient()],

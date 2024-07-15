@@ -7,7 +7,6 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
-import { ProfileService } from '../../services/profile.service';
 import {
   FormGroup,
   FormControl,
@@ -15,10 +14,14 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SweetAlert } from '../../shared/SweetAlert';
+import { formEditUserComponent } from '../../../components/forms/formEditUser/formEditUser.component';
+import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { ProfileService } from '../../../services/profile.service';
+import { UsersTableComponent } from '../../users-table/users-table.component';
 
 @Component({
-  selector: 'app-sideBar',
+  selector: 'app-users',
   standalone: true,
   imports: [
     CommonModule,
@@ -29,35 +32,12 @@ import { SweetAlert } from '../../shared/SweetAlert';
     MatButtonModule,
     RouterLink,
     ReactiveFormsModule,
+    formEditUserComponent,
+    formEditPasswordUserComponent,
+    UsersTableComponent,
   ],
-  templateUrl: './sideBar.component.html',
-  styleUrls: ['./sideBar.component.css'],
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class sideBarComponent {
-  title = 'acds-frontend';
-  urlSidebar = '';
-  role: string = '';
-
-  constructor(private router: Router, private profileService: ProfileService) {
-    this.getDataUser();
-    this.getRoute();
-  }
-  getDataUser() {
-    this.profileService.getProfile().subscribe(
-      (data) => {
-        this.role = data.role;
-        console.log(this.role);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
-
-  getRoute() {
-    //obtener ruta actual
-    this.urlSidebar = this.router.url;
-    console.log(this.urlSidebar);
-  }
-}
+export class usersComponent {}

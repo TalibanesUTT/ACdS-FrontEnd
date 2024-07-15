@@ -16,7 +16,6 @@ import { AuthService } from '../../../services/auth.service';
 import { headerComponent } from '../../../components/header/header.component';
 import { sideBarComponent } from '../../../components/sidebar/sideBar.component';
 import { UsersTableComponent } from '../../users-table/users-table.component';
-import { contentComponent } from '../../../components/content/content.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -31,8 +30,7 @@ import { contentComponent } from '../../../components/content/content.component'
     ReactiveFormsModule,
     headerComponent,
     sideBarComponent,
-    contentComponent,
-    UsersTableComponent
+    UsersTableComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

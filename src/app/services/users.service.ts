@@ -13,9 +13,11 @@ export class UsersService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAllUsers(): Observable<any> {
-    return this.http.get(this.API_URL + '/users', { headers:{
-      Authorization: 'Bearer ' + this.authService.getToken()
-    }});
+    return this.http.get(this.API_URL + '/users', {
+      headers: {
+        Authorization: 'Bearer ' + this.authService.getToken(),
+      },
+    });
   }
 
   login(form: IUser): Observable<any> {
@@ -35,9 +37,11 @@ export class UsersService {
     return this.http.get(this.API_URL + '/resendVerificationCode/' + id);
   }
 
-  updateUser( path: string, form: any): Observable<any> {
-    return this.http.put(environments.API_URL + '/' + path, form, { headers: {
-      Authorization: 'Bearer ' + this.authService.getToken()
-    }});
+  updateUser(path: string, form: any): Observable<any> {
+    return this.http.put(environments.API_URL + '/' + path, form, {
+      headers: {
+        Authorization: 'Bearer ' + this.authService.getToken(),
+      },
+    });
   }
 }
