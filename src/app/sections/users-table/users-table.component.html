@@ -1,27 +1,76 @@
+<form
+  [formGroup]="form"
+  class="form"
+  style="display: flex; flex-direction: row"
+>
+  <div style="display: flex; flex-direction: row">
+    <mat-form-field appearance="fill">
+      <mat-label>Busqueda...</mat-label>
+      <input matInput formControlName="myControl" autocomplete="myControl" />
+    </mat-form-field>
+    <mat-form-field style="width: 45%" appearance="outline">
+      <mat-select
+        placeholder="Filtrar por..."
+        formControlName="filter"
+        appearance="outline"
+      >
+        <mat-option value="name">Nombre</mat-option>
+        <mat-option value="email">Correo</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div style="display: flex; flex-direction: row; gap: 20px">
+    <mat-form-field style="width: 25%">
+      <mat-select placeholder="Rol" formControlName="role" appearance="outline">
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="customer">Cliente</mat-option>
+        <mat-option value="mechanic">Mecanico</mat-option>
+        <mat-option value="root">Root</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 25%">
+      <mat-select
+        placeholder="Status"
+        formControlName="status"
+        appearance="outline"
+      >
+        <mat-option value="one">Activo</mat-option>
+        <mat-option value="two">Inactivo</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <button class="buttonReset" (click)="resetFilters()">reset</button>
+  </div>
+</form>
+
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource">
-
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{ element.name }} {{ element.lastName }} </td>
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name }} {{ element.lastName }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
     </ng-container>
 
     <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Phone </th>
-      <td mat-cell *matCellDef="let element"> {{ element.phoneNumber }} </td>
+      <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+      <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef> Role </th>
+      <th mat-header-cell *matHeaderCellDef>Rol</th>
       <td mat-cell *matCellDef="let element">
         <div *ngIf="element.isEditing; else notEditing">
           <select [(ngModel)]="element.role">
-            <option *ngFor="let role of roles" [value]="role.viewValue">{{ role.viewValue }}</option>
+            <option *ngFor="let role of roles" [value]="role.viewValue">
+              {{ role.viewValue }}
+            </option>
           </select>
         </div>
         <ng-template #notEditing>
@@ -31,70 +80,107 @@
     </ng-container>
 
     <ng-container matColumnDef="emailConfirmed">
-      <th mat-header-cell *matHeaderCellDef> Email Confirmed </th>
+      <th mat-header-cell *matHeaderCellDef>Email Confirmado</th>
       <td mat-cell *matCellDef="let element">
-        @if (element.emailConfirmed) {
-          <mat-icon aria-hidden="false" aria-label="For active users" fontIcon="check_small"></mat-icon>
-        }
-        @else {
-          <mat-icon aria-hidden="false" aria-label="For inactive users" fontIcon="close"></mat-icon>
-        }
+        <mat-icon
+          *ngIf="element.emailConfirmed"
+          aria-hidden="false"
+          aria-label="Usuario activo"
+          fontIcon="check_small"
+        ></mat-icon>
+        <mat-icon
+          *ngIf="!element.emailConfirmed"
+          aria-hidden="false"
+          aria-label="Usuario inactivo"
+          fontIcon="close"
+        ></mat-icon>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="phoneConfirmed">
-      <th mat-header-cell *matHeaderCellDef> Phone Confirmed </th>
+      <th mat-header-cell *matHeaderCellDef>Teléfono Confirmado</th>
       <td mat-cell *matCellDef="let element">
-        @if (element.phoneConfirmed) {
-          <mat-icon aria-hidden="false" aria-label="For active users" fontIcon="check_small"></mat-icon>
-        }
-        @else {
-          <mat-icon aria-hidden="false" aria-label="For inactive users" fontIcon="close"></mat-icon>
-        }
+        <mat-icon
+          *ngIf="element.phoneConfirmed"
+          aria-hidden="false"
+          aria-label="Usuario activo"
+          fontIcon="check_small"
+        ></mat-icon>
+        <mat-icon
+          *ngIf="!element.phoneConfirmed"
+          aria-hidden="false"
+          aria-label="Usuario inactivo"
+          fontIcon="close"
+        ></mat-icon>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef> Active <i class="fas fa-angrycreative"></i> </th>
+      <th mat-header-cell *matHeaderCellDef>Activo</th>
       <td mat-cell *matCellDef="let element">
-          <div *ngIf="element.active; else notActive">
-            <button (click)="toggleActive(element.id)">
-              <mat-icon aria-hidden="false" aria-label="For active users" fontIcon="check_small"></mat-icon>
-            </button>
-          </div>
-          <ng-template #notActive>
-            <button (click)="toggleActive(element.id)">
-              <mat-icon aria-hidden="false" aria-label="For inactive users" fontIcon="close"></mat-icon>
-            </button>
-          </ng-template>
+        <div *ngIf="element.active; else notActive">
+          <button (click)="toggleActive(element.id)">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Usuario activo"
+              fontIcon="check_small"
+            ></mat-icon>
+          </button>
+        </div>
+        <ng-template #notActive>
+          <button (click)="toggleActive(element.id)">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Usuario inactivo"
+              fontIcon="close"
+            ></mat-icon>
+          </button>
+        </ng-template>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let element">
-        <div *ngIf="element.isEditing; else notEditing" style="display: inline-flex">
+        <div
+          *ngIf="element.isEditing; else notEditing"
+          style="display: inline-flex"
+        >
           <button mat-icon-button (click)="openDialog(element.id)">
-            <mat-icon aria-hidden="false" aria-label="Save user" fontIcon="save"></mat-icon>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Guardar usuario"
+              fontIcon="save"
+            ></mat-icon>
           </button>
           <button mat-icon-button (click)="cancelEdit(element.id)">
-            <mat-icon aria-hidden="false" aria-label="Cancel edit" fontIcon="cancel"></mat-icon>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Cancelar edición"
+              fontIcon="cancel"
+            ></mat-icon>
           </button>
         </div>
         <ng-template #notEditing>
           <button mat-icon-button (click)="editUser(element.id)">
-            <mat-icon aria-hidden="false" aria-label="Edit user" fontIcon="edit"></mat-icon>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Editar usuario"
+              fontIcon="edit"
+            ></mat-icon>
           </button>
         </ng-template>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Select page of periodic elements">
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Selecciona la página de elementos periódicos"
+  >
   </mat-paginator>
 </div>

@@ -19,7 +19,6 @@ nav {
 
 .options {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 40px;
   height: 100%;
@@ -29,10 +28,15 @@ button {
   background-color: #f5f7fa;
   border: none;
   border-radius: 50%;
-  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px; /* Ajusta el ancho según sea necesario */
   height: 50px; /* Ajusta la altura según sea necesario */
+}
+
+.imgSetting {
+  width: 25px;
+  height: 25px;
+  margin-right: 20px;
 }

@@ -29,4 +29,13 @@ export class AuthService {
   getToken(): string {
     return localStorage.getItem('token') ?? '';
   }
+
+  logout() {
+    //get with headers
+    return this.http.post(this.API_URL + '/logout', {
+      headers: {
+        Authorization: 'Bearer ' + this.getToken(),
+      },
+    });
+  }
 }
