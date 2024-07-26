@@ -18,6 +18,7 @@ import { Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 
 import { startWith, map, filter } from 'rxjs/operators';
+import { SweetAlert } from '../../shared/SweetAlert';
 
 @Component({
   selector: 'app-users-table',
@@ -69,11 +70,13 @@ export class UsersTableComponent implements AfterViewInit {
 
   constructor(usersService: UsersService, private fb: FormBuilder) {
     this.usersService = usersService;
-    this.usersService.getAllUsers().subscribe((data: UserInterface[]) => {
-      data.map((user: UserInterface) => {
+    this.usersService.getAllUsers().subscribe((data: any) => {
+      console.log(data);
+
+      data.data.map((user: UserInterface) => {
         user.isEditing = false;
       });
-      this.dataSource.data = data;
+      this.dataSource.data = data.data;
     });
     this.form = this.newFormControls();
     this.setupFilter();
@@ -172,6 +175,7 @@ export class UsersTableComponent implements AfterViewInit {
       };
 
       this.usersService.updateUser(user.updateURL, userToSend).subscribe();
+      SweetAlert.success('¡Éxito!', 'Usuario actualizado correctamente');
     }
   }
 
@@ -212,9 +216,9 @@ export class UsersTableComponent implements AfterViewInit {
   resetFilters() {
     this.form.reset({
       myControl: '',
-      filter: '',
-      role: '',
-      status: '',
+      filter: 'all',
+      role: 'all',
+      status: 'all',
     });
     this.dataSource.filter = ''; // Restablece el filtro de la tabla
   }

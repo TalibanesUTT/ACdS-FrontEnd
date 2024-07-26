@@ -81,7 +81,8 @@
 .links {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: end;
+  padding-bottom: 10px;
   width: 100%;
   font-size: 14px;
   margin-top: 27px;
