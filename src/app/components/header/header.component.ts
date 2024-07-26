@@ -47,7 +47,7 @@ export class headerComponent {
   logout() {
     this.authService.logout().subscribe(
       (data) => {
-        localStorage.removeItem('token');
+        localStorage.clear();
         this.router.navigate(['/login']);
       },
       (error) => {

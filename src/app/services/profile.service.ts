@@ -19,11 +19,42 @@ export class ProfileService {
     });
   }
 
-  putProfile(data: IUser): Observable<any> {
-    return this.http.put(this.API_URL + '/profile', data, {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
+  putProfile(data: IUser, id: number): Observable<any> {
+    if (data.phoneNumber) {
+      data.phoneNumber = data.phoneNumber.replace(/-/g, '') as '1231231231';
+    }
+    return this.http.put(
+      this.API_URL + `/user-management/updateProfile/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: 'Bearer ' + this.authService.getToken(),
+        },
+      }
+    );
+  }
+
+  updatePassword(
+    data: {
+      actualPassword: string;
+      newPassword: string;
+      passwordConfirmation: string;
+    },
+    id: number
+  ): Observable<any> {
+    return this.http.put(
+      this.API_URL + '/user-management/updatePassword/' + id,
+      data,
+      {
+        headers: {
+          Authorization: 'Bearer ' + this.authService.getToken(),
+        },
+      }
+    );
+  }
+  recoverPassword(email: string): Observable<any> {
+    return this.http.post(this.API_URL + '/user-management/recoverPassword', {
+      email,
     });
   }
 }

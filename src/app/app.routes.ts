@@ -24,6 +24,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'recoverPassword',
+    loadComponent: () =>
+      import('./sections/auth/recoverPassword/recoverPassword.component').then(
+        (m) => m.recoverPasswordComponent
+      ),
+  },
+  {
     //LandingPage
     path: 'ACdS',
     loadComponent: () =>

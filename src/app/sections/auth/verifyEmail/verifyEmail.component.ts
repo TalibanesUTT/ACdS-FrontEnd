@@ -68,11 +68,13 @@ export class verifyEmailComponent {
           this.resendCodeDisabled = true;
           return;
         }
+        console.log(res);
         SweetAlert.success('Éxito', res.message);
         this.router.navigate(['/login']);
       },
       (err) => {
-        SweetAlert.error('Error', 'El código ingresado es incorrecto');
+        console.log(err);
+        SweetAlert.error('Error', err.message);
       }
     );
   }

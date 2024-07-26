@@ -20,6 +20,10 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { CustomValidators } from '../../../shared/validation';
+import Swal from 'sweetalert2';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-formEditPasswordUser',
@@ -44,41 +48,77 @@ export class formEditPasswordUserComponent {
   @Input() PasswordSwitch: boolean = true;
   @Output() PasswordSwitchChange = new EventEmitter<boolean>();
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private profileService: ProfileService
+  ) {
     this.registerForm = this.newFormControls();
   }
   newFormControls(): FormGroup {
-    return this.fb.group({
-      passwordOld: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
+    return this.fb.group(
+      {
+        actualPassword: [
+          '',
+          [Validators.required, CustomValidators.passwordPattern],
         ],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
+        newPassword: [
+          '',
+          [Validators.required, CustomValidators.passwordPattern],
         ],
-      ],
-      passwordConfirmation: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+])[A-Za-z\\d!@#$%^&*()_+]{8,}$'
-          ),
+        passwordConfirmation: [
+          '',
+          [Validators.required, CustomValidators.passwordPattern],
         ],
-      ],
-    });
+      },
+      { validators: CustomValidators.validatorMatchPasswordUpdate }
+    );
   }
   PasswordChange(): void {
+    const USER = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log('Usuario', USER);
+    console.log('Formulario de cambio de contraseña', this.registerForm.value);
+    if (this.registerForm.invalid) {
+      SweetAlert.info('Aviso', 'Por favor, llena todos los campos');
+      return;
+    }
+    if (
+      this.registerForm.value.newPassword !==
+      this.registerForm.value.passwordConfirmation
+    ) {
+      SweetAlert.info('Aviso', 'Las contraseñas no coinciden');
+      return;
+    }
+    if (!this.PasswordSwitch) {
+      Swal.fire({
+        title: 'Aviso',
+        text: 'Estás a punto de modificar tu contraseña, a partir de ahora tendrás que utilizarla para iniciar sesión en la aplicación, por ello es importante que no la olvides. ¿Deseas continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.profileService
+            .updatePassword(this.registerForm.value, USER.id)
+            .subscribe(
+              (response) => {
+                console.log(response);
+                SweetAlert.success('Éxito', response.message);
+                this.registerForm.reset();
+                this.PasswordSwitch = !this.PasswordSwitch;
+                this.PasswordSwitchChange.emit(this.PasswordSwitch);
+              },
+              (error) => {
+                console.log(error);
+                SweetAlert.error('Error', error.error.error.message);
+              }
+            );
+        }
+      });
+    }
+  }
+  changeView(): void {
     this.PasswordSwitch = !this.PasswordSwitch;
     this.PasswordSwitchChange.emit(this.PasswordSwitch);
   }

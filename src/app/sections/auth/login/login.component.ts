@@ -61,11 +61,11 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
         console.log(res);
-        localStorage.setItem('token', res.access_token || '');
+        localStorage.setItem('token', res.data || '');
         localStorage.setItem('url', res.url || '');
         if (res.data) {
           localStorage.setItem('user', JSON.stringify(res.data) || '');
-          if (res.data.role === 'admin') {
+          if (res.data.role === 'admin' || res.data.role === 'root') {
             this.router.navigate(['/verifyEmail']);
             return;
           }

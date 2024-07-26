@@ -7,6 +7,7 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import {
   FormGroup,
   FormControl,
@@ -18,6 +19,8 @@ import { formEditUserComponent } from '../../../components/forms/formEditUser/fo
 import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { ProfileService } from '../../../services/profile.service';
+import { IUser } from '../../../interfaces/Users';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,11 +42,11 @@ import { ProfileService } from '../../../services/profile.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class profileComponent {
+  temporyDataUSer: IUser = {};
   editProfile: boolean = false;
   PasswordSwitch: boolean = true;
-  id: number = 1;
+  id: number = 0;
   userData: any = {
-    id: 1,
     name: 'Riley',
     lastName: 'Doe',
     email: 'riley.doe@example.com',
@@ -51,7 +54,11 @@ export class profileComponent {
     role: 'Admin',
   };
 
-  constructor(private profileService: ProfileService) {
+  constructor(
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.getProfile();
   }
 
@@ -60,6 +67,7 @@ export class profileComponent {
       console.log(res);
       this.userData = res;
       this.id = res.id;
+      this.temporyDataUSer = res;
       this.onPhoneFormat(this.userData.phoneNumber);
     });
   }
@@ -72,11 +80,63 @@ export class profileComponent {
     this.userData.phoneNumber = input;
   }
   changeEditProfile() {
+    this.userData.phoneNumber = this.userData.phoneNumber.replace('-', '');
     if (this.editProfile) {
-      this.userData.id = this.id;
-      SweetAlert.success('Profile Updated', 'Your profile has been updated');
+      this.editProfile = !this.editProfile;
+      console.log('datos actualizado', this.userData);
+      console.log('datos temporales', this.temporyDataUSer);
+      if (
+        this.userData.email !== this.temporyDataUSer.email ||
+        this.userData.phoneNumber !== this.temporyDataUSer.phoneNumber
+      ) {
+        Swal.fire({
+          title: 'Aviso',
+          text: 'Estás a punto de modificar tus datos. Por tu seguridad, esto desactivara momentáneamente tu cuenta hasta que verifiques tus nuevos datos. ¿Deseas continuar?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Si',
+          cancelButtonText: 'No',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.sendData();
+            this.logout();
+          }
+        });
+      } else {
+        this.sendData();
+      }
     }
     this.editProfile = !this.editProfile;
+  }
+  sendData() {
+    delete this.userData.emailConfirmed;
+    delete this.userData.phoneConfirmed;
+    delete this.userData.id;
+    this.profileService.putProfile(this.userData, this.id).subscribe(
+      (res) => {
+        SweetAlert.success('success', res.message);
+        this.editProfile = !this.editProfile;
+      },
+      (err) => {
+        if (err.error.error.message) {
+          SweetAlert.error('error', err.error.error.message);
+        } else {
+          SweetAlert.error('error', 'Vuelve a intentarlo');
+        }
+      }
+    );
+  }
+  logout() {
+    this.authService.logout().subscribe(
+      (res) => {
+        console.log(res);
+        localStorage.clear();
+        this.router.navigate(['/login']);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   editProfileChange(event: boolean) {

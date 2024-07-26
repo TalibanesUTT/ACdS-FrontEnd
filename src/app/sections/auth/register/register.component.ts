@@ -87,8 +87,8 @@ export class registerComponent {
         // console.log(response);
       },
       (error) => {
-        // console.error(error);
-        SweetAlert.error('Error', error.error.message);
+        console.log(error);
+        SweetAlert.error('Error', error.error.error.message);
       }
     );
   }

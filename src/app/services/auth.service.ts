@@ -32,7 +32,7 @@ export class AuthService {
 
   logout() {
     //get with headers
-    return this.http.post(this.API_URL + '/logout', {
+    return this.http.delete(this.API_URL + '/logout', {
       headers: {
         Authorization: 'Bearer ' + this.getToken(),
       },

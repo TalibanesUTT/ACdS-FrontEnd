@@ -40,4 +40,14 @@ export class CustomValidators {
       ? null
       : { passwordsMismatch: true };
   };
+
+  static validatorMatchPasswordUpdate: ValidatorFn = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    const password = control.get('newPassword')?.value;
+    const confirmPassword = control.get('passwordConfirmation')?.value;
+    return password && confirmPassword && password === confirmPassword
+      ? null
+      : { passwordsMismatchUpdate: true };
+  };
 }

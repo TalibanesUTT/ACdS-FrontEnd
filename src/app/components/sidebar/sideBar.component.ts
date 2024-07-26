@@ -47,7 +47,8 @@ export class sideBarComponent {
     this.profileService.getProfile().subscribe(
       (data) => {
         this.role = data.role;
-        console.log(this.role);
+        // console.log('side', data);
+        localStorage.setItem('user', JSON.stringify(data));
       },
       (error) => {
         console.log(error);

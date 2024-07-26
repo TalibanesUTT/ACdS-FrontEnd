@@ -7,6 +7,7 @@ export class SweetAlert {
       icon: 'success',
       title: title,
       text: message,
+      timer: 2000,
     });
   }
   //Alert error
