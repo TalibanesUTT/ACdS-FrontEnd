@@ -1,0 +1,85 @@
+<div class="container">
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    "
+  >
+    <form
+      [formGroup]="formFilter"
+      style="display: flex; flex-direction: row; height: 5%; width: 100%"
+    >
+      <div style="display: flex; flex-direction: row; width: 40%">
+        <input
+          formControlName="myControl"
+          type="text"
+          placeholder="Busqueda por marca"
+          class="inputSearch"
+        />
+      </div>
+    </form>
+    <div>
+      <button
+        matTooltip="Agregar nueva marca"
+        style="
+          width: 200px;
+          height: 40px;
+          border-radius: 5%;
+          background-color: #bc0505;
+          box-shadow: 0px 0px 5px 0px #000000;
+          color: white;
+        "
+        (click)="openDialog()"
+      >
+        <mat-icon>add</mat-icon>
+        Nueva Marca
+      </button>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Marca</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <p *ngIf="editTableIndex !== i">
+            {{ element.name }}
+          </p>
+          <form *ngIf="editTableIndex === i" [formGroup]="formCarBrand">
+            <input type="text" formControlName="name" class="inputSimple" />
+          </form>
+        </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <button
+            matTooltip="Editar nombre de la marca"
+            style="width: 40px; height: 40px"
+            (click)="editForm(element, i)"
+          >
+            <mat-icon *ngIf="editTableIndex !== i">edit</mat-icon>
+            <mat-icon *ngIf="editTableIndex === i">save</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

@@ -61,14 +61,14 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
         console.log(res);
-        localStorage.setItem('token', res.data || '');
-        localStorage.setItem('url', res.url || '');
         if (res.data) {
           localStorage.setItem('user', JSON.stringify(res.data) || '');
           if (res.data.role === 'admin' || res.data.role === 'root') {
+            localStorage.setItem('url', res.url || '');
             this.router.navigate(['/verifyEmail']);
             return;
           }
+          localStorage.setItem('token', res.data || '');
         }
         this.router.navigate(['/home/dashboard']);
       },

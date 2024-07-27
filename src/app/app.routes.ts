@@ -67,6 +67,13 @@ export const routes: Routes = [
             (m) => m.profileComponent
           ),
       },
+      {
+        path: 'carBrand',
+        loadComponent: () =>
+          import('./sections/panel/carBrand/carBrand.component').then(
+            (m) => m.carBrandComponent
+          ),
+      },
     ],
   },
   {

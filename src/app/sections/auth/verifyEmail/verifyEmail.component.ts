@@ -61,14 +61,14 @@ export class verifyEmailComponent {
     console.log(this.sendCode);
     this.authService.verifyEmail(url, this.sendCode).subscribe(
       (res) => {
-        if (res.token) {
-          localStorage.setItem('token', res.token);
+        console.log(res);
+        if (this.role) {
+          localStorage.setItem('token', res.data);
           SweetAlert.success('Éxito', res.message);
           this.router.navigate(['/home/dashboard']);
           this.resendCodeDisabled = true;
           return;
         }
-        console.log(res);
         SweetAlert.success('Éxito', res.message);
         this.router.navigate(['/login']);
       },

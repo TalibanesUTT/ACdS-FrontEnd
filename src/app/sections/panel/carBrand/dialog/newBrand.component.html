@@ -1,0 +1,16 @@
+<div class="container">
+  <h1 style="margin-bottom: -20px">Nueva Marca</h1>
+  <form [formGroup]="form">
+    <input
+      type="text"
+      placeholder="Ingresa la nueva marca"
+      class="input"
+      formControlName="name"
+      (input)="validateInput()"
+    />
+  </form>
+  <button class="buttonAdd" [disabled]="buttonDisabled" (click)="addBrand()">
+    <mat-icon>add</mat-icon>
+    Agregar
+  </button>
+</div>

@@ -14,7 +14,7 @@
       >
     </li>
     <li
-      *ngIf="role === 'root'"
+      *ngIf="role === 'root' || role === 'admin'"
       (click)="getRoute()"
       [ngClass]="{ 'active-border': urlSidebar === '/home/users' }"
     >
@@ -25,6 +25,20 @@
         class="nav-link"
         [ngClass]="{ 'active-link': urlSidebar === '/home/users' }"
         >Usuarios</a
+      >
+    </li>
+    <li
+      *ngIf="role === 'root' || role === 'admin'"
+      (click)="getRoute()"
+      [ngClass]="{ 'active-border': urlSidebar === '/home/carBrand' }"
+    >
+      <img src="assets/icons/profile.svg" alt="" />
+      <a
+        routerLink="/home/carBrand"
+        routerLinkActive="active-link"
+        class="nav-link"
+        [ngClass]="{ 'active-link': urlSidebar === '/home/carBrand' }"
+        >Marcas</a
       >
     </li>
 
