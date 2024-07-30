@@ -31,7 +31,7 @@
           box-shadow: 0px 0px 5px 0px #000000;
           color: white;
         "
-        (click)="openDialog()"
+        (click)="openDialog($event, 'add')"
       >
         <mat-icon>add</mat-icon>
         Nueva Marca
@@ -41,10 +41,7 @@
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- Position Column -->
+      <!-- ID Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>ID</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
@@ -54,12 +51,7 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Marca</th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <p *ngIf="editTableIndex !== i">
-            {{ element.name }}
-          </p>
-          <form *ngIf="editTableIndex === i" [formGroup]="formCarBrand">
-            <input type="text" formControlName="name" class="inputSimple" />
-          </form>
+          {{ element.name }}
         </td>
       </ng-container>
 
@@ -70,7 +62,7 @@
           <button
             matTooltip="Editar nombre de la marca"
             style="width: 40px; height: 40px"
-            (click)="editForm(element, i)"
+            (click)="openDialog(element, 'edit')"
           >
             <mat-icon *ngIf="editTableIndex !== i">edit</mat-icon>
             <mat-icon *ngIf="editTableIndex === i">save</mat-icon>
@@ -81,5 +73,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    <mat-paginator
+      [length]="dataSource.data.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 20]"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 </div>

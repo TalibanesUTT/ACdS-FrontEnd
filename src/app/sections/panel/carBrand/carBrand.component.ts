@@ -11,36 +11,30 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import { startWith, map, filter } from 'rxjs/operators';
-import { CarBrandsService } from '../../../services/carBrands.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CarBrandsService } from '../../../services/carBrands.service';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { newBrandComponent } from './dialog/newBrand.component';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-carBrand',
   standalone: true,
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatLabel,
-    ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
@@ -49,17 +43,13 @@ import {
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
-    CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
     MatButtonModule,
   ],
   templateUrl: './carBrand.component.html',
   styleUrls: ['./carBrand.component.css'],
 })
-export class carBrandComponent {
+export class carBrandComponent implements AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   readonly dialog = inject(MatDialog);
   title = 'acds-frontend';
   formFilter: FormGroup;
@@ -84,6 +74,10 @@ export class carBrandComponent {
     this.formFilter.get('myControl')!.valueChanges.subscribe((value) => {
       this.applyFilter(value);
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   getAllCarBrands() {
@@ -119,10 +113,12 @@ export class carBrandComponent {
     }
   }
 
-  openDialog() {
+  openDialog(item: any, action: string) {
+    console.log(item);
     const dialogRef = this.dialog.open(newBrandComponent, {
       width: '400px',
-      height: '200px',
+      height: '250px',
+      data: { item, action },
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);

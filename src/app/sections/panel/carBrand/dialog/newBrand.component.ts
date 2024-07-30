@@ -9,6 +9,7 @@ import {
   ReactiveFormsModule,
   FormGroup,
   FormBuilder,
+  Validators,
 } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -57,36 +58,71 @@ import { SweetAlert } from '../../../../shared/SweetAlert';
   styleUrls: ['./newBrand.component.css'],
 })
 export class newBrandComponent {
+  isDisabled: boolean = false;
   title = 'acds-frontend';
   form: FormGroup;
-  buttonDisabled = true;
+  textButton = '';
   readonly dialogRef = inject(MatDialogRef<newBrandComponent>);
+  data = inject(MAT_DIALOG_DATA);
+
   constructor(private carBrandsService: CarBrandsService) {
-    this.form = new FormBuilder().group({
-      name: [''],
-    });
+    console.log('recived data: ', this.data);
+    if (this.data.action === 'edit') {
+      console.log('Se va a editar');
+      this.textButton = 'Editar';
+      this.form = new FormBuilder().group({
+        name: [this.data.item.name, [Validators.required]],
+      });
+    } else {
+      console.log('Se va a agregar');
+      this.isDisabled = true;
+      this.textButton = 'Agregar';
+      this.form = new FormBuilder().group({
+        name: ['', [Validators.required]],
+      });
+    }
   }
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   addBrand() {
-    this.carBrandsService.postCarBrand(this.form.value).subscribe(
-      (res) => {
-        SweetAlert.success('Exito', res.message);
-        this.dialogRef.close();
-      },
-      (err) => {
-        console.log(err);
-        SweetAlert.error('Error', err.error.message);
-      }
-    );
-  }
-  validateInput() {
-    if (this.form.value.name === '') {
-      this.buttonDisabled = true;
-    } else {
-      this.buttonDisabled = false;
+    if (this.data.action === 'add') {
+      this.carBrandsService.postCarBrand(this.form.value).subscribe(
+        (res) => {
+          SweetAlert.success('Exito', res.message);
+          this.dialogRef.close();
+        },
+        (err) => {
+          console.log(err);
+          SweetAlert.error('Error', err.error.message);
+        }
+      );
+      return;
     }
+    this.carBrandsService
+      .putCarBrand(this.form.value, this.data.item.id)
+      .subscribe(
+        (res) => {
+          SweetAlert.success('Exito', res.message);
+          this.dialogRef.close();
+        },
+        (err) => {
+          console.log(err);
+          SweetAlert.error('Error', err.error.message);
+        }
+      );
+  }
+
+  validateInput() {
+    if (this.form.value.name !== '') {
+      this.isDisabled = false;
+      return;
+    }
+    this.isDisabled = true;
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 }

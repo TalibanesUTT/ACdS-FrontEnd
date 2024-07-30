@@ -1,5 +1,14 @@
 <div class="container">
-  <h1 style="margin-bottom: -20px">Nueva Marca</h1>
+  <div
+    style="display: flex; align-items: center; justify-content: space-between"
+  >
+    <h1 style="margin-bottom: -20px">Nueva Marca</h1>
+    <button>
+      <mat-icon (click)="closeDialog()" style="float: right; cursor: pointer"
+        >close</mat-icon
+      >
+    </button>
+  </div>
   <form [formGroup]="form">
     <input
       type="text"
@@ -7,10 +16,20 @@
       class="input"
       formControlName="name"
       (input)="validateInput()"
+      [disabled]="isDisabled"
+      (input)="validateInput()"
     />
+    <mat-error *ngIf="form.get('name')?.hasError('required')"
+      >Este campo es requerido</mat-error
+    >
   </form>
-  <button class="buttonAdd" [disabled]="buttonDisabled" (click)="addBrand()">
-    <mat-icon>add</mat-icon>
-    Agregar
+  <button
+    class="buttonAdd"
+    [disabled]="isDisabled"
+    (click)="addBrand()"
+    [ngClass]="{ 'disabled-opacity': isDisabled }"
+  >
+    <!-- <mat-icon>edit</mat-icon> -->
+    {{ textButton }}
   </button>
 </div>
