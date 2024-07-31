@@ -1,10 +1,43 @@
 <div class="sideBar">
+  <div
+    style="
+      width: 100%;
+      text-align: center;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <div
+      style="
+        width: 70px;
+        height: 70px;
+        background-color: black;
+        border-radius: 999px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <p style="color: white">Foto</p>
+    </div>
+    {{ role }}
+  </div>
   <ul>
     <li
-      (click)="getRoute()"
+      (click)="getRoute('dashboard')"
       [ngClass]="{ 'active-border': urlSidebar === '/home/dashboard' }"
     >
-      <img src="assets/icons/home.svg" alt="" />
+      <img
+        [src]="
+          urlSidebar === '/home/dashboard'
+            ? 'assets/icons/homeActive.svg'
+            : 'assets/icons/homeInactive.svg'
+        "
+        alt=""
+      />
       <a
         routerLink="/home/dashboard"
         routerLinkActive="active-link"
@@ -14,11 +47,18 @@
       >
     </li>
     <li
-      *ngIf="role === 'root' || role === 'admin'"
-      (click)="getRoute()"
+      *ngIf="role === 'Raíz' || role === 'Administrador'"
+      (click)="getRoute('usuarios')"
       [ngClass]="{ 'active-border': urlSidebar === '/home/users' }"
     >
-      <img src="assets/icons/profile.svg" alt="" />
+      <img
+        [src]="
+          urlSidebar === '/home/users'
+            ? 'assets/icons/profileActive.svg'
+            : 'assets/icons/profileInactive.svg'
+        "
+        alt=""
+      />
       <a
         routerLink="/home/users"
         routerLinkActive="active-link"
@@ -28,31 +68,43 @@
       >
     </li>
     <li
-      *ngIf="role === 'root' || role === 'admin'"
-      (click)="getRoute()"
-      [ngClass]="{ 'active-border': urlSidebar === '/home/carBrand' }"
-    >
-      <img src="assets/icons/profile.svg" alt="" />
-      <a
-        routerLink="/home/carBrand"
-        routerLinkActive="active-link"
-        class="nav-link"
-        [ngClass]="{ 'active-link': urlSidebar === '/home/carBrand' }"
-        >Marcas</a
-      >
-    </li>
-
-    <li
-      (click)="getRoute()"
+      (click)="getRoute('perfil')"
       [ngClass]="{ 'active-border': urlSidebar === '/home/perfil' }"
     >
-      <img src="assets/icons/profile.svg" alt="" />
+      <img
+        [src]="
+          urlSidebar === '/home/perfil'
+            ? 'assets/icons/profileActive.svg'
+            : 'assets/icons/profileInactive.svg'
+        "
+        alt=""
+      />
       <a
         routerLink="/home/perfil"
         routerLinkActive="active-link"
         class="nav-link"
         [ngClass]="{ 'active-link': urlSidebar === '/home/perfil' }"
         >Perfil</a
+      >
+    </li>
+    <li
+      (click)="getRoute('carBrand')"
+      [ngClass]="{ 'active-border': urlSidebar === '/home/carBrand' }"
+    >
+      <img
+        [src]="
+          urlSidebar === '/home/carBrand'
+            ? 'assets/icons/profileActive.svg'
+            : 'assets/icons/profileInactive.svg'
+        "
+        alt=""
+      />
+      <a
+        routerLink="/home/carBrand"
+        routerLinkActive="active-link"
+        class="nav-link"
+        [ngClass]="{ 'active-link': urlSidebar === '/home/carBrand' }"
+        >Marcas</a
       >
     </li>
   </ul>

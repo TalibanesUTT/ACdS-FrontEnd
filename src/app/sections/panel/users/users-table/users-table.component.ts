@@ -1,24 +1,20 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { UsersService } from '../../services/users.service';
+import { UsersService } from '../../../../services/users.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialog } from './confirm-dialog.component';
-import { ActiveDialog } from './active-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-
-import { startWith, map, filter } from 'rxjs/operators';
-import { SweetAlert } from '../../shared/SweetAlert';
+import { startWith, map } from 'rxjs/operators';
+import { userFormComponent } from './dialogs/userForm.component';
 
 @Component({
   selector: 'app-users-table',
@@ -58,6 +54,8 @@ export class UsersTableComponent implements AfterViewInit {
 
   dataSource = new MatTableDataSource<UserInterface>();
   usersService: UsersService;
+  updateURL = '';
+  user = JSON.parse(localStorage.getItem('user') || '{}');
   roles = [
     { value: 'admin', viewValue: 'Admin' },
     { value: 'customer', viewValue: 'Cliente' },
@@ -70,14 +68,7 @@ export class UsersTableComponent implements AfterViewInit {
 
   constructor(usersService: UsersService, private fb: FormBuilder) {
     this.usersService = usersService;
-    this.usersService.getAllUsers().subscribe((data: any) => {
-      console.log(data);
-
-      data.data.map((user: UserInterface) => {
-        user.isEditing = false;
-      });
-      this.dataSource.data = data.data;
-    });
+    this.getUsers();
     this.form = this.newFormControls();
     this.setupFilter();
   }
@@ -85,20 +76,28 @@ export class UsersTableComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-
+  getUsers() {
+    this.usersService.getAllUsers().subscribe((data: any) => {
+      console.log(data);
+      data.data.map((user: UserInterface) => {
+        user.isEditing = false;
+      });
+      this.dataSource.data = data.data;
+    });
+  }
   newFormControls(): FormGroup {
     return this.fb.group({
       myControl: [''],
-      filter: [''],
-      role: [''],
-      status: [''],
+      filter: ['all'],
+      role: ['all'],
+      status: ['all'],
     });
   }
 
   setupFilter() {
     this.form.valueChanges
       .pipe(
-        startWith({ myControl: '', filter: '', role: '', status: '' }),
+        startWith({ myControl: '', filter: 'all', role: 'all', status: 'all' }),
         map((value) => this.filterData(value))
       )
       .subscribe();
@@ -108,11 +107,8 @@ export class UsersTableComponent implements AfterViewInit {
     const filterValue = value.myControl
       ? value.myControl.trim().toLowerCase()
       : '';
-    const filterField = value.filter;
-    const roleFilter = value.role;
-    const statusFilter = value.status;
-
     this.dataSource.filterPredicate = (data: UserInterface, filter: string) => {
+      console.log(data);
       const matchFilter = [];
       const searchTerms = JSON.parse(filter);
 
@@ -129,15 +125,22 @@ export class UsersTableComponent implements AfterViewInit {
           case 'email':
             matchFilter.push(data.email.toLowerCase().includes(searchValue));
             break;
+          case 'phone':
+            matchFilter.push(
+              data.phoneNumber
+                ? data.phoneNumber.toString().includes(searchValue)
+                : false
+            );
+            break;
         }
       }
 
-      if (searchTerms.role) {
+      if (searchTerms.role && searchTerms.role !== 'all') {
         matchFilter.push(data.role === searchTerms.role);
       }
 
-      if (searchTerms.status) {
-        const isActive = searchTerms.status === 'one' ? true : false;
+      if (searchTerms.status && searchTerms.status !== 'all') {
+        const isActive = searchTerms.status === 'active' ? true : false;
         matchFilter.push(data.active === isActive);
       }
 
@@ -150,69 +153,6 @@ export class UsersTableComponent implements AfterViewInit {
     });
   }
 
-  editUser(id: number) {
-    const user = this.dataSource.data.find(
-      (user: UserInterface) => user.id === id
-    );
-    if (user) {
-      user.isEditing = true;
-    }
-  }
-
-  updateUser(id: number) {
-    const user = this.dataSource.data.find(
-      (user: UserInterface) => user.id === id
-    );
-    if (user) {
-      user.isEditing = false;
-      const userToSend = {
-        name: user.name,
-        lastName: user.lastName,
-        phoneNumber: user.phone,
-        email: user.email,
-        role: user.role,
-        active: user.active,
-      };
-
-      this.usersService.updateUser(user.updateURL, userToSend).subscribe();
-      SweetAlert.success('¡Éxito!', 'Usuario actualizado correctamente');
-    }
-  }
-
-  cancelEdit(id: number) {
-    const user = this.dataSource.data.find(
-      (user: UserInterface) => user.id === id
-    );
-    if (user) {
-      user.isEditing = false;
-    }
-  }
-
-  openDialog(id: number) {
-    const dialog = this.dialog.open(ConfirmDialog);
-
-    dialog.afterClosed().subscribe((result: boolean) => {
-      if (result) {
-        this.updateUser(id);
-      }
-    });
-  }
-
-  toggleActive(id: number) {
-    const user = this.dataSource.data.find(
-      (user: UserInterface) => user.id === id
-    );
-    if (user) {
-      const dialog = this.activeDialog.open(ActiveDialog);
-
-      dialog.afterClosed().subscribe((result: boolean) => {
-        if (result) {
-          user.active = !user.active;
-          this.updateUser(id);
-        }
-      });
-    }
-  }
   resetFilters() {
     this.form.reset({
       myControl: '',
@@ -220,11 +160,35 @@ export class UsersTableComponent implements AfterViewInit {
       role: 'all',
       status: 'all',
     });
-    this.dataSource.filter = ''; // Restablece el filtro de la tabla
+
+    // Actualiza el filtro de la tabla después de restablecer el formulario
+    this.dataSource.filter = JSON.stringify({
+      myControl: '',
+      filter: 'all',
+      role: 'all',
+      status: 'all',
+    });
+
+    // Opcional: también puedes forzar la actualización llamando a `setupFilter` de nuevo
+    this.setupFilter();
+  }
+
+  openDialog(item: any, action: string) {
+    console.log(item);
+    const dialogRef = this.dialog.open(userFormComponent, {
+      width: '400px',
+      height: '300px',
+      data: { item, action },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+      this.getUsers();
+    });
   }
 }
 
 export interface UserInterface {
+  phoneNumber: string;
   id: number;
   name: string;
   lastName: string;

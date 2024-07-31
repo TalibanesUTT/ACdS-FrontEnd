@@ -54,7 +54,6 @@ export class formEditUserComponent implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.newFormControls();
-    this.setFormState(this.editProfile);
     this.updateFormValues(this.userData);
   }
 
@@ -73,7 +72,7 @@ export class formEditUserComponent implements OnChanges {
       lastName: ['', [Validators.required, CustomValidators.namePattern]],
       email: ['', [Validators.required, CustomValidators.emailPattern]],
       phoneNumber: ['', [Validators.required, CustomValidators.phonePattern]],
-      rol: ['', [Validators.required, CustomValidators.namePattern]],
+      role: ['', [Validators.required, CustomValidators.namePattern]],
     });
   }
 
@@ -82,6 +81,11 @@ export class formEditUserComponent implements OnChanges {
       this.registerForm.enable();
     } else {
       this.registerForm.disable();
+      this.registerForm.get('name')?.enable();
+      this.registerForm.get('lastName')?.enable();
+      this.registerForm.get('email')?.enable();
+      this.registerForm.get('phoneNumber')?.enable();
+      this.registerForm.get('role')?.enable();
     }
   }
 
@@ -91,7 +95,7 @@ export class formEditUserComponent implements OnChanges {
       lastName: data.lastName,
       email: data.email,
       phoneNumber: data.phoneNumber,
-      rol: data.role,
+      role: data.role,
     });
   }
 
@@ -111,7 +115,6 @@ export class formEditUserComponent implements OnChanges {
   }
 
   ProfileChange(): void {
-    console.log('Cambio de estado de edición de perfil', this.userData);
     this.editProfile = !this.editProfile;
     this.editProfileChange.emit(this.editProfile);
   }
@@ -122,9 +125,8 @@ export class formEditUserComponent implements OnChanges {
       lastName: this.registerForm.get('lastName')?.value,
       email: this.registerForm.get('email')?.value,
       phoneNumber: this.registerForm.get('phoneNumber')?.value,
-      role: this.registerForm.get('rol')?.value,
+      role: this.registerForm.get('role')?.value,
     };
-    console.log('Datos del usuario actualizados antes de emitir:', data); // Log para verificar los datos antes de emitir
     this.userDataChange.emit(data);
   }
 }

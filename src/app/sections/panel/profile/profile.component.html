@@ -16,20 +16,20 @@
           class="buttonEdit"
           (click)="changeEditProfile()"
         >
-          Editar Perfil
+          Editar perfil
         </button>
         <button
           *ngIf="editProfile"
           class="buttonEdit"
           (click)="changeEditProfile()"
         >
-          Guardar Cambios
+          Guardar cambios
         </button>
       </section>
     </div>
     <div class="card2DataProfile">
-      <h1 *ngIf="PasswordSwitch">Información Personal</h1>
-      <h1 *ngIf="!PasswordSwitch">Actualizar Contraseña</h1>
+      <h1 *ngIf="PasswordSwitch">Información personal</h1>
+      <h1 *ngIf="!PasswordSwitch">Actualizar contraseña</h1>
       <section *ngIf="PasswordSwitch">
         <app-formEditUser
           [editProfile]="editProfile"

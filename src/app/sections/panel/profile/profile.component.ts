@@ -80,15 +80,21 @@ export class profileComponent {
     this.userData.phoneNumber = input;
   }
   changeEditProfile() {
+    let modifyPhone = false;
+    let modifyEmail = false;
+    this.userData.phoneNumber = this.userData.phoneNumber.replace('-', '');
     this.userData.phoneNumber = this.userData.phoneNumber.replace('-', '');
     if (this.editProfile) {
       this.editProfile = !this.editProfile;
       console.log('datos actualizado', this.userData);
       console.log('datos temporales', this.temporyDataUSer);
-      if (
-        this.userData.email !== this.temporyDataUSer.email ||
-        this.userData.phoneNumber !== this.temporyDataUSer.phoneNumber
-      ) {
+      if (this.userData.phoneNumber !== this.temporyDataUSer.phoneNumber) {
+        modifyPhone = true;
+      }
+      if (this.userData.email !== this.temporyDataUSer.email) {
+        modifyEmail = true;
+      }
+      if (modifyPhone || modifyEmail) {
         Swal.fire({
           title: 'Aviso',
           text: 'Estás a punto de modificar tus datos. Por tu seguridad, esto desactivara momentáneamente tu cuenta hasta que verifiques tus nuevos datos. ¿Deseas continuar?',
@@ -98,7 +104,7 @@ export class profileComponent {
           cancelButtonText: 'No',
         }).then((result) => {
           if (result.isConfirmed) {
-            this.sendData();
+            this.sendData(modifyPhone, modifyEmail);
             this.logout();
           }
         });
@@ -108,12 +114,24 @@ export class profileComponent {
     }
     this.editProfile = !this.editProfile;
   }
-  sendData() {
+  sendData(modifyPhone?: boolean, modifyEmail?: boolean) {
     delete this.userData.emailConfirmed;
     delete this.userData.phoneConfirmed;
     delete this.userData.id;
     this.profileService.putProfile(this.userData, this.id).subscribe(
       (res) => {
+        localStorage.setItem('user', JSON.stringify(this.userData));
+        if (modifyPhone && modifyEmail) {
+          localStorage.setItem('dataModify', 'both');
+          localStorage.setItem('url', res.url);
+        } else if (modifyEmail) {
+          localStorage.setItem('dataModify', 'email');
+          localStorage.setItem('url', res.url);
+        } else if (modifyPhone) {
+          localStorage.setItem('dataModify', 'phone');
+          localStorage.setItem('url', res.url);
+        }
+        console.log('respuesta', res);
         SweetAlert.success('success', res.message);
         this.editProfile = !this.editProfile;
       },
@@ -130,8 +148,7 @@ export class profileComponent {
     this.authService.logout().subscribe(
       (res) => {
         console.log(res);
-        localStorage.clear();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/reactiveCount']);
       },
       (err) => {
         console.log(err);

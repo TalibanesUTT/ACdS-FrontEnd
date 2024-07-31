@@ -1,6 +1,12 @@
 <main class="containerHome">
-  <app-sideBar></app-sideBar>
-  <app-header></app-header>
+  <app-sideBar
+    [sectionText]="sectionText"
+    (editSectionText)="editSectionText($event)"
+  ></app-sideBar>
+  <app-header
+    [sectionText]="sectionText"
+    (editSectionText)="editSectionText($event)"
+  ></app-header>
   <div class="main-content">
     <!-- <users-table></users-table> -->
     <router-outlet></router-outlet>

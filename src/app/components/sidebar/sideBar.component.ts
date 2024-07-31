@@ -1,4 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
@@ -35,19 +41,22 @@ import { SweetAlert } from '../../shared/SweetAlert';
   encapsulation: ViewEncapsulation.None,
 })
 export class sideBarComponent {
+  @Input() sectionText: string = '';
+  @Output() editSectionText = new EventEmitter<string>();
   title = 'acds-frontend';
   urlSidebar = '';
   role: string = '';
 
   constructor(private router: Router, private profileService: ProfileService) {
     this.getDataUser();
-    this.getRoute();
+    this.getRoute('dashboard');
   }
+
   getDataUser() {
     this.profileService.getProfile().subscribe(
       (data) => {
-        this.role = data.role;
-        // console.log('side', data);
+        console.log('side', data);
+        this.role = this.translateRole(data.role);
         localStorage.setItem('user', JSON.stringify(data));
       },
       (error) => {
@@ -56,9 +65,25 @@ export class sideBarComponent {
     );
   }
 
-  getRoute() {
+  getRoute(text: string) {
     //obtener ruta actual
     this.urlSidebar = this.router.url;
     console.log(this.urlSidebar);
+    this.sectionTextChange('Sección de ' + text);
+  }
+
+  translateRole(role: string): string {
+    const roleTranslations: { [key: string]: string } = {
+      root: 'Administrador',
+      admin: 'Administrativo',
+      mechanic: 'Mecánico',
+      customer: 'Cliente',
+      // Agrega más roles y sus traducciones según sea necesario
+    };
+    return roleTranslations[role] || role;
+  }
+
+  sectionTextChange(text: string) {
+    this.editSectionText.emit(text);
   }
 }

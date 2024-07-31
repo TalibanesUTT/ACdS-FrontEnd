@@ -11,13 +11,26 @@
         </div>
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
-        <p style="line-height: 30px; margin-bottom: 30px">
+        <p
+          *ngIf="dataModify == 'email'"
+          style="line-height: 30px; margin-bottom: 30px"
+        >
+          Ingresa el codigo de verificación que se envio al correo
+          <strong>{{ user.email }}</strong>
+        </p>
+        <p
+          *ngIf="dataModify == 'both'"
+          style="line-height: 30px; margin-bottom: 30px"
+        >
           Para proteger la seguridad de tu cuenta y de nuestra plataforma es
           necesario verificar tu cuenta, por lo cual se enviará un correo a
           <strong>{{ user.email }}</strong> y tras confirmarlo, recibirás un
           código de verificación a tu número de teléfono.
         </p>
-
+        <p *ngIf="dataModify == 'phone'" style="line-height: 30px">
+          Ingresa el código de verificación que se envio al número de teléfono
+          <strong>{{ user.phone }}</strong>
+        </p>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Ingresa el código de verificación</mat-label>

@@ -24,6 +24,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'reactiveCount',
+    loadComponent: () =>
+      import('./sections/auth/reactiveCount/reactiveCount.component').then(
+        (m) => m.reactiveCountComponent
+      ),
+  },
+  {
+    path: 'secondFactor',
+    loadComponent: () =>
+      import('./sections/auth/secondFactor/secondFactor.component').then(
+        (m) => m.secondFactorComponent
+      ),
+  },
+  {
     path: 'recoverPassword',
     loadComponent: () =>
       import('./sections/auth/recoverPassword/recoverPassword.component').then(

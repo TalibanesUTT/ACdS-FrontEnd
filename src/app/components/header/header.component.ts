@@ -1,4 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
@@ -19,7 +25,7 @@ import {
 } from '@angular/forms';
 import { SweetAlert } from '../../shared/SweetAlert';
 import { AuthService } from '../../services/auth.service';
-
+import { ProfileService } from '../../services/profile.service';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -40,15 +46,34 @@ import { AuthService } from '../../services/auth.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class headerComponent {
+  @Input() sectionText: string = '';
+  @Output() editSectionText = new EventEmitter<boolean>();
   title = 'acds-frontend';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private profileService: ProfileService
+  ) {}
+  user: any;
 
   logout() {
     this.authService.logout().subscribe(
       (data) => {
         localStorage.clear();
         this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  getDataUser() {
+    this.profileService.getProfile().subscribe(
+      (data) => {
+        console.log('header', data);
+        this.user = data;
+        localStorage.setItem('user', JSON.stringify(data));
       },
       (error) => {
         console.log(error);

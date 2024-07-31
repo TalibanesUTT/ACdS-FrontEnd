@@ -3,13 +3,13 @@
     <div style="width: 250px; height: 100%; display: flex; align-items: center">
       <img src="assets/img/logoAutomecanics.svg" alt="" />
     </div>
-    <h1 style="margin-top: 20px">Titulo Sección</h1>
+    <h1 style="margin-top: 20px; margin-left: -20px">{{ sectionText }}</h1>
   </div>
   <div class="options">
     <button mat-button [matMenuTriggerFor]="menu">
       <img src="assets/icons/settings.svg" alt="" class="imgSetting" />
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="logout()">Cerrar Sesión</button>
+        <button mat-menu-item (click)="logout()">Cerrar sesión</button>
       </mat-menu>
     </button>
     <!-- <button>

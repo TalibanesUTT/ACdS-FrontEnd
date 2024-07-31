@@ -1,0 +1,10 @@
+/* En tu archivo CSS o SCSS */
+td {
+  background-color: white; /* Cambia este valor al color que desees */
+  color: #000; /* Color del texto */
+}
+
+th {
+  background-color: #f2494e !important; /* Cambia este valor al color que desees */
+  color: white; /* Color del texto */
+}

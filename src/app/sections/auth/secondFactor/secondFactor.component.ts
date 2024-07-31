@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-secondFactor',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,10 +30,10 @@ import { SweetAlert } from '../../../shared/SweetAlert';
     RouterLink,
     ReactiveFormsModule,
   ],
-  templateUrl: './verifyEmail.component.html',
-  styleUrl: './verifyEmail.component.css',
+  templateUrl: './secondFactor.component.html',
+  styleUrl: './secondFactor.component.css',
 })
-export class verifyEmailComponent {
+export class secondFactorComponent {
   title = 'acds-frontend';
   verifyEmailForm: FormGroup;
   sendCode: string = '';
@@ -61,10 +61,11 @@ export class verifyEmailComponent {
     console.log(this.sendCode);
     this.authService.verifyEmail(url, this.sendCode).subscribe(
       (res) => {
-        console.log(res);
+        console.log('secondFactor', res);
+        localStorage.setItem('token', res.data);
         SweetAlert.success('Éxito', res.message);
-        localStorage.clear();
-        this.router.navigate(['/login']);
+        this.resendCodeDisabled = true;
+        this.router.navigate(['/home/dashboard']);
       },
       (err) => {
         console.log(err);

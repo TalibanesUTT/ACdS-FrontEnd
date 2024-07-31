@@ -34,6 +34,20 @@ export class ProfileService {
     );
   }
 
+  putUserTemporaly(data: IUser, id: number): Observable<any> {
+    if (data.phoneNumber) {
+      data.phoneNumber = data.phoneNumber.replace(/-/g, '') as '1231231231';
+    }
+    return this.http.put(
+      this.API_URL + `/user-management/updateProfile/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: 'Bearer ' + this.authService.getToken(),
+        },
+      }
+    );
+  }
   updatePassword(
     data: {
       actualPassword: string;
@@ -52,6 +66,7 @@ export class ProfileService {
       }
     );
   }
+
   recoverPassword(email: string): Observable<any> {
     return this.http.post(this.API_URL + '/user-management/recoverPassword', {
       email,

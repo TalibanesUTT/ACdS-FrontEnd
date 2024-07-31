@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environments } from '../../environments/environments';
 import { IUser } from '../interfaces/Users';
 import { AuthService } from './auth.service';
-import { UserInterface } from '../sections/users-table/users-table.component';
+import { UserInterface } from '../sections/panel/users/users-table/users-table.component';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -37,8 +37,9 @@ export class UsersService {
     return this.http.get(this.API_URL + '/resendVerificationCode/' + id);
   }
 
-  updateUser(path: string, form: any): Observable<any> {
-    return this.http.put(environments.API_URL + '/' + path, form, {
+  updateUser(form: any, updateURL: string): Observable<any> {
+    console.log(form);
+    return this.http.put(environments.API_URL + '/' + updateURL, form, {
       headers: {
         Authorization: 'Bearer ' + this.authService.getToken(),
       },

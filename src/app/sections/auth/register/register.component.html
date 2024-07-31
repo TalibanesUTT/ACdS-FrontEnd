@@ -59,6 +59,9 @@
               formControlName="phone"
               (input)="onPhoneFormat($event)"
             />
+            <mat-error *ngIf="registerForm.get('phone')?.hasError('required')">
+              El teléfono es obligatorio
+            </mat-error>
             <mat-error *ngIf="registerForm.get('phone')?.hasError('pattern')">
               El teléfono es inválido
             </mat-error>
@@ -111,12 +114,22 @@
         </div>
 
         <button
+          *ngIf="!userTemporalyExist"
           class="buttonLogin bg-primary"
           type="button"
           (click)="onSubmit()"
           [disabled]="registerForm.invalid"
         >
           Registrarse
+        </button>
+        <button
+          *ngIf="userTemporalyExist"
+          class="buttonLogin bg-primary"
+          type="button"
+          (click)="updateData()"
+          [disabled]="registerForm.invalid"
+        >
+          Actualizar datos
         </button>
       </form>
       <div class="links">

@@ -60,16 +60,14 @@ export class LoginComponent {
     }
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
-        console.log(res);
-        if (res.data) {
-          localStorage.setItem('user', JSON.stringify(res.data) || '');
-          if (res.data.role === 'admin' || res.data.role === 'root') {
-            localStorage.setItem('url', res.url || '');
-            this.router.navigate(['/verifyEmail']);
-            return;
-          }
-          localStorage.setItem('token', res.data || '');
+        console.log('login', res);
+        localStorage.setItem('user', JSON.stringify(res.data) || '');
+        if (res.data.role === 'admin' || res.data.role === 'root') {
+          localStorage.setItem('url', res.url || '');
+          this.router.navigate(['/secondFactor']);
+          return;
         }
+        localStorage.setItem('token', res.data || '');
         this.router.navigate(['/home/dashboard']);
       },
       (err) => {

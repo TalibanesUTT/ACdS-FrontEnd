@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-reactiveCount',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,22 +30,24 @@ import { SweetAlert } from '../../../shared/SweetAlert';
     RouterLink,
     ReactiveFormsModule,
   ],
-  templateUrl: './verifyEmail.component.html',
-  styleUrl: './verifyEmail.component.css',
+  templateUrl: './reactiveCount.component.html',
+  styleUrl: './reactiveCount.component.css',
 })
-export class verifyEmailComponent {
+export class reactiveCountComponent {
   title = 'acds-frontend';
   verifyEmailForm: FormGroup;
   sendCode: string = '';
   user = JSON.parse(localStorage.getItem('user') || '{}');
   resendCodeDisabled = true;
   role = this.user.role;
+  dataModify = localStorage.getItem('dataModify');
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
+    this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.verifyEmailForm = this.newFormControls();
   }
 
@@ -62,7 +64,10 @@ export class verifyEmailComponent {
     this.authService.verifyEmail(url, this.sendCode).subscribe(
       (res) => {
         console.log(res);
+        console.log('secondFactor', res);
+        localStorage.setItem('token', res.data);
         SweetAlert.success('Éxito', res.message);
+        this.resendCodeDisabled = true;
         localStorage.clear();
         this.router.navigate(['/login']);
       },

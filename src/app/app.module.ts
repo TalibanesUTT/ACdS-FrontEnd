@@ -13,7 +13,9 @@ import { headerComponent } from './components/header/header.component';
 import { profileComponent } from './sections/panel/profile/profile.component';
 import { formEditUserComponent } from './components/forms/formEditUser/formEditUser.component';
 import { formEditPasswordUserComponent } from './components/forms/formEditPasswordUser/formEditPasswordUser.component';
-import { UsersTableComponent } from './sections/users-table/users-table.component';
+import { UsersTableComponent } from './sections/panel/users/users-table/users-table.component';
+import { reactiveCountComponent } from './sections/auth/reactiveCount/reactiveCount.component';
+import { secondFactorComponent } from './sections/auth/secondFactor/secondFactor.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -68,6 +70,8 @@ import { MatTreeModule } from '@angular/material/tree';
     UsersTableComponent,
     formEditUserComponent,
     formEditPasswordUserComponent,
+    secondFactorComponent,
+    reactiveCountComponent,
     //Material
     MatFormFieldModule,
     MatAutocompleteModule,

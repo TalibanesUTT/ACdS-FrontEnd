@@ -9,7 +9,7 @@ body {
 .containerHome {
   display: grid;
   grid-template-columns: 300px 1fr;
-  width: 100%;
+  width: 98%;
   height: 100%;
 }
 

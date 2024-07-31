@@ -15,7 +15,7 @@ import { SweetAlert } from '../../../shared/SweetAlert';
 import { AuthService } from '../../../services/auth.service';
 import { headerComponent } from '../../../components/header/header.component';
 import { sideBarComponent } from '../../../components/sidebar/sideBar.component';
-import { UsersTableComponent } from '../../users-table/users-table.component';
+import { UsersTableComponent } from '../users/users-table/users-table.component';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -39,6 +39,7 @@ import { UsersTableComponent } from '../../users-table/users-table.component';
 export class HomeComponent {
   title = 'acds-frontend';
   loginForm: FormGroup;
+  sectionText: string = 'Bienvenido a la plataforma de ACdS';
 
   constructor(
     private fb: FormBuilder,
@@ -82,5 +83,9 @@ export class HomeComponent {
         SweetAlert.error('Error', err.error.message);
       }
     );
+  }
+
+  editSectionText(event: any): void {
+    this.sectionText = event;
   }
 }

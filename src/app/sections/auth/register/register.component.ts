@@ -18,6 +18,7 @@ import {
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { CustomValidators } from '../../../shared/validation';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-register',
@@ -38,12 +39,28 @@ export class registerComponent {
   title = 'acds-frontend';
   registerForm: FormGroup;
   passwordNotMatch = false;
+  userTemporaly: any;
+  userTemporalyExist = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private profileService: ProfileService,
     private router: Router
   ) {
+    const userString = localStorage.getItem('user');
+    this.userTemporaly = userString ? JSON.parse(userString) : null;
+    if (this.userTemporaly) {
+      console.log('hay usuario temporal');
+      this.userTemporalyExist = true;
+      this.userTemporaly.phoneNumber = this.formatPhoneNumber(
+        this.userTemporaly.phoneNumber
+      );
+      this.registerForm = this.userTemporalyForm(this.userTemporaly);
+      return;
+    }
+    console.log('no hay usuario temporal');
+    this.userTemporalyExist = false;
     this.registerForm = this.newFormControls();
   }
 
@@ -64,10 +81,44 @@ export class registerComponent {
     );
   }
 
+  userTemporalyForm(user: any): FormGroup {
+    return this.fb.group(
+      {
+        name: [user.name, [Validators.required, CustomValidators.namePattern]],
+        lastName: [
+          user.lastName,
+          [Validators.required, CustomValidators.namePattern],
+        ],
+        email: [
+          user.email,
+          [Validators.required, CustomValidators.emailPattern],
+        ],
+        phone: [
+          user.phoneNumber,
+          [Validators.required, CustomValidators.phonePattern],
+        ],
+        password: ['', [Validators.required, CustomValidators.passwordPattern]],
+        passwordConfirmation: [
+          '',
+          [Validators.required, CustomValidators.passwordPattern],
+        ],
+      },
+      { validators: CustomValidators.validatorMatchPassword } // Aplica el validador personalizado aquí
+    );
+  }
+
+  formatPhoneNumber(phone: string): string {
+    let cleaned = ('' + phone).replace(/\D/g, '');
+    let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return match[1] + '-' + match[2] + '-' + match[3];
+    }
+    return phone;
+  }
+
   onSubmit(): void {
     let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
     this.registerForm.value.phone = newPhone;
-    console.log(this.registerForm.value);
     if (!this.registerForm.valid) {
       SweetAlert.info('Error', 'Por favor, revisa los campos');
       return;
@@ -84,13 +135,36 @@ export class registerComponent {
         localStorage.setItem('url', response.url);
         localStorage.setItem('user', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
-        // console.log(response);
+        SweetAlert.success('Éxito', response.message);
       },
       (error) => {
         console.log(error);
         SweetAlert.error('Error', error.error.error.message);
       }
     );
+  }
+
+  updateData(): void {
+    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
+    this.registerForm.value.phone = newPhone;
+    delete this.registerForm.value.phone;
+    delete this.registerForm.value.passwordConfirmation;
+    this.profileService
+      .putUserTemporaly(this.registerForm.value, this.userTemporaly.id)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          delete response.data.role;
+          localStorage.setItem('url', response.url);
+          localStorage.setItem('user', JSON.stringify(response.data));
+          this.router.navigate(['/verifyEmail']);
+          SweetAlert.success('Éxito', response.message);
+        },
+        (error) => {
+          console.log(error);
+          SweetAlert.error('Error', error.error.error.message);
+        }
+      );
   }
 
   onPhoneFormat(event: any): void {

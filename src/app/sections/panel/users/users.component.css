@@ -1,7 +1,8 @@
 .container {
   height: 90vh;
+  width: 99.5%;
   background-color: #f5f7fa;
-  padding-top: 20px;
+  padding-top: 0px;
   padding-left: 20px;
   padding-right: 20px;
 }

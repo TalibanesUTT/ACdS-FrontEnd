@@ -18,7 +18,7 @@ import { formEditUserComponent } from '../../../components/forms/formEditUser/fo
 import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { ProfileService } from '../../../services/profile.service';
-import { UsersTableComponent } from '../../users-table/users-table.component';
+import { UsersTableComponent } from './users-table/users-table.component';
 
 @Component({
   selector: 'app-users',
