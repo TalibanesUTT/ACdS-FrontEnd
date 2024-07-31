@@ -6,15 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { CustomValidators } from '../../../shared/validation';
@@ -23,15 +15,7 @@ import { ProfileService } from '../../../services/profile.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -42,20 +26,13 @@ export class registerComponent {
   userTemporaly: any;
   userTemporalyExist = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private profileService: ProfileService,
-    private router: Router
-  ) {
-    const userString = localStorage.getItem('user');
+  constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService, private router: Router) {
+    const userString = localStorage.getItem('userTemporaly');
     this.userTemporaly = userString ? JSON.parse(userString) : null;
     if (this.userTemporaly) {
       console.log('hay usuario temporal');
       this.userTemporalyExist = true;
-      this.userTemporaly.phoneNumber = this.formatPhoneNumber(
-        this.userTemporaly.phoneNumber
-      );
+      this.userTemporaly.phoneNumber = this.formatPhoneNumber(this.userTemporaly.phoneNumber);
       this.registerForm = this.userTemporalyForm(this.userTemporaly);
       return;
     }
@@ -72,10 +49,7 @@ export class registerComponent {
         email: ['', [Validators.required, CustomValidators.emailPattern]],
         phone: ['', [Validators.required, CustomValidators.phonePattern]],
         password: ['', [Validators.required, CustomValidators.passwordPattern]],
-        passwordConfirmation: [
-          '',
-          [Validators.required, CustomValidators.passwordPattern],
-        ],
+        passwordConfirmation: ['', [Validators.required, CustomValidators.passwordPattern]],
       },
       { validators: CustomValidators.validatorMatchPassword } // Aplica el validador personalizado aquí
     );
@@ -85,23 +59,11 @@ export class registerComponent {
     return this.fb.group(
       {
         name: [user.name, [Validators.required, CustomValidators.namePattern]],
-        lastName: [
-          user.lastName,
-          [Validators.required, CustomValidators.namePattern],
-        ],
-        email: [
-          user.email,
-          [Validators.required, CustomValidators.emailPattern],
-        ],
-        phone: [
-          user.phoneNumber,
-          [Validators.required, CustomValidators.phonePattern],
-        ],
+        lastName: [user.lastName, [Validators.required, CustomValidators.namePattern]],
+        email: [user.email, [Validators.required, CustomValidators.emailPattern]],
+        phone: [user.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
         password: ['', [Validators.required, CustomValidators.passwordPattern]],
-        passwordConfirmation: [
-          '',
-          [Validators.required, CustomValidators.passwordPattern],
-        ],
+        passwordConfirmation: ['', [Validators.required, CustomValidators.passwordPattern]],
       },
       { validators: CustomValidators.validatorMatchPassword } // Aplica el validador personalizado aquí
     );
@@ -133,7 +95,7 @@ export class registerComponent {
       (response) => {
         console.log(response);
         localStorage.setItem('url', response.url);
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('userTemporaly', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
         SweetAlert.success('Éxito', response.message);
       },
@@ -149,22 +111,20 @@ export class registerComponent {
     this.registerForm.value.phone = newPhone;
     delete this.registerForm.value.phone;
     delete this.registerForm.value.passwordConfirmation;
-    this.profileService
-      .putUserTemporaly(this.registerForm.value, this.userTemporaly.id)
-      .subscribe(
-        (response) => {
-          console.log(response);
-          delete response.data.role;
-          localStorage.setItem('url', response.url);
-          localStorage.setItem('user', JSON.stringify(response.data));
-          this.router.navigate(['/verifyEmail']);
-          SweetAlert.success('Éxito', response.message);
-        },
-        (error) => {
-          console.log(error);
-          SweetAlert.error('Error', error.error.error.message);
-        }
-      );
+    this.profileService.putUserTemporaly(this.registerForm.value, this.userTemporaly.id).subscribe(
+      (response) => {
+        console.log(response);
+        delete response.data.role;
+        localStorage.setItem('url', response.url);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        this.router.navigate(['/verifyEmail']);
+        SweetAlert.success('Éxito', response.message);
+      },
+      (error) => {
+        console.log(error);
+        SweetAlert.error('Error', error.error.error.message);
+      }
+    );
   }
 
   onPhoneFormat(event: any): void {

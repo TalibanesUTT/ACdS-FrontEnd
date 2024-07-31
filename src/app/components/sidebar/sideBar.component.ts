@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
@@ -14,28 +8,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert } from '../../shared/SweetAlert';
+import { ChangeDetectorRef } from '@angular/core';
+import { NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-sideBar',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './sideBar.component.html',
   styleUrls: ['./sideBar.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -47,9 +28,20 @@ export class sideBarComponent {
   urlSidebar = '';
   role: string = '';
 
-  constructor(private router: Router, private profileService: ProfileService) {
+  constructor(private router: Router, private profileService: ProfileService, private cdr: ChangeDetectorRef) {
+    this.initializeComponent();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.urlSidebar = this.router.url;
+        this.cdr.detectChanges(); // Fuerza la detección de cambios
+      }
+    });
+  }
+
+  initializeComponent() {
     this.getDataUser();
-    this.getRoute('dashboard');
+    this.urlSidebar = this.router.url;
   }
 
   getDataUser() {
@@ -66,10 +58,8 @@ export class sideBarComponent {
   }
 
   getRoute(text: string) {
-    //obtener ruta actual
     this.urlSidebar = this.router.url;
-    console.log(this.urlSidebar);
-    this.sectionTextChange('Sección de ' + text);
+    this.sectionTextChange(text);
   }
 
   translateRole(role: string): string {
@@ -78,12 +68,15 @@ export class sideBarComponent {
       admin: 'Administrativo',
       mechanic: 'Mecánico',
       customer: 'Cliente',
-      // Agrega más roles y sus traducciones según sea necesario
     };
     return roleTranslations[role] || role;
   }
 
   sectionTextChange(text: string) {
     this.editSectionText.emit(text);
+  }
+
+  isActiveRoute(route: string): boolean {
+    return this.router.url === route;
   }
 }

@@ -1,46 +1,12 @@
 <div class="container">
-  <div
-    style="
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      height: 40px;
-    "
-  >
-    <form
-      [formGroup]="formFilter"
-      style="
-        display: flex;
-        flex-direction: row;
-        height: 5%;
-        width: 100%;
-        height: 100%;
-        margin-bottom: 20px;
-      "
-    >
+  <div style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 23px; height: 40px">
+    <form [formGroup]="formFilter" style="display: flex; flex-direction: row; height: 5%; width: 100%; height: 100%; margin-bottom: 20px">
       <div style="display: flex; flex-direction: row; width: 40%">
-        <input
-          formControlName="myControl"
-          type="text"
-          placeholder="Busqueda por marca"
-          class="inputSearch"
-        />
+        <input formControlName="myControl" type="text" placeholder="Busqueda por marca" class="inputSearch" />
       </div>
     </form>
-    <div>
-      <button
-        matTooltip="Agregar nueva marca"
-        style="
-          width: 200px;
-          height: 40px;
-          border-radius: 5%;
-          background-color: #bc0505;
-          box-shadow: 0px 0px 5px 0px #000000;
-          color: white;
-        "
-        (click)="openDialog($event, 'add')"
-      >
+    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 20%; height: 45px">
+      <button class="buttonReset" (click)="openDialog($event, 'add')">
         <mat-icon>add</mat-icon>
         Nueva marca
       </button>
@@ -66,16 +32,8 @@
       <!-- Action Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td
-          mat-cell
-          *matCellDef="let element; let i = index"
-          style="display: flex; justify-content: center; align-items: center"
-        >
-          <button
-            matTooltip="Editar nombre de la marca"
-            style="width: 40px; height: 40px"
-            (click)="openDialog(element, 'edit')"
-          >
+        <td mat-cell *matCellDef="let element; let i = index" style="display: flex; justify-content: center; align-items: center">
+          <button matTooltip="Editar nombre de la marca" style="width: 40px; height: 40px" (click)="openDialog(element, 'edit')">
             <mat-icon>edit</mat-icon>
           </button>
         </td>
@@ -84,12 +42,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <mat-paginator
-      [length]="dataSource.data.length"
-      [pageSize]="10"
-      [pageSizeOptions]="[10, 20]"
-      aria-label="Select page"
-    >
-    </mat-paginator>
+    <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[10, 20]" aria-label="Select page"> </mat-paginator>
   </div>
 </div>

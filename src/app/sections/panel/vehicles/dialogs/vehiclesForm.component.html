@@ -1,0 +1,36 @@
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px">
+  <h1>{{ textButton }} cliente</h1>
+  <button>
+    <mat-icon (click)="closeDialog()" style="float: right; cursor: pointer">close</mat-icon>
+  </button>
+</div>
+<div class="containerDialog">
+  <form [formGroup]="form" style="width: 80%; display: flex; flex-direction: column">
+    <mat-form-field class="inputForm" appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput placeholder="Nombre" formControlName="name" [disabled]="isDisabled" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')">Este campo es requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field class="inputForm" appearance="outline">
+      <mat-label>Apellidos</mat-label>
+      <input matInput placeholder="Apellidos" formControlName="lastName" [disabled]="isDisabled" />
+      <mat-error *ngIf="form.get('lastName')?.hasError('required')">Este campo es requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field class="inputForm" appearance="outline">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput placeholder="Correo electrónico" formControlName="email" [disabled]="isDisabled" />
+      <mat-error *ngIf="form.get('email')?.hasError('required')">Este campo es requerido</mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">El correo electrónico no es válido</mat-error>
+    </mat-form-field>
+    <mat-form-field class="inputForm" appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput placeholder="Teléfono" formControlName="phoneNumber" [disabled]="isDisabled" />
+      <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">Este campo es requerido</mat-error>
+    </mat-form-field>
+    <mat-slide-toggle *ngIf="action === 'edit'" formControlName="active" [disabled]="isDisabled"> Activo </mat-slide-toggle>
+    <button class="buttonAdd" [disabled]="isDisabled" (click)="submit()" [ngClass]="{ 'disabled-opacity': isDisabled }">
+      <!-- <mat-icon>edit</mat-icon> -->
+      {{ textButton }}
+    </button>
+  </form>
+</div>

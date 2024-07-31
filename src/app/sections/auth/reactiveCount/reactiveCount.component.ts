@@ -7,29 +7,14 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-reactiveCount',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './reactiveCount.component.html',
   styleUrl: './reactiveCount.component.css',
 })
@@ -42,11 +27,7 @@ export class reactiveCountComponent {
   role = this.user.role;
   dataModify = localStorage.getItem('dataModify');
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.verifyEmailForm = this.newFormControls();
   }
@@ -63,12 +44,16 @@ export class reactiveCountComponent {
     console.log(this.sendCode);
     this.authService.verifyEmail(url, this.sendCode).subscribe(
       (res) => {
-        console.log(res);
         console.log('secondFactor', res);
+        if (res.message === 'Sesión iniciada correctamente.') {
+          localStorage.setItem('token', res.data);
+          SweetAlert.success('Éxito', res.message);
+          this.router.navigate(['/home/dashboard']);
+          return;
+        }
         localStorage.setItem('token', res.data);
         SweetAlert.success('Éxito', res.message);
         this.resendCodeDisabled = true;
-        localStorage.clear();
         this.router.navigate(['/login']);
       },
       (err) => {
@@ -88,15 +73,12 @@ export class reactiveCountComponent {
     if (input.length > 6) {
       input = input.slice(0, 6);
     }
-    input = input.replace(
-      /(\d{2})(\d{2})?(\d{2})?/,
-      (match: string, p1: string, p2: string, p3: string) => {
-        let result = p1;
-        if (p2) result += '-' + p2;
-        if (p3) result += '-' + p3;
-        return result;
-      }
-    );
+    input = input.replace(/(\d{2})(\d{2})?(\d{2})?/, (match: string, p1: string, p2: string, p3: string) => {
+      let result = p1;
+      if (p2) result += '-' + p2;
+      if (p3) result += '-' + p3;
+      return result;
+    });
     event.target.value = input;
     this.verifyEmailForm.get('code')?.setValue(input, { emitEvent: false });
     this.sendCode = input.replace(/-/g, '');

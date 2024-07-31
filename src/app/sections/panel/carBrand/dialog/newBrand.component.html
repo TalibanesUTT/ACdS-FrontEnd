@@ -1,47 +1,18 @@
-<div
-  style="
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-  "
->
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 10px">
   <h1>{{ textButton }} marca</h1>
   <button>
-    <mat-icon (click)="closeDialog()" style="float: right; cursor: pointer"
-      >close</mat-icon
-    >
+    <mat-icon (click)="closeDialog()" style="float: right; cursor: pointer"> close </mat-icon>
   </button>
 </div>
 <div class="containerDialog">
-  <form
-    [formGroup]="form"
-    style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      width: 80%;
-    "
-  >
-    <input
-      type="text"
-      placeholder="Ingresa la marca"
-      class="input"
-      formControlName="name"
-      (input)="validateInput()"
-      [disabled]="isDisabled"
-    />
-    <mat-error *ngIf="form.get('name')?.hasError('required')"
-      >Este campo es requerido</mat-error
-    >
-    <button
-      class="buttonAdd"
-      [disabled]="isDisabled"
-      (click)="addBrand()"
-      [ngClass]="{ 'disabled-opacity': isDisabled }"
-    >
-      <!-- <mat-icon>edit</mat-icon> -->
+  <form [formGroup]="form" style="width: 80%">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Marca</mat-label>
+      <input matInput type="text" placeholder="Ingresa la marca" formControlName="name" (input)="validateInput()" [disabled]="isDisabled" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')"> Este campo es requerido </mat-error>
+    </mat-form-field>
+
+    <button mat-button class="buttonAdd" [disabled]="isDisabled" (click)="addBrand()" [ngClass]="{ 'disabled-opacity': isDisabled }">
       {{ textButton }}
     </button>
   </form>

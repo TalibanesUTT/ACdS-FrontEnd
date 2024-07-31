@@ -1,0 +1,41 @@
+<div
+  style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  "
+>
+  <h1>{{ textButton }} usuario</h1>
+  <button>
+    <mat-icon (click)="closeDialog()" style="float: right; cursor: pointer"
+      >close</mat-icon
+    >
+  </button>
+</div>
+<div class="containerDialog">
+  <form [formGroup]="form" style="width: 80%">
+    <select class="input" formControlName="role" [disabled]="isDisabled">
+      <option value="admin">Admin</option>
+      <option value="customer">Cliente</option>
+      <option value="mechanic">Mecanico</option>
+      <option value="root">Root</option>
+    </select>
+    <mat-error *ngIf="form.get('role')?.hasError('required')"
+      >Este campo es requerido</mat-error
+    >
+    <mat-slide-toggle formControlName="active" [disabled]="isDisabled">
+      Activo
+    </mat-slide-toggle>
+    <button
+      class="buttonAdd"
+      [disabled]="isDisabled"
+      (click)="submit()"
+      [ngClass]="{ 'disabled-opacity': isDisabled }"
+    >
+      <!-- <mat-icon>edit</mat-icon> -->
+      {{ textButton }}
+    </button>
+  </form>
+</div>

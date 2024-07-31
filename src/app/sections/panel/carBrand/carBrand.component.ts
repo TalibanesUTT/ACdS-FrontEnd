@@ -4,19 +4,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {
-  MatDialogModule,
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -58,10 +48,7 @@ export class carBrandComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<any>();
   editTableIndex: number | null = null; // Variable para rastrear la fila que se está editando
 
-  constructor(
-    private fb: FormBuilder,
-    private carBrandsService: CarBrandsService
-  ) {
+  constructor(private fb: FormBuilder, private carBrandsService: CarBrandsService) {
     this.formFilter = this.fb.group({
       myControl: [''],
     });
@@ -93,18 +80,16 @@ export class carBrandComponent implements AfterViewInit {
   editForm(data: any, index: number) {
     if (this.editTableIndex === index) {
       console.log('save');
-      this.carBrandsService
-        .putCarBrand(this.formCarBrand.value, data.id)
-        .subscribe(
-          (res) => {
-            SweetAlert.success('Exito', res.message);
-            this.getAllCarBrands();
-          },
-          (err) => {
-            console.log(err);
-            SweetAlert.error('Error', err.error.error.message);
-          }
-        );
+      this.carBrandsService.putCarBrand(this.formCarBrand.value, data.id).subscribe(
+        (res) => {
+          SweetAlert.success('Exito', res.message);
+          this.getAllCarBrands();
+        },
+        (err) => {
+          console.log(err);
+          SweetAlert.error('Error', err.error.error.message);
+        }
+      );
       this.editTableIndex = null; // Resetea el índice después de guardar
     } else {
       console.log('edit', data);
