@@ -20,14 +20,14 @@
       <mat-label>Correo electrónico</mat-label>
       <input matInput placeholder="Correo electrónico" formControlName="email" [disabled]="isDisabled" />
       <mat-error *ngIf="form.get('email')?.hasError('required')">Este campo es requerido</mat-error>
-      <mat-error *ngIf="form.get('email')?.hasError('email')">El correo electrónico no es válido</mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email') && !form.get('email')?.hasError('required')">Correo electrónico no válido</mat-error>
     </mat-form-field>
     <mat-form-field class="inputForm" appearance="outline">
       <mat-label>Teléfono</mat-label>
       <input matInput (input)="onPhoneFormat($event)" placeholder="Teléfono" formControlName="phoneNumber" [disabled]="isDisabled" />
       <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">Este campo es requerido</mat-error>
     </mat-form-field>
-    <mat-slide-toggle *ngIf="action === 'edit'" formControlName="active" [disabled]="isDisabled"> Activo </mat-slide-toggle>
+    <!-- <mat-slide-toggle *ngIf="action === 'edit'" formControlName="active" [disabled]="isDisabled"> Activo </mat-slide-toggle> -->
     <button class="buttonAdd" [disabled]="isDisabled" (click)="submit()" [ngClass]="{ 'disabled-opacity': isDisabled }">
       <!-- <mat-icon>edit</mat-icon> -->
       {{ textButton }}

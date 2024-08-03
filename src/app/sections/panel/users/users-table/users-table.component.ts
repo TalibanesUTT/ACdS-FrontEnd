@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { UsersService } from '../../../../services/users.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +15,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { startWith, map } from 'rxjs/operators';
 import { userFormComponent } from './dialogs/userForm.component';
+import { MatPaginatorIntlEspañol } from '../../../../shared/MatPaginatorIntl';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import Swal from 'sweetalert2';
+import { ProfileService } from '../../../../services/profile.service';
+import { SweetAlert } from '../../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-users-table',
@@ -35,20 +40,13 @@ import { userFormComponent } from './dialogs/userForm.component';
     MatLabel,
     MatInputModule,
     MatSelectModule,
+    MatTooltipModule,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
 })
 export class UsersTableComponent implements AfterViewInit {
   form: FormGroup;
-  displayedColumns: string[] = [
-    'name',
-    'email',
-    'phone',
-    'role',
-    'phoneConfirmed',
-    'emailConfirmed',
-    'active',
-    'actions',
-  ];
+  displayedColumns: string[] = ['name', 'email', 'phone', 'role', 'phoneConfirmed', 'emailConfirmed', 'active', 'actions'];
   readonly dialog = inject(MatDialog);
   readonly activeDialog = inject(MatDialog);
 
@@ -56,17 +54,18 @@ export class UsersTableComponent implements AfterViewInit {
   usersService: UsersService;
   updateURL = '';
   user = JSON.parse(localStorage.getItem('user') || '{}');
-  roles = [
-    { value: 'admin', viewValue: 'Admin' },
-    { value: 'customer', viewValue: 'Cliente' },
-    { value: 'mechanic', viewValue: 'Mecanico' },
-    { value: 'root', viewValue: 'Root' },
-  ];
+
+  roleMap: { [key: string]: string } = {
+    admin: 'Administrativo',
+    customer: 'Cliente',
+    mechanic: 'Mecánico',
+    root: 'Administrador',
+  };
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  constructor(usersService: UsersService, private fb: FormBuilder) {
+  constructor(usersService: UsersService, private fb: FormBuilder, private profileService: ProfileService) {
     this.usersService = usersService;
     this.getUsers();
     this.form = this.newFormControls();
@@ -76,6 +75,7 @@ export class UsersTableComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
   getUsers() {
     this.usersService.getAllUsers().subscribe((data: any) => {
       console.log(data);
@@ -85,6 +85,7 @@ export class UsersTableComponent implements AfterViewInit {
       this.dataSource.data = data.data;
     });
   }
+
   newFormControls(): FormGroup {
     return this.fb.group({
       myControl: [''],
@@ -104,9 +105,7 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   filterData(value: any) {
-    const filterValue = value.myControl
-      ? value.myControl.trim().toLowerCase()
-      : '';
+    const filterValue = value.myControl ? value.myControl.trim().toLowerCase() : '';
     this.dataSource.filterPredicate = (data: UserInterface, filter: string) => {
       console.log(data);
       const matchFilter = [];
@@ -116,21 +115,13 @@ export class UsersTableComponent implements AfterViewInit {
         const searchValue = searchTerms.myControl.toLowerCase();
         switch (searchTerms.filter) {
           case 'name':
-            matchFilter.push(
-              `${data.name} ${data.lastName}`
-                .toLowerCase()
-                .includes(searchValue)
-            );
+            matchFilter.push(`${data.name} ${data.lastName}`.toLowerCase().includes(searchValue));
             break;
           case 'email':
             matchFilter.push(data.email.toLowerCase().includes(searchValue));
             break;
           case 'phone':
-            matchFilter.push(
-              data.phoneNumber
-                ? data.phoneNumber.toString().includes(searchValue)
-                : false
-            );
+            matchFilter.push(data.phoneNumber ? data.phoneNumber.toString().includes(searchValue) : false);
             break;
         }
       }
@@ -161,7 +152,6 @@ export class UsersTableComponent implements AfterViewInit {
       status: 'all',
     });
 
-    // Actualiza el filtro de la tabla después de restablecer el formulario
     this.dataSource.filter = JSON.stringify({
       myControl: '',
       filter: 'all',
@@ -169,7 +159,6 @@ export class UsersTableComponent implements AfterViewInit {
       status: 'all',
     });
 
-    // Opcional: también puedes forzar la actualización llamando a `setupFilter` de nuevo
     this.setupFilter();
   }
 
@@ -183,6 +172,28 @@ export class UsersTableComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
       this.getUsers();
+    });
+  }
+
+  recoverPasswordModal(item: UserInterface) {
+    Swal.fire({
+      title: 'Restablecer contraseña',
+      html: '¿Estás seguro que deseas restablecer la contraseña del usuario <b>' + item.email + '</b>?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.profileService.recoverPassword(item.email).subscribe(
+          (res) => {
+            SweetAlert.success('success', res.message);
+          },
+          (err) => {
+            SweetAlert.error('error', err.error.error.message);
+          }
+        );
+      }
     });
   }
 }

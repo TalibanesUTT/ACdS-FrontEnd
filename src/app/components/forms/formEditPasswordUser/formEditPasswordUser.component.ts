@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
@@ -13,31 +7,17 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CustomValidators } from '../../../shared/validation';
 import Swal from 'sweetalert2';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { ProfileService } from '../../../services/profile.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-formEditPasswordUser',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule, MatIconModule],
   templateUrl: './formEditPasswordUser.component.html',
   styleUrls: ['./formEditPasswordUser.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -48,28 +28,15 @@ export class formEditPasswordUserComponent {
   @Input() PasswordSwitch: boolean = true;
   @Output() PasswordSwitchChange = new EventEmitter<boolean>();
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private profileService: ProfileService
-  ) {
+  constructor(private fb: FormBuilder, private router: Router, private profileService: ProfileService) {
     this.registerForm = this.newFormControls();
   }
   newFormControls(): FormGroup {
     return this.fb.group(
       {
-        actualPassword: [
-          '',
-          [Validators.required, CustomValidators.passwordPattern],
-        ],
-        newPassword: [
-          '',
-          [Validators.required, CustomValidators.passwordPattern],
-        ],
-        passwordConfirmation: [
-          '',
-          [Validators.required, CustomValidators.passwordPattern],
-        ],
+        actualPassword: ['', [Validators.required, CustomValidators.passwordPattern]],
+        newPassword: ['', [Validators.required, CustomValidators.passwordPattern]],
+        passwordConfirmation: ['', [Validators.required, CustomValidators.passwordPattern]],
       },
       { validators: CustomValidators.validatorMatchPasswordUpdate }
     );
@@ -82,10 +49,7 @@ export class formEditPasswordUserComponent {
       SweetAlert.info('Aviso', 'Por favor, llena todos los campos');
       return;
     }
-    if (
-      this.registerForm.value.newPassword !==
-      this.registerForm.value.passwordConfirmation
-    ) {
+    if (this.registerForm.value.newPassword !== this.registerForm.value.passwordConfirmation) {
       SweetAlert.info('Aviso', 'Las contraseñas no coinciden');
       return;
     }
@@ -99,21 +63,19 @@ export class formEditPasswordUserComponent {
         cancelButtonText: 'No',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.profileService
-            .updatePassword(this.registerForm.value, USER.id)
-            .subscribe(
-              (response) => {
-                console.log(response);
-                SweetAlert.success('Éxito', response.message);
-                this.registerForm.reset();
-                this.PasswordSwitch = !this.PasswordSwitch;
-                this.PasswordSwitchChange.emit(this.PasswordSwitch);
-              },
-              (error) => {
-                console.log(error);
-                SweetAlert.error('Error', error.error.error.message);
-              }
-            );
+          this.profileService.updatePassword(this.registerForm.value, USER.id).subscribe(
+            (response) => {
+              console.log(response);
+              SweetAlert.success('Éxito', response.message);
+              this.registerForm.reset();
+              this.PasswordSwitch = !this.PasswordSwitch;
+              this.PasswordSwitchChange.emit(this.PasswordSwitch);
+            },
+            (error) => {
+              console.log(error);
+              SweetAlert.error('Error', error.error.error.message);
+            }
+          );
         }
       });
     }

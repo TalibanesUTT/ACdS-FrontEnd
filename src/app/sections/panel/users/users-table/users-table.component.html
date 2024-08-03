@@ -1,6 +1,6 @@
 <form [formGroup]="form" style="display: flex; flex-direction: row; height: 5%; margin-bottom: 20px; height: 40px">
   <div style="display: flex; flex-direction: row; width: 40%">
-    <input formControlName="myControl" type="text" placeholder="Busqueda..." class="inputSimple" />
+    <input formControlName="myControl" type="text" placeholder="Búsqueda..." class="inputSimple" />
 
     <select formControlName="filter" type="text" class="select" style="width: 50%">
       <option value="all" [defaultSelected]="true">Filtrar por...</option>
@@ -12,13 +12,13 @@
   <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 40%">
     <select formControlName="role" class="select">
       <option value="all" [defaultSelected]="true">Rol</option>
-      <option value="admin">Admin</option>
+      <option value="admin">Administrativo</option>
       <option value="customer">Cliente</option>
       <option value="mechanic">Mecanico</option>
-      <option value="root">Root</option>
+      <option value="root">Administrador</option>
     </select>
     <select formControlName="status" class="select">
-      <option value="all" [defaultSelected]="true">Status</option>
+      <option value="all" [defaultSelected]="true">Estatus</option>
       <option value="active">Activo</option>
       <option value="inactive">Inactivo</option>
     </select>
@@ -50,7 +50,7 @@
     <ng-container matColumnDef="role">
       <th mat-header-cell *matHeaderCellDef class="custom-header">Rol</th>
       <td mat-cell *matCellDef="let element" class="custom-column">
-        {{ element.role }}
+        {{ roleMap[element.role] || element.role }}
       </td>
     </ng-container>
 
@@ -88,14 +88,17 @@
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="custom-header">Acciones</th>
-      <td mat-cell *matCellDef="let element" style="display: flex; align-items: center; justify-content: center">
+      <td mat-cell *matCellDef="let element" style="display: flex; align-items: center; justify-content: center; gap: 10px">
         <button
           [disabled]="user.email === element.email"
-          matTooltip="Editar nombre de la marca"
+          matTooltip="Editar usuario"
           style="width: 40px; height: 40px"
           (click)="openDialog(element, 'edit')"
         >
           <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="Restablecer contraseña" style="width: 40px; height: 40px" (click)="recoverPasswordModal(element)">
+          <mat-icon>key</mat-icon>
         </button>
       </td>
     </ng-container>
@@ -104,5 +107,5 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecciona la página de elementos periódicos"> </mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Selecciona la página de elementos periódicos"> </mat-paginator>
 </div>

@@ -68,11 +68,12 @@
   font-family: "SF Pro Display", sans-serif;
   font-size: 50px;
   font-weight: 500;
+  line-height: normal;
   color: black;
 }
 
 .buttonEdit {
-  background-color: #f5f7fa;
+  background-color: #eaeaea;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -81,6 +82,10 @@
   justify-content: center;
   width: 90%;
   height: 46px;
+  gap: 10px;
+}
+.buttonEdit:hover {
+  background-color: #dcdcdc;
 }
 
 .card2DataProfile {
@@ -98,4 +103,8 @@
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+}
+.outlined-icons {
+  -webkit-text-stroke: 1px black; /* Aplica un contorno negro al ícono */
+  color: transparent; /* Hace que el relleno sea transparente */
 }

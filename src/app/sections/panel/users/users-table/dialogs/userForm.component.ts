@@ -4,13 +4,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -59,10 +53,10 @@ import { SweetAlert } from '../../../../../shared/SweetAlert';
 })
 export class userFormComponent {
   Roles: any[] = [
-    { value: 'admin', viewValue: 'Admin' },
+    { value: 'admin', viewValue: 'Administrativo' },
     { value: 'customer', viewValue: 'Cliente' },
     { value: 'mechanic', viewValue: 'Mecanico' },
-    { value: 'root', viewValue: 'Root' },
+    { value: 'root', viewValue: 'Administrador' },
   ];
   isDisabled: boolean = false;
   title = 'acds-frontend';
@@ -71,10 +65,7 @@ export class userFormComponent {
   updateURL = '';
   readonly dialogRef = inject(MatDialogRef<userFormComponent>);
   data = inject(MAT_DIALOG_DATA);
-  constructor(
-    private formBuilder: FormBuilder,
-    private userService: UsersService
-  ) {
+  constructor(private formBuilder: FormBuilder, private userService: UsersService) {
     console.log(this.data);
     if (this.data.action === 'edit') {
       this.textButton = 'Editar';

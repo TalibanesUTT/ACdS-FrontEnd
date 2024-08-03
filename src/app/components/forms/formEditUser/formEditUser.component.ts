@@ -1,38 +1,18 @@
-import {
-  Component,
-  Input,
-  ViewEncapsulation,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, ViewEncapsulation, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, Router } from '@angular/router';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CustomValidators } from '../../../shared/validation';
 
 @Component({
   selector: 'app-formEditUser',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, ReactiveFormsModule, MatIconModule],
   templateUrl: './formEditUser.component.html',
   styleUrls: ['./formEditUser.component.css'],
   encapsulation: ViewEncapsulation.None,

@@ -5,61 +5,41 @@
   <section class="column2">
     <div class="card">
       <div class="titleHeader">
-        <h1>Verificación en dos pasos</h1>
+        <h1 *ngIf="dataModify == 'email'">Verificación de correo</h1>
+        <h1 *ngIf="dataModify == 'both'">Verificación de correo y teléfono</h1>
+        <h1 *ngIf="dataModify == 'phone'">Verificación de teléfono</h1>
+
         <div class="containerRoundedImg">
           <img src="assets/img/lock.svg" alt="roundedImg" />
         </div>
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
-        <p
-          *ngIf="dataModify == 'email'"
-          style="line-height: 30px; margin-bottom: 30px"
-        >
-          Ingresa el codigo de verificación que se envio al correo
+        <p *ngIf="dataModify == 'email'" style="line-height: 30px; margin-bottom: 30px">
+          Ingresa el código de verificación que se envió al correo
           <strong>{{ user.email }}</strong>
         </p>
-        <p
-          *ngIf="dataModify == 'both'"
-          style="line-height: 30px; margin-bottom: 30px"
-        >
-          Para proteger la seguridad de tu cuenta y de nuestra plataforma es
-          necesario verificar tu cuenta, por lo cual se enviará un correo a
-          <strong>{{ user.email }}</strong> y tras confirmarlo, recibirás un
-          código de verificación a tu número de teléfono.
+        <p *ngIf="dataModify == 'both'" style="line-height: 30px; margin-bottom: 30px">
+          Para proteger la seguridad de tu cuenta y de nuestra plataforma es necesario verificar tu cuenta, por lo cual se enviará un correo a
+          <strong>{{ user.email }}</strong> y tras confirmarlo, recibirás un código de verificación a tu número de teléfono.
         </p>
         <p *ngIf="dataModify == 'phone'" style="line-height: 30px">
-          Ingresa el código de verificación que se envio al número de teléfono
+          Ingresa el código de verificación que se envió al número de teléfono
           <strong>{{ user.phone }}</strong>
         </p>
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Ingresa el código de verificación</mat-label>
-            <input
-              matInput
-              formControlName="code"
-              (input)="onFormatCode($event)"
-            />
-            <mat-error
-              *ngIf="verifyEmailForm.get('code')?.hasError('required')"
-            >
-              El código es obligatorio
-            </mat-error>
+            <input matInput formControlName="code" (input)="onFormatCode($event)" />
+            <mat-error *ngIf="verifyEmailForm.get('code')?.hasError('required')"> El código es obligatorio </mat-error>
           </mat-form-field>
         </div>
-        <div class="divLabel">
+        <!-- <div class="divLabel">
           <a class="labelSend" routerLink="/register"
             >¿Tus datos son incorrectos?</a
           >
           <a (click)="resendCode()" class="labelSend">Reenviar código</a>
-        </div>
-        <button
-          class="buttonLogin bg-primary"
-          type="button"
-          (click)="verify()"
-          [disabled]="sendCode.length < 6"
-        >
-          Enviar código
-        </button>
+        </div> -->
+        <button class="buttonLogin bg-primary" type="button" (click)="verify()" [disabled]="sendCode.length < 6">Enviar código</button>
       </form>
     </div>
   </section>

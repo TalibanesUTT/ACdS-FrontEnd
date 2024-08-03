@@ -24,6 +24,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr;
   height: 100%;
+  padding: 20px;
 }
 
 app-header {

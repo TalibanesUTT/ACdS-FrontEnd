@@ -3,82 +3,55 @@
     <div class="inputContainer">
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          formControlName="name"
-          [readonly]="!editProfile"
-          (input)="userChange()"
-        />
-        <mat-error *ngIf="registerForm.get('name')?.hasError('required')">
-          El nombre es requerido
-        </mat-error>
+        <input matInput formControlName="name" [readonly]="!editProfile" (input)="userChange()" />
+        <mat-error *ngIf="registerForm.get('name')?.hasError('required')"> El nombre es requerido </mat-error>
+        <mat-error *ngIf="registerForm.get('name')?.hasError('invalidName') && !registerForm.get('name')?.hasError('required')"
+          >No pueden contener números</mat-error
+        >
       </mat-form-field>
     </div>
     <div class="inputContainer">
       <mat-form-field appearance="outline">
         <mat-label>Apellidos</mat-label>
-        <input
-          matInput
-          formControlName="lastName"
-          [readonly]="!editProfile"
-          (input)="userChange()"
-        />
-        <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')">
-          Los apellidos son requeridos
-        </mat-error>
+        <input matInput formControlName="lastName" [readonly]="!editProfile" (input)="userChange()" />
+        <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')"> Los apellidos son requeridos </mat-error>
+        <mat-error *ngIf="registerForm.get('lastName')?.hasError('invalidName') && !registerForm.get('lastName')?.hasError('required')"
+          >No pueden contener números</mat-error
+        >
       </mat-form-field>
     </div>
   </div>
   <div class="inputContainer">
     <mat-form-field appearance="outline">
       <mat-label>Correo electrónico</mat-label>
-      <input
-        matInput
-        formControlName="email"
-        [readonly]="!editProfile"
-        (input)="userChange()"
-      />
-      <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
-        El correo electrónico es requerido
-      </mat-error>
-      <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
-        El correo electrónico no es válido
-      </mat-error>
+      <input matInput formControlName="email" [readonly]="!editProfile" (input)="userChange()" />
+      <mat-error *ngIf="registerForm.get('email')?.hasError('required')"> El correo electrónico es requerido </mat-error>
+      <mat-error *ngIf="registerForm.get('email')?.hasError('invalidEmail') && !registerForm.get('email')?.hasError('required')"
+        >Correo electrónico no válido</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="inputContainer">
     <mat-form-field appearance="outline">
       <mat-label>Teléfono</mat-label>
-      <input
-        matInput
-        formControlName="phoneNumber"
-        [readonly]="!editProfile"
-        (input)="onPhoneFormat($event)"
-        (input)="userChange()"
-      />
-      <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('required')">
-        El teléfono es requerido
-      </mat-error>
+      <input matInput formControlName="phoneNumber" [readonly]="!editProfile" (input)="onPhoneFormat($event)" (input)="userChange()" />
+      <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('required')"> El teléfono es requerido </mat-error>
+      <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('invalidPhone') && !registerForm.get('phoneNumber')?.hasError('required')"
+        >Teléfono no válido</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="inputContainer">
     <mat-form-field appearance="outline">
       <mat-label>Rol</mat-label>
       <input matInput formControlName="role" type="text" [readonly]="true" />
-      <mat-error *ngIf="registerForm.get('role')?.hasError('required')">
-        El rol es requerido
-      </mat-error>
+      <mat-error *ngIf="registerForm.get('role')?.hasError('required')"> El rol es requerido </mat-error>
     </mat-form-field>
   </div>
 </form>
-<div
-  style="width: 100%; display: flex; align-items: center; justify-content: end"
->
-  <button
-    *ngIf="!editProfile"
-    class="buttonChangePassword"
-    (click)="PasswordChange()"
-  >
+<div style="width: 100%; display: flex; align-items: center; justify-content: end">
+  <button *ngIf="!editProfile" class="buttonChangePassword" (click)="PasswordChange()">
+    <mat-icon class="outlined-icon">edit</mat-icon>
     Cambiar contraseña
   </button>
 </div>

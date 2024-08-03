@@ -14,7 +14,9 @@
             <mat-label>Correo electrónico</mat-label>
             <input matInput formControlName="email" autocomplete="email" />
             <mat-error *ngIf="loginForm.get('email')?.hasError('required')"> El correo electrónico es obligatorio </mat-error>
-            <mat-error *ngIf="loginForm.get('email')?.hasError('pattern')"> Correo electrónico no válido </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('invalidEmail') && !loginForm.get('email')?.hasError('required')">
+              Correo electrónico no válido
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="inputContainer">
@@ -22,7 +24,7 @@
             <mat-label>Contraseña</mat-label>
             <input matInput formControlName="password" type="password" />
             <mat-error *ngIf="loginForm.get('password')?.hasError('required')"> La contraseña es obligatoria </mat-error>
-            <mat-error *ngIf="loginForm.get('password')?.hasError('invalidPassword')">
+            <mat-error *ngIf="loginForm.get('password')?.hasError('invalidPassword') && !loginForm.get('password')?.hasError('required')">
               Debe tener 8 caracteres, una letra, un número y un caracter especial
             </mat-error>
           </mat-form-field>

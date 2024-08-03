@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +15,7 @@ import { CarBrandsService } from '../../../services/carBrands.service';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { newBrandComponent } from './dialog/newBrand.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorIntlEspañol } from '../../../shared/MatPaginatorIntl';
 
 @Component({
   selector: 'app-carBrand',
@@ -35,6 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     MatButtonModule,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
   templateUrl: './carBrand.component.html',
   styleUrls: ['./carBrand.component.css'],
 })
@@ -44,7 +46,7 @@ export class carBrandComponent implements AfterViewInit {
   title = 'acds-frontend';
   formFilter: FormGroup;
   formCarBrand: FormGroup;
-  displayedColumns: string[] = ['id', 'name', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<any>();
   editTableIndex: number | null = null; // Variable para rastrear la fila que se está editando
 

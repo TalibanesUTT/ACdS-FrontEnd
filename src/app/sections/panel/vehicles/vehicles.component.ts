@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
@@ -13,9 +13,10 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { startWith, map } from 'rxjs/operators';
-import { CustomersService } from '../../../services/customers.service';
-import { IUser } from '../../../interfaces/Users';
+import { VehiclesService } from '../../../services/vehicles.service';
 import { vehiclesFormComponent } from './dialogs/vehiclesForm.component';
+import { SweetAlert } from '../../../shared/SweetAlert';
+import { MatPaginatorIntlEspañol } from '../../../shared/MatPaginatorIntl';
 @Component({
   selector: 'app-vehicles',
   styleUrls: ['vehicles.component.css'],
@@ -36,14 +37,15 @@ import { vehiclesFormComponent } from './dialogs/vehiclesForm.component';
     MatInputModule,
     MatSelectModule,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
 })
 export class vehiclesComponent implements AfterViewInit {
   form: FormGroup;
-  displayedColumns: string[] = ['name', 'email', 'phone', 'role', 'phoneConfirmed', 'emailConfirmed', 'active', 'actions'];
+  displayedColumns: string[] = ['id', 'owner', 'model', 'color', 'plates', 'serialNumber', 'year', 'actions'];
   readonly dialog = inject(MatDialog);
   readonly activeDialog = inject(MatDialog);
 
-  dataSource = new MatTableDataSource<IUser>();
+  dataSource = new MatTableDataSource<any>();
   updateURL = '';
   user = JSON.parse(localStorage.getItem('user') || '{}');
   roles = [
@@ -56,8 +58,8 @@ export class vehiclesComponent implements AfterViewInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  constructor(private customerService: CustomersService, private fb: FormBuilder) {
-    this.getAllCustomers();
+  constructor(private vehicleService: VehiclesService, private fb: FormBuilder) {
+    this.getAllVehicles();
     this.form = this.newFormControls();
     this.setupFilter();
   }
@@ -65,11 +67,16 @@ export class vehiclesComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  getAllCustomers() {
-    this.customerService.getAllCustomers().subscribe((res) => {
-      console.log(res);
-      this.dataSource.data = res.data;
-    });
+  getAllVehicles() {
+    this.vehicleService.getAllVehicles().subscribe(
+      (res) => {
+        console.log(res);
+        this.dataSource.data = res.data;
+      },
+      (err) => {
+        SweetAlert.error('Error', err.error.error.message);
+      }
+    );
   }
   newFormControls(): FormGroup {
     return this.fb.group({
@@ -91,7 +98,7 @@ export class vehiclesComponent implements AfterViewInit {
 
   filterData(value: any) {
     const filterValue = value.myControl ? value.myControl.trim().toLowerCase() : '';
-    this.dataSource.filterPredicate = (data: IUser, filter: string) => {
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
       console.log(data);
       const matchFilter = [];
       const searchTerms = JSON.parse(filter);
@@ -158,7 +165,7 @@ export class vehiclesComponent implements AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
-      this.getAllCustomers();
+      this.getAllVehicles();
     });
   }
 }

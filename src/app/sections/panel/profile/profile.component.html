@@ -11,18 +11,12 @@
         <p class="fontSFProBold">{{ userData.name }} {{ userData.lastName }}</p>
       </section>
       <section class="sectionButtonEdit">
-        <button
-          *ngIf="!editProfile"
-          class="buttonEdit"
-          (click)="changeEditProfile()"
-        >
+        <button *ngIf="!editProfile" class="buttonEdit" (click)="changeEditProfile()">
+          <mat-icon class="outlined-icons">edit</mat-icon>
           Editar perfil
         </button>
-        <button
-          *ngIf="editProfile"
-          class="buttonEdit"
-          (click)="changeEditProfile()"
-        >
+        <button *ngIf="editProfile" class="buttonEdit" (click)="changeEditProfile()">
+          <mat-icon class="outlined-icons">edit</mat-icon>
           Guardar cambios
         </button>
       </section>
@@ -41,10 +35,7 @@
         ></app-formEditUser>
       </section>
       <section *ngIf="!PasswordSwitch">
-        <app-formEditPasswordUser
-          [PasswordSwitch]="PasswordSwitch"
-          (PasswordSwitchChange)="PasswordSwitchChange($event)"
-        ></app-formEditPasswordUser>
+        <app-formEditPasswordUser [PasswordSwitch]="PasswordSwitch" (PasswordSwitchChange)="PasswordSwitchChange($event)"></app-formEditPasswordUser>
       </section>
     </div>
   </div>

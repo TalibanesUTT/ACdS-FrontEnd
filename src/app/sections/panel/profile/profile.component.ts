@@ -8,19 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { formEditUserComponent } from '../../../components/forms/formEditUser/formEditUser.component';
 import { formEditPasswordUserComponent } from '../../../components/forms/formEditPasswordUser/formEditPasswordUser.component';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { ProfileService } from '../../../services/profile.service';
 import { IUser } from '../../../interfaces/Users';
 import { AuthService } from '../../../services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +31,7 @@ import { AuthService } from '../../../services/auth.service';
     ReactiveFormsModule,
     formEditUserComponent,
     formEditPasswordUserComponent,
+    MatIconModule,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
@@ -47,18 +43,14 @@ export class profileComponent {
   PasswordSwitch: boolean = true;
   id: number = 0;
   userData: any = {
-    name: 'Riley',
-    lastName: 'Doe',
-    email: 'riley.doe@example.com',
+    name: 'Test',
+    lastName: 'User',
+    email: 'test@example.com',
     phoneNumber: '123-456-7890',
     role: 'Admin',
   };
 
-  constructor(
-    private profileService: ProfileService,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private profileService: ProfileService, private authService: AuthService, private router: Router) {
     this.getProfile();
   }
 
@@ -66,10 +58,39 @@ export class profileComponent {
     this.profileService.getProfile().subscribe((res) => {
       console.log(res);
       this.userData = res;
+      this.userData = { ...res, role: this.mapRoleEnglish(res.role) };
       this.id = res.id;
       this.temporyDataUSer = res;
       this.onPhoneFormat(this.userData.phoneNumber);
     });
+  }
+  /**
+   * Funcion para mapear el rol
+   * @param role
+   * @returns
+   */
+  mapRoleEnglish(role: string): string {
+    const roleMap: { [key: string]: string } = {
+      customer: 'Cliente',
+      admin: 'Administrativo',
+      root: 'Administrador',
+      mechanic: 'Mecánico',
+    };
+    return roleMap[role] || role;
+  }
+  /**
+   * Funcion para mapear el rol
+   * @param role
+   * @returns
+   */
+  mapRoleSpanish(role: string): string {
+    const roleMap: { [key: string]: string } = {
+      Cliente: 'customer',
+      Administrativo: 'admin',
+      Administrador: 'root',
+      Mecánico: 'mechanic',
+    };
+    return roleMap[role];
   }
   onPhoneFormat(phoneNumber: string): void {
     let input = phoneNumber.replace(/\D/g, '');
@@ -105,7 +126,6 @@ export class profileComponent {
         }).then((result) => {
           if (result.isConfirmed) {
             this.sendData(modifyPhone, modifyEmail);
-            this.logout();
           }
         });
       } else {
@@ -115,9 +135,11 @@ export class profileComponent {
     this.editProfile = !this.editProfile;
   }
   sendData(modifyPhone?: boolean, modifyEmail?: boolean) {
+    let onlyEmailModify = false;
     delete this.userData.emailConfirmed;
     delete this.userData.phoneConfirmed;
     delete this.userData.id;
+    this.userData.role = this.mapRoleSpanish(this.userData.role);
     this.profileService.putProfile(this.userData, this.id).subscribe(
       (res) => {
         localStorage.setItem('user', JSON.stringify(this.userData));
@@ -127,6 +149,7 @@ export class profileComponent {
         } else if (modifyEmail) {
           localStorage.setItem('dataModify', 'email');
           localStorage.setItem('url', res.url);
+          onlyEmailModify = true;
         } else if (modifyPhone) {
           localStorage.setItem('dataModify', 'phone');
           localStorage.setItem('url', res.url);
@@ -134,20 +157,25 @@ export class profileComponent {
         console.log('respuesta', res);
         SweetAlert.success('success', res.message);
         this.editProfile = !this.editProfile;
+        this.logout(onlyEmailModify);
       },
       (err) => {
         if (err.error.error.message) {
-          SweetAlert.error('error', err.error.error.message);
+          SweetAlert.error('errors', err.error.error.message);
         } else {
           SweetAlert.error('error', 'Vuelve a intentarlo');
         }
       }
     );
   }
-  logout() {
+  logout(onlyEmailModify?: boolean) {
     this.authService.logout().subscribe(
       (res) => {
         console.log(res);
+        if (onlyEmailModify) {
+          this.router.navigate(['/login']);
+          return;
+        }
         this.router.navigate(['/reactiveCount']);
       },
       (err) => {

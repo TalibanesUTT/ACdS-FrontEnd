@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
@@ -16,6 +16,7 @@ import { startWith, map } from 'rxjs/operators';
 import { CustomersService } from '../../../services/customers.service';
 import { IUser } from '../../../interfaces/Users';
 import { CustomerFormComponent } from './dialogs/customerForm.component';
+import { MatPaginatorIntlEspañol } from '../../../shared/MatPaginatorIntl';
 @Component({
   selector: 'app-customers',
   styleUrls: ['customers.component.css'],
@@ -36,10 +37,11 @@ import { CustomerFormComponent } from './dialogs/customerForm.component';
     MatInputModule,
     MatSelectModule,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
 })
 export class customersComponent implements AfterViewInit {
   form: FormGroup;
-  displayedColumns: string[] = ['name', 'email', 'phone', 'role', 'phoneConfirmed', 'emailConfirmed', 'active', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'phone', 'actions'];
   readonly dialog = inject(MatDialog);
   readonly activeDialog = inject(MatDialog);
 

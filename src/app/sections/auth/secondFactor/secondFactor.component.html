@@ -12,39 +12,24 @@
       </div>
       <form class="form" [formGroup]="verifyEmailForm">
         <p style="line-height: 30px; margin-bottom: 30px">
-          Ingresa el codigo de verificación que se envio al correo
+          Ingresa el código de verificación que se envió al correo
           <strong>{{ user.email }}</strong>
         </p>
 
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Ingresa el código de verificación</mat-label>
-            <input
-              matInput
-              formControlName="code"
-              (input)="onFormatCode($event)"
-            />
-            <mat-error
-              *ngIf="verifyEmailForm.get('code')?.hasError('required')"
-            >
-              El código es obligatorio
-            </mat-error>
+            <input matInput formControlName="code" (input)="onFormatCode($event)" />
+            <mat-error *ngIf="verifyEmailForm.get('code')?.hasError('required')"> El código es obligatorio </mat-error>
           </mat-form-field>
         </div>
-        <div class="divLabel">
+        <!-- <div class="divLabel">
           <a class="labelSend" routerLink="/register"
             >¿Tus datos son incorrectos?</a
           >
           <a (click)="resendCode()" class="labelSend">Reenviar código</a>
-        </div>
-        <button
-          class="buttonLogin bg-primary"
-          type="button"
-          (click)="verify()"
-          [disabled]="sendCode.length < 6"
-        >
-          Enviar código
-        </button>
+        </div> -->
+        <button class="buttonLogin bg-primary" type="button" (click)="verify()" [disabled]="sendCode.length < 6">Enviar código</button>
       </form>
     </div>
   </section>

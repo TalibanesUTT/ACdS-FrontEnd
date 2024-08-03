@@ -9,10 +9,10 @@
     <mat-form-field appearance="outline">
       <mat-label>Rol</mat-label>
       <mat-select formControlName="role" [disabled]="isDisabled">
-        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="admin">Administrativo</mat-option>
         <mat-option value="customer">Cliente</mat-option>
         <mat-option value="mechanic">Mecánico</mat-option>
-        <mat-option value="root">Root</mat-option>
+        <mat-option value="root">Administrador</mat-option>
       </mat-select>
       <mat-error *ngIf="form.get('role')?.hasError('required')">Este campo es requerido</mat-error>
     </mat-form-field>

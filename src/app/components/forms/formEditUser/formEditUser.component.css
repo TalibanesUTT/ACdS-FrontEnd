@@ -1,6 +1,6 @@
 .buttonChangePassword {
   color: white;
-  background-color: #f2494e;
+  background-color: #bc0505;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -9,6 +9,11 @@
   justify-content: center;
   width: 40%;
   height: 46px;
+  gap: 10px;
+}
+
+.buttonChangePassword:hover {
+  background-color: #f2494e;
 }
 
 .form {
@@ -40,4 +45,8 @@
 
 mat-form-field {
   width: 100%;
+}
+.outlined-icon {
+  -webkit-text-stroke: 1px white; /* Aplica un contorno negro al ícono */
+  color: transparent; /* Hace que el relleno sea transparente */
 }
