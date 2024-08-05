@@ -10,14 +10,14 @@
         <option value="phone">Teléfono</option>
       </select>
     </div>
-    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 40%">
+    <!-- <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 40%">
       <select formControlName="Estatus" class="select">
         <option value="all" [defaultSelected]="true">Estatus</option>
         <option value="active">Activo</option>
         <option value="inactive">Inactivo</option>
       </select>
       <button class="buttonReset" (click)="resetFilters()">Reiniciar filtros</button>
-    </div>
+    </div> -->
     <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 20%">
       <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="openDialog($event, 'add')">
         <mat-icon>add</mat-icon>

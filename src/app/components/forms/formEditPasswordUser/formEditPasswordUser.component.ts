@@ -25,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class formEditPasswordUserComponent {
   title = 'acds-frontend';
   registerForm: FormGroup;
+  formValid = true;
   @Input() PasswordSwitch: boolean = true;
   @Output() PasswordSwitchChange = new EventEmitter<boolean>();
 
@@ -41,18 +42,19 @@ export class formEditPasswordUserComponent {
       { validators: CustomValidators.validatorMatchPasswordUpdate }
     );
   }
+
+  validForm($event: any): void {
+    if (this.registerForm.valid) {
+      this.formValid = false;
+    } else {
+      this.formValid = true;
+    }
+  }
   PasswordChange(): void {
     const USER = JSON.parse(localStorage.getItem('user') || '{}');
     console.log('Usuario', USER);
     console.log('Formulario de cambio de contraseña', this.registerForm.value);
-    if (this.registerForm.invalid) {
-      SweetAlert.info('Aviso', 'Por favor, llena todos los campos');
-      return;
-    }
-    if (this.registerForm.value.newPassword !== this.registerForm.value.passwordConfirmation) {
-      SweetAlert.info('Aviso', 'Las contraseñas no coinciden');
-      return;
-    }
+
     if (!this.PasswordSwitch) {
       Swal.fire({
         title: 'Aviso',

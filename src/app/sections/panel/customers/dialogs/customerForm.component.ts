@@ -29,6 +29,7 @@ import { CustomersService } from '../../../../services/customers.service';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { Route, Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
+import { CustomValidators } from '../../../../shared/validation';
 
 @Component({
   selector: 'app-carBrand',
@@ -54,7 +55,7 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrls: ['./customerForm.component.css'],
 })
 export class CustomerFormComponent {
-  isDisabled: boolean = false;
+  isDisabled: boolean = true;
   title = 'acds-frontend';
   form: FormGroup;
   textButton = '';
@@ -69,19 +70,14 @@ export class CustomerFormComponent {
     this.action = this.data.action;
     if (this.data.action === 'edit') {
       this.textButton = 'Editar';
+      this.isDisabled = false;
     } else {
       this.textButton = 'Agregar';
     }
     this.updateURL = this.data.item.updateURL;
 
     // Inicializa el formulario
-    this.form = this.formBuilder.group({
-      name: [this.data.item.name, Validators.required],
-      lastName: [this.data.item.lastName, Validators.required],
-      email: [this.data.item.email, Validators.required],
-      phoneNumber: [this.data.item.phoneNumber || '', Validators.required],
-      active: [this.data.item.active, Validators.required],
-    });
+    this.form = this.newFormControls(this.data.item);
 
     // Formatea el número de teléfono y actualiza el valor del formulario si no es nulo o indefinido
     const phoneNumber = this.form.get('phoneNumber')?.value;
@@ -91,6 +87,18 @@ export class CustomerFormComponent {
         phoneNumber: formattedPhoneNumber,
       });
     }
+  }
+  newFormControls(data: any): FormGroup {
+    return this.formBuilder.group(
+      {
+        name: [data.name, [Validators.required, CustomValidators.namePattern]],
+        lastName: [data.lastName, [Validators.required, CustomValidators.namePattern]],
+        email: [data.email, [Validators.required, CustomValidators.emailPattern]],
+        phoneNumber: [data.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
+        active: [data.active, [Validators.required]],
+      },
+      { validators: CustomValidators.validatorMatchPassword }
+    );
   }
 
   submit() {
@@ -136,5 +144,11 @@ export class CustomerFormComponent {
     }
     input = input.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
     return input;
+  }
+  validateForm($event: any) {
+    if (this.form.invalid) {
+      this.isDisabled = true;
+    }
+    this.isDisabled = false;
   }
 }

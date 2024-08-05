@@ -7,13 +7,7 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 import { CustomValidators } from '../../../shared/validation';
@@ -22,16 +16,7 @@ import { ProfileService } from '../../../services/profile.service';
 @Component({
   selector: 'app-recoverPassword',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './recoverPassword.component.html',
   styleUrl: './recoverPassword.component.css',
 })
@@ -41,12 +26,7 @@ export class recoverPasswordComponent {
   sendCode: string = '';
   resendCodeDisabled = true;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private profileService: ProfileService
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private profileService: ProfileService) {
     this.verifyEmailForm = this.newFormControls();
   }
 
@@ -57,18 +37,17 @@ export class recoverPasswordComponent {
   }
 
   verify(): void {
-    this.profileService
-      .recoverPassword(this.verifyEmailForm.value.email)
-      .subscribe(
-        (res) => {
-          console.log(res);
-          SweetAlert.success('success', res.message);
-        },
-        (err) => {
-          console.log(err);
-          SweetAlert.error('error', err.error.error.message);
-        }
-      );
+    this.profileService.recoverPassword(this.verifyEmailForm.value.email).subscribe(
+      (res) => {
+        console.log(res);
+        SweetAlert.success('success', res.message);
+        this.router.navigate(['/login']);
+      },
+      (err) => {
+        console.log(err);
+        SweetAlert.error('error', err.error.error.message);
+      }
+    );
   }
   /**
    *

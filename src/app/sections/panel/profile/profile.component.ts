@@ -38,7 +38,13 @@ import { MatIconModule } from '@angular/material/icon';
   encapsulation: ViewEncapsulation.None,
 })
 export class profileComponent {
-  temporyDataUSer: IUser = {};
+  temporyDataUSer: any = {
+    name: 'Test',
+    lastName: 'User',
+    email: '',
+    phoneNumber: '123-456-7890',
+    role: 'Admin',
+  };
   editProfile: boolean = false;
   PasswordSwitch: boolean = true;
   id: number = 0;
@@ -46,6 +52,13 @@ export class profileComponent {
     name: 'Test',
     lastName: 'User',
     email: 'test@example.com',
+    phoneNumber: '123-456-7890',
+    role: 'Admin',
+  };
+  userTemporyData: any = {
+    name: 'Test',
+    lastName: 'User',
+    email: '',
     phoneNumber: '123-456-7890',
     role: 'Admin',
   };
@@ -58,9 +71,11 @@ export class profileComponent {
     this.profileService.getProfile().subscribe((res) => {
       console.log(res);
       this.userData = res;
-      this.userData = { ...res, role: this.mapRoleEnglish(res.role) };
-      this.id = res.id;
       this.temporyDataUSer = res;
+      this.userData = { ...res, role: this.mapRoleEnglish(res.role) };
+      this.temporyDataUSer.role = this.mapRoleEnglish(res.role);
+      this.id = res.id;
+      this.onPhoneFormat(this.temporyDataUSer.phoneNumber);
       this.onPhoneFormat(this.userData.phoneNumber);
     });
   }
@@ -107,8 +122,6 @@ export class profileComponent {
     this.userData.phoneNumber = this.userData.phoneNumber.replace('-', '');
     if (this.editProfile) {
       this.editProfile = !this.editProfile;
-      console.log('datos actualizado', this.userData);
-      console.log('datos temporales', this.temporyDataUSer);
       if (this.userData.phoneNumber !== this.temporyDataUSer.phoneNumber) {
         modifyPhone = true;
       }
@@ -135,6 +148,17 @@ export class profileComponent {
     this.editProfile = !this.editProfile;
   }
   sendData(modifyPhone?: boolean, modifyEmail?: boolean) {
+    console.log('datos a enviar', this.userData);
+    console.log('datos temporales', this.temporyDataUSer);
+    if (
+      this.userData.name === this.temporyDataUSer.name &&
+      this.userData.lastName === this.temporyDataUSer.lastName &&
+      this.userData.email === this.temporyDataUSer.email &&
+      this.userData.phoneNumber === this.temporyDataUSer.phoneNumber
+    ) {
+      this.editProfile = !this.editProfile;
+      return;
+    }
     let onlyEmailModify = false;
     delete this.userData.emailConfirmed;
     delete this.userData.phoneConfirmed;
@@ -146,17 +170,27 @@ export class profileComponent {
         if (modifyPhone && modifyEmail) {
           localStorage.setItem('dataModify', 'both');
           localStorage.setItem('url', res.url);
+          SweetAlert.success('success', res.message);
         } else if (modifyEmail) {
           localStorage.setItem('dataModify', 'email');
           localStorage.setItem('url', res.url);
+          SweetAlert.success('success', res.message);
           onlyEmailModify = true;
         } else if (modifyPhone) {
           localStorage.setItem('dataModify', 'phone');
           localStorage.setItem('url', res.url);
+          SweetAlert.success('success', res.message);
+        } else {
+          this.editProfile = !this.editProfile;
+          modifyEmail = false;
+          modifyPhone = false;
+          SweetAlert.success('success', res.message);
+          return;
         }
         console.log('respuesta', res);
-        SweetAlert.success('success', res.message);
         this.editProfile = !this.editProfile;
+        modifyEmail = false;
+        modifyPhone = false;
         this.logout(onlyEmailModify);
       },
       (err) => {

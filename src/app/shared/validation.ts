@@ -3,7 +3,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
   static namePattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑs]+$/;
+    const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/;
     return pattern.test(control.value) ? null : { invalidName: true };
   };
 

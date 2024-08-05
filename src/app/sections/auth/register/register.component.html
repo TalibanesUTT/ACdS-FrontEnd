@@ -16,7 +16,7 @@
               <input matInput formControlName="name" />
               <mat-error *ngIf="registerForm.get('name')?.hasError('required')"> El nombre es obligatorio </mat-error>
               <mat-error *ngIf="registerForm.get('name')?.hasError('invalidName') && !registerForm.get('name')?.hasError('required')">
-                No pueden contener números
+                Solo puede contener letras
               </mat-error>
             </mat-form-field>
           </div>
@@ -26,7 +26,7 @@
               <input matInput formControlName="lastName" />
               <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')"> Los apellidos son obligatorios </mat-error>
               <mat-error *ngIf="registerForm.get('lastName')?.hasError('invalidName') && !registerForm.get('lastName')?.hasError('required')">
-                No pueden contener números
+                Solo puede contener letras
               </mat-error>
             </mat-form-field>
           </div>
@@ -44,20 +44,23 @@
         <div class="inputContainer">
           <mat-form-field appearance="outline">
             <mat-label>Teléfono</mat-label>
-            <input matInput formControlName="phone" (input)="onPhoneFormat($event)" />
-            <mat-error *ngIf="registerForm.get('phone')?.hasError('required')"> El teléfono es obligatorio </mat-error>
-            <mat-error *ngIf="registerForm.get('phone')?.hasError('invalidPhone') && !registerForm.get('phone')?.hasError('required')">
+            <input matInput formControlName="phoneNumber" (input)="onPhoneFormat($event)" />
+            <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('required')"> El teléfono es obligatorio </mat-error>
+            <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('invalidPhone') && !registerForm.get('phoneNumber')?.hasError('required')">
               Teléfono no válido
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="inputContainer">
+        <div class="inputContainer" style="margin-bottom: 15px">
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
             <input matInput formControlName="password" type="password" />
             <mat-error *ngIf="registerForm.get('password')?.hasError('required')"> La contraseña es obligatoria </mat-error>
-            <mat-error *ngIf="registerForm.get('password')?.hasError('invalidPassword') && !registerForm.get('password')?.hasError('required')">
-              Debe tener al menos 8 caracteres, una letra y un número
+            <mat-error
+              style="line-height: normal"
+              *ngIf="registerForm.get('password')?.hasError('invalidPassword') && !registerForm.get('password')?.hasError('required')"
+            >
+              Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial
             </mat-error>
           </mat-form-field>
         </div>
@@ -68,21 +71,8 @@
             <mat-error *ngIf="registerForm.get('passwordConfirmation')?.hasError('required')">
               La confirmación de la contraseña es obligatoria
             </mat-error>
-            <mat-error
-              *ngIf="
-                registerForm.get('passwordConfirmation')?.hasError('invalidPassword') &&
-                !registerForm.get('passwordConfirmation')?.hasError('required')
-              "
-            >
-              Debe tener al menos 8 caracteres, una letra y un número
-            </mat-error>
-            <mat-error
-              *ngIf="
-                registerForm.hasError('passwordsMismatch') &&
-                !registerForm.get('passwordConfirmation')?.hasError('required') &&
-                !registerForm.get('passwordConfirmation')?.hasError('invalidPassword')
-              "
-            >
+
+            <mat-error *ngIf="registerForm.hasError('passwordsMismatch') && !registerForm.get('passwordConfirmation')?.hasError('required')">
               Las contraseñas no coinciden
             </mat-error>
           </mat-form-field>

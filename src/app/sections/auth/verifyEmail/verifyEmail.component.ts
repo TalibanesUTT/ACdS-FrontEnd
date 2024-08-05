@@ -7,29 +7,14 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatButtonModule,
-    RouterLink,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './verifyEmail.component.html',
   styleUrl: './verifyEmail.component.css',
 })
@@ -41,11 +26,7 @@ export class verifyEmailComponent {
   resendCodeDisabled = true;
   role = this.user.role;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.verifyEmailForm = this.newFormControls();
   }
 
@@ -68,7 +49,7 @@ export class verifyEmailComponent {
       },
       (err) => {
         console.log(err);
-        SweetAlert.error('Error', err.message);
+        SweetAlert.error('Error', err.error.error.message ? err.error.error.message : 'Error al verificar el código');
       }
     );
   }
@@ -83,15 +64,12 @@ export class verifyEmailComponent {
     if (input.length > 6) {
       input = input.slice(0, 6);
     }
-    input = input.replace(
-      /(\d{2})(\d{2})?(\d{2})?/,
-      (match: string, p1: string, p2: string, p3: string) => {
-        let result = p1;
-        if (p2) result += '-' + p2;
-        if (p3) result += '-' + p3;
-        return result;
-      }
-    );
+    input = input.replace(/(\d{2})(\d{2})?(\d{2})?/, (match: string, p1: string, p2: string, p3: string) => {
+      let result = p1;
+      if (p2) result += '-' + p2;
+      if (p3) result += '-' + p3;
+      return result;
+    });
     event.target.value = input;
     this.verifyEmailForm.get('code')?.setValue(input, { emitEvent: false });
     this.sendCode = input.replace(/-/g, '');

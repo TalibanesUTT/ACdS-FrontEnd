@@ -27,7 +27,7 @@ export class registerComponent {
   userTemporalyExist = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService, private router: Router) {
-    const userString = localStorage.getItem('userTemporaly');
+    const userString = localStorage.getItem('user');
     this.userTemporaly = userString ? JSON.parse(userString) : null;
     if (this.userTemporaly) {
       console.log('hay usuario temporal');
@@ -47,7 +47,7 @@ export class registerComponent {
         name: ['', [Validators.required, CustomValidators.namePattern]],
         lastName: ['', [Validators.required, CustomValidators.namePattern]],
         email: ['', [Validators.required, CustomValidators.emailPattern]],
-        phone: ['', [Validators.required, CustomValidators.phonePattern]],
+        phoneNumber: ['', [Validators.required, CustomValidators.phonePattern]],
         password: ['', [Validators.required, CustomValidators.passwordPattern]],
         passwordConfirmation: ['', [Validators.required, CustomValidators.passwordPattern]],
       },
@@ -56,12 +56,13 @@ export class registerComponent {
   }
 
   userTemporalyForm(user: any): FormGroup {
+    console.log('user', user);
     return this.fb.group(
       {
         name: [user.name, [Validators.required, CustomValidators.namePattern]],
         lastName: [user.lastName, [Validators.required, CustomValidators.namePattern]],
         email: [user.email, [Validators.required, CustomValidators.emailPattern]],
-        phone: [user.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
+        phoneNumber: [user.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
         password: ['', [Validators.required, CustomValidators.passwordPattern]],
         passwordConfirmation: ['', [Validators.required, CustomValidators.passwordPattern]],
       },
@@ -79,8 +80,8 @@ export class registerComponent {
   }
 
   onSubmit(): void {
-    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
-    this.registerForm.value.phone = newPhone;
+    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phoneNumber);
+    this.registerForm.value.phoneNumber = newPhone;
     if (!this.registerForm.valid) {
       SweetAlert.info('Error', 'Por favor, revisa los campos');
       return;
@@ -95,7 +96,7 @@ export class registerComponent {
       (response) => {
         console.log(response);
         localStorage.setItem('url', response.url);
-        localStorage.setItem('userTemporaly', JSON.stringify(response.data));
+        localStorage.setItem('user', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
         SweetAlert.success('Éxito', response.message);
       },
@@ -107,15 +108,17 @@ export class registerComponent {
   }
 
   updateData(): void {
-    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phone);
-    this.registerForm.value.phone = newPhone;
-    delete this.registerForm.value.phone;
+    let newPhone = this.DeleteMiddleDash(this.registerForm.value.phoneNumber);
+    this.registerForm.value.phoneNumber = newPhone;
+    console.log('updateData', this.registerForm.value);
+    // delete this.registerForm.value.phone;
     delete this.registerForm.value.passwordConfirmation;
     this.profileService.putUserTemporaly(this.registerForm.value, this.userTemporaly.id).subscribe(
       (response) => {
-        console.log(response);
+        console.log('update', response);
         delete response.data.role;
-        localStorage.setItem('url', response.url);
+        if (!response.url === null) localStorage.setItem('url', response.url);
+
         localStorage.setItem('user', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
         SweetAlert.success('Éxito', response.message);
@@ -134,7 +137,7 @@ export class registerComponent {
     }
     input = input.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
     event.target.value = input;
-    this.registerForm.get('phone')?.setValue(input, { emitWidget: false });
+    this.registerForm.get('phoneNumber')?.setValue(input, { emitWidget: false });
   }
 
   DeleteMiddleDash(text: string): string {
