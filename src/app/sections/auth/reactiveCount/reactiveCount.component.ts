@@ -58,7 +58,7 @@ export class reactiveCountComponent {
       },
       (err) => {
         console.log(err);
-        SweetAlert.error('Error', err.message);
+        SweetAlert.error('Error', err.error.error.error ? err.error.error.error : 'Código de verificacción incorrecto');
       }
     );
   }
