@@ -49,7 +49,7 @@ export class verifyEmailComponent {
       },
       (err) => {
         console.log(err);
-        SweetAlert.error('Error', err.error.error.message ? err.error.error.message : 'Error al verificar el código');
+        SweetAlert.error('Error', err.error.error.error ? err.error.error.error : 'Código de verificacción incorrecto');
       }
     );
   }
