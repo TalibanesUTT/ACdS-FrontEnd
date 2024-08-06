@@ -33,12 +33,10 @@
             <mat-error *ngIf="verifyEmailForm.get('code')?.hasError('required')"> El código es obligatorio </mat-error>
           </mat-form-field>
         </div>
-        <!-- <div class="divLabel">
-          <a class="labelSend" routerLink="/register"
-            >¿Tus datos son incorrectos?</a
-          >
+        <div class="divLabel">
+          <!-- <a class="labelSend" routerLink="/register">¿Tus datos son incorrectos?</a> -->
           <a (click)="resendCode()" class="labelSend">Reenviar código</a>
-        </div> -->
+        </div>
         <button class="buttonLogin bg-primary" type="button" (click)="verify()" [disabled]="sendCode.length < 6">Enviar código</button>
       </form>
     </div>
