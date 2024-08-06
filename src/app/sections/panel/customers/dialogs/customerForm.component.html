@@ -24,7 +24,9 @@
       <mat-label>Correo electrónico</mat-label>
       <input matInput placeholder="Correo electrónico" formControlName="email" [disabled]="isDisabled" (input)="validateForm($event)" />
       <mat-error *ngIf="form.get('email')?.hasError('required')">Este campo es requerido</mat-error>
-      <mat-error *ngIf="form.get('email')?.hasError('email') && !form.get('email')?.hasError('required')">Correo electrónico no válido</mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('invalidEmail') && !form.get('email')?.hasError('required')"
+        >Correo electrónico no válido</mat-error
+      >
     </mat-form-field>
     <mat-form-field class="inputForm" appearance="outline">
       <mat-label>Teléfono</mat-label>

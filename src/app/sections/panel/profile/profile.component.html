@@ -10,7 +10,7 @@
         <p class="fontSFPro">Hola</p>
         <p class="fontSFProBold">{{ userData.name }} {{ userData.lastName }}</p>
       </section>
-      <section class="sectionButtonEdit">
+      <section class="sectionButtonEdit" *ngIf="PasswordSwitch">
         <button *ngIf="!editProfile" class="buttonEdit" (click)="changeEditProfile()">
           <mat-icon class="outlined-icons">edit</mat-icon>
           Editar perfil
