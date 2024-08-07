@@ -50,7 +50,7 @@
     <div style="display: flex; align-items: center; flex-direction: row; width: 100%; gap: 10px">
       <mat-form-field appearance="outline">
         <mat-label>Año</mat-label>
-        <input matInput formControlName="year" (input)="disableSendButton($event)" maxlength="4" />
+        <input matInput formControlName="year" (input)="disableSendButton($event)" maxlength="4" type="number" />
         <mat-error *ngIf="formVehicles.get('year')?.hasError('required')"> El año es obligatorio </mat-error>
         <mat-error *ngIf="formVehicles.get('year')?.hasError('minlength') && formVehicles.get('year')?.hasError('maxlength')">
           El año debe tener 4 caracteres
@@ -60,6 +60,7 @@
         <mat-label>Color</mat-label>
         <input matInput formControlName="color" (input)="disableSendButton($event)" />
         <mat-error *ngIf="formVehicles.get('color')?.hasError('required')"> El color es obligatorio </mat-error>
+        <mat-error *ngIf="formVehicles.get('color')?.hasError('invalidName')"> El color no debe contener numeros </mat-error>
       </mat-form-field>
     </div>
     <mat-form-field appearance="outline">
@@ -69,6 +70,7 @@
       <mat-error *ngIf="formVehicles.get('serialNumber')?.hasError('minlength') && formVehicles.get('serialNumber')?.hasError('maxlength')">
         El numero de serie debe tener de minimo 17 caracteres y maximo 20 caracteres
       </mat-error>
+      <mat-error *ngIf="formVehicles.get('serialNumber')?.hasError('invalidNumber')"> Solo se permiten números </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Placas</mat-label>

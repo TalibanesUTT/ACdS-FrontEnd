@@ -39,12 +39,10 @@ export class recoverPasswordComponent {
   verify(): void {
     this.profileService.recoverPassword(this.verifyEmailForm.value.email).subscribe(
       (res) => {
-        console.log(res);
         SweetAlert.success('success', res.message);
         this.router.navigate(['/login']);
       },
       (err) => {
-        console.log(err);
         SweetAlert.error('error', err.error.error.message);
       }
     );

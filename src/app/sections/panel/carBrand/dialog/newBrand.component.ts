@@ -4,13 +4,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -66,15 +60,12 @@ export class newBrandComponent {
   data = inject(MAT_DIALOG_DATA);
 
   constructor(private carBrandsService: CarBrandsService) {
-    console.log('recived data: ', this.data);
     if (this.data.action === 'edit') {
-      console.log('Se va a editar');
       this.textButton = 'Editar';
       this.form = new FormBuilder().group({
         name: [this.data.item.name, [Validators.required]],
       });
     } else {
-      console.log('Se va a agregar');
       this.isDisabled = true;
       this.textButton = 'Agregar';
       this.form = new FormBuilder().group({
@@ -94,24 +85,20 @@ export class newBrandComponent {
           this.dialogRef.close();
         },
         (err) => {
-          console.log(err);
           SweetAlert.error('Error', err.error.message);
         }
       );
       return;
     }
-    this.carBrandsService
-      .putCarBrand(this.form.value, this.data.item.id)
-      .subscribe(
-        (res) => {
-          SweetAlert.success('Exito', res.message);
-          this.dialogRef.close();
-        },
-        (err) => {
-          console.log(err);
-          SweetAlert.error('Error', err.error.message);
-        }
-      );
+    this.carBrandsService.putCarBrand(this.form.value, this.data.item.id).subscribe(
+      (res) => {
+        SweetAlert.success('Exito', res.message);
+        this.dialogRef.close();
+      },
+      (err) => {
+        SweetAlert.error('Error', err.error.message);
+      }
+    );
   }
 
   validateInput() {

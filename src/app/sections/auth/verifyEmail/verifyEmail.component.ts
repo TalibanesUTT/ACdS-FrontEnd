@@ -39,16 +39,13 @@ export class verifyEmailComponent {
   verify(): void {
     const url = localStorage.getItem('url') || '';
     this.sendCode = this.verifyEmailForm.value.code.replace(/-/g, '');
-    console.log(this.sendCode);
     this.authService.verifyEmail(url, this.sendCode).subscribe(
       (res) => {
-        console.log(res);
         SweetAlert.success('Éxito', res.message);
         localStorage.clear();
         this.router.navigate(['/login']);
       },
       (err) => {
-        console.log(err);
         SweetAlert.error('Error', err.error.error.error ? err.error.error.error : 'Código de verificacción incorrecto');
       }
     );

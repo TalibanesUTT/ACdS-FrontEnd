@@ -82,15 +82,14 @@ export class formVehiclesComponent {
     return this.fb.group({
       id: [''],
       ownerId: ['', [Validators.required]],
-      serialNumber: ['', [Validators.required, Validators.maxLength(20), Validators.minLength(17)]],
+      serialNumber: ['', [Validators.required, Validators.maxLength(20), Validators.minLength(17), CustomValidators.onlyNumbers]],
       model: ['', [Validators.required]],
       brandId: ['', [Validators.required]],
       year: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]],
-      color: ['', [Validators.required]],
+      color: ['', [Validators.required, CustomValidators.namePattern]],
       plates: ['', [Validators.required, Validators.maxLength(15), Validators.minLength(6)]],
     });
   }
-
   getOwners(): void {
     this.usersService.getAllUsers().subscribe((data) => {
       this.owners = data.data;
@@ -222,7 +221,6 @@ export class formVehiclesComponent {
     if (changes['dataVehicle'] && this.dataVehicle) {
       if (this.dataVehicle.action === 'edit' || this.dataVehicle.action === 'detail') {
         this.textCondition = 'Editar';
-        console.log('dataVehicle', this.dataVehicle);
         this.formVehicles.patchValue(this.dataVehicle);
         this.disabledSendButton = false;
         return;
@@ -232,8 +230,6 @@ export class formVehiclesComponent {
   }
 
   saveVehicle() {
-    console.log('sendForm', this.formVehicles.value);
-
     this.formVehicles.value.ownerId = parseInt(this.formVehicles.value.ownerId.id, 10);
     this.formVehicles.value.brandId = parseInt(this.formVehicles.value.brandId.id, 10);
     this.formVehicles.value.year = parseInt(this.formVehicles.value.year, 10);

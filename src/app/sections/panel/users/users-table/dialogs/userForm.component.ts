@@ -66,7 +66,6 @@ export class userFormComponent {
   readonly dialogRef = inject(MatDialogRef<userFormComponent>);
   data = inject(MAT_DIALOG_DATA);
   constructor(private formBuilder: FormBuilder, private userService: UsersService) {
-    console.log(this.data);
     if (this.data.action === 'edit') {
       this.textButton = 'Editar';
     } else {

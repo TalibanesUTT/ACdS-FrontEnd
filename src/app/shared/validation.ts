@@ -6,7 +6,11 @@ export class CustomValidators {
     const pattern = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/;
     return pattern.test(control.value) ? null : { invalidName: true };
   };
-
+  //only numbers
+  static onlyNumbers: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const pattern = /^[0-9]*$/;
+    return pattern.test(control.value) ? null : { invalidNumber: true };
+  };
   static emailPattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return pattern.test(control.value) ? null : { invalidEmail: true };

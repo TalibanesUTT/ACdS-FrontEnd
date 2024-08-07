@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatFormField } from '@angular/material/form-field';
@@ -16,13 +10,7 @@ import { RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { Router } from '@angular/router';
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert } from '../../shared/SweetAlert';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
@@ -50,11 +38,7 @@ export class headerComponent {
   @Output() editSectionText = new EventEmitter<boolean>();
   title = 'acds-frontend';
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private profileService: ProfileService
-  ) {}
+  constructor(private router: Router, private authService: AuthService, private profileService: ProfileService) {}
   user: any;
 
   logout() {
@@ -63,21 +47,16 @@ export class headerComponent {
         localStorage.clear();
         this.router.navigate(['/login']);
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
   }
   getDataUser() {
     this.profileService.getProfile().subscribe(
       (data) => {
-        console.log('header', data);
         this.user = data;
         localStorage.setItem('user', JSON.stringify(data));
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
   }
 }

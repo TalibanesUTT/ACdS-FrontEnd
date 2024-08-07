@@ -52,8 +52,6 @@ export class formEditPasswordUserComponent {
   }
   PasswordChange(): void {
     const USER = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log('Usuario', USER);
-    console.log('Formulario de cambio de contraseña', this.registerForm.value);
 
     if (!this.PasswordSwitch) {
       Swal.fire({
@@ -67,14 +65,12 @@ export class formEditPasswordUserComponent {
         if (result.isConfirmed) {
           this.profileService.updatePassword(this.registerForm.value, USER.id).subscribe(
             (response) => {
-              console.log(response);
               SweetAlert.success('Éxito', response.message);
               this.registerForm.reset();
               this.PasswordSwitch = !this.PasswordSwitch;
               this.PasswordSwitchChange.emit(this.PasswordSwitch);
             },
             (error) => {
-              console.log(error);
               SweetAlert.error('Error', error.error.error.message);
             }
           );

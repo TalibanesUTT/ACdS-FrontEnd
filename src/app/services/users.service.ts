@@ -38,7 +38,6 @@ export class UsersService {
   }
 
   updateUser(form: any, updateURL: string): Observable<any> {
-    console.log(form);
     return this.http.put(environments.API_URL + '/' + updateURL, form, {
       headers: {
         Authorization: 'Bearer ' + this.authService.getToken(),

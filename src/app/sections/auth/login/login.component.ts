@@ -42,7 +42,6 @@ export class LoginComponent {
     }
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
-        console.log('login', res);
         localStorage.setItem('user', JSON.stringify(res.data) || '');
         if (res.message === 'Código de verificación reenviado') {
           localStorage.setItem('dataModify', 'phone');

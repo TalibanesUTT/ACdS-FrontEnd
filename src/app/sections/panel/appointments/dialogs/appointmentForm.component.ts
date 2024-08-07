@@ -64,7 +64,6 @@ export class appointmentComponent {
   readonly dialogRef = inject(MatDialogRef<appointmentComponent>);
   data = inject(MAT_DIALOG_DATA);
   constructor(private formBuilder: FormBuilder) {
-    console.log(this.data);
     if (this.data.action === 'edit') {
       this.textButton = 'Editar';
     } else {

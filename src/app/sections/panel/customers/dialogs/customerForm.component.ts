@@ -98,10 +98,8 @@ export class CustomerFormComponent {
 
   submit() {
     this.form.value.phoneNumber = this.form.value.phoneNumber.replace(/\D/g, '');
-    console.log('user', this.form.value);
-    console.log('userModify', this.userTemporaly);
+
     if (this.form.invalid) {
-      console.log('Formulario inválido');
       return;
     }
     if (this.data.action === 'edit') {

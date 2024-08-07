@@ -69,7 +69,6 @@ export class profileComponent {
 
   getProfile() {
     this.profileService.getProfile().subscribe((res) => {
-      console.log(res);
       this.userData = res;
       this.temporyDataUSer = res;
       this.userData = { ...res, role: this.mapRoleEnglish(res.role) };
@@ -148,8 +147,6 @@ export class profileComponent {
     this.editProfile = !this.editProfile;
   }
   sendData(modifyPhone?: boolean, modifyEmail?: boolean) {
-    console.log('datos a enviar', this.userData);
-    console.log('datos temporales', this.temporyDataUSer);
     if (
       this.userData.name === this.temporyDataUSer.name &&
       this.userData.lastName === this.temporyDataUSer.lastName &&
@@ -187,7 +184,6 @@ export class profileComponent {
           SweetAlert.success('success', res.message);
           return;
         }
-        console.log('respuesta', res);
         this.editProfile = !this.editProfile;
         modifyEmail = false;
         modifyPhone = false;
@@ -205,16 +201,13 @@ export class profileComponent {
   logout(onlyEmailModify?: boolean) {
     this.authService.logout().subscribe(
       (res) => {
-        console.log(res);
         if (onlyEmailModify) {
           this.router.navigate(['/login']);
           return;
         }
         this.router.navigate(['/reactiveCount']);
       },
-      (err) => {
-        console.log(err);
-      }
+      (err) => {}
     );
   }
 

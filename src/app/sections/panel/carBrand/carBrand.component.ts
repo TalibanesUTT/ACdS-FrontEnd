@@ -73,7 +73,6 @@ export class carBrandComponent implements AfterViewInit {
     this.carBrandsService.getCardBrands().subscribe(
       (res) => {
         this.dataSource.data = res.data;
-        console.log(this.dataSource.data);
       },
       (err) => {}
     );
@@ -81,34 +80,29 @@ export class carBrandComponent implements AfterViewInit {
 
   editForm(data: any, index: number) {
     if (this.editTableIndex === index) {
-      console.log('save');
       this.carBrandsService.putCarBrand(this.formCarBrand.value, data.id).subscribe(
         (res) => {
           SweetAlert.success('Exito', res.message);
           this.getAllCarBrands();
         },
         (err) => {
-          console.log(err);
           SweetAlert.error('Error', err.error.error.message);
         }
       );
       this.editTableIndex = null; // Resetea el índice después de guardar
     } else {
-      console.log('edit', data);
       this.editTableIndex = index; // Establece el índice de la fila que se está editando
       this.formCarBrand.patchValue(data);
     }
   }
 
   openDialog(item: any, action: string) {
-    console.log(item);
     const dialogRef = this.dialog.open(newBrandComponent, {
       width: '400px',
       height: '250px',
       data: { item, action },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
       this.getAllCarBrands();
     });
   }

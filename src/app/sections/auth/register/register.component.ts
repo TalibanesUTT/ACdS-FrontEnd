@@ -30,13 +30,11 @@ export class registerComponent {
     const userString = localStorage.getItem('user');
     this.userTemporaly = userString ? JSON.parse(userString) : null;
     if (this.userTemporaly) {
-      console.log('hay usuario temporal');
       this.userTemporalyExist = true;
       this.userTemporaly.phoneNumber = this.formatPhoneNumber(this.userTemporaly.phoneNumber);
       this.registerForm = this.userTemporalyForm(this.userTemporaly);
       return;
     }
-    console.log('no hay usuario temporal');
     this.userTemporalyExist = false;
     this.registerForm = this.newFormControls();
   }
@@ -56,7 +54,6 @@ export class registerComponent {
   }
 
   userTemporalyForm(user: any): FormGroup {
-    console.log('user', user);
     return this.fb.group(
       {
         name: [user.name, [Validators.required, CustomValidators.namePattern]],
@@ -94,14 +91,12 @@ export class registerComponent {
     this.passwordNotMatch = false;
     this.authService.register(this.registerForm.value).subscribe(
       (response) => {
-        console.log(response);
         localStorage.setItem('url', response.url);
         localStorage.setItem('user', JSON.stringify(response.data));
         this.router.navigate(['/verifyEmail']);
         SweetAlert.success('Éxito', response.message);
       },
       (error) => {
-        console.log(error);
         SweetAlert.error('Error', error.error.error.message);
       }
     );
@@ -110,12 +105,10 @@ export class registerComponent {
   updateData(): void {
     let newPhone = this.DeleteMiddleDash(this.registerForm.value.phoneNumber);
     this.registerForm.value.phoneNumber = newPhone;
-    console.log('updateData', this.registerForm.value);
     // delete this.registerForm.value.phone;
     delete this.registerForm.value.passwordConfirmation;
     this.profileService.putUserTemporaly(this.registerForm.value, this.userTemporaly.id).subscribe(
       (response) => {
-        console.log('update', response);
         delete response.data.role;
         if (!response.url === null) localStorage.setItem('url', response.url);
 
@@ -124,7 +117,6 @@ export class registerComponent {
         SweetAlert.success('Éxito', response.message);
       },
       (error) => {
-        console.log(error);
         SweetAlert.error('Error', error.error.error.message);
       }
     );
