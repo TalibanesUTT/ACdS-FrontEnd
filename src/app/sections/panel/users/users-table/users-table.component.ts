@@ -78,7 +78,6 @@ export class UsersTableComponent implements AfterViewInit {
 
   getUsers() {
     this.usersService.getAllUsers().subscribe((data: any) => {
-      console.log(data);
       data.data.map((user: UserInterface) => {
         user.isEditing = false;
       });
@@ -107,7 +106,6 @@ export class UsersTableComponent implements AfterViewInit {
   filterData(value: any) {
     const filterValue = value.myControl ? value.myControl.trim().toLowerCase() : '';
     this.dataSource.filterPredicate = (data: UserInterface, filter: string) => {
-      console.log(data);
       const matchFilter = [];
       const searchTerms = JSON.parse(filter);
 
@@ -163,14 +161,12 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   openDialog(item: any, action: string) {
-    console.log(item);
     const dialogRef = this.dialog.open(userFormComponent, {
       width: '400px',
       height: '300px',
       data: { item, action },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
       this.getUsers();
     });
   }

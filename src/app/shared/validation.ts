@@ -19,7 +19,6 @@ export class CustomValidators {
 
   static passwordPattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&()_+\[\]{}*])[A-Za-z\d!@#$%^&()_+\[\]{}*]{8,}$/;
-    // console.log('Password being validated:', control.value);
     return pattern.test(control.value) ? null : { invalidPassword: true };
   };
   static validatorMatchPassword: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
