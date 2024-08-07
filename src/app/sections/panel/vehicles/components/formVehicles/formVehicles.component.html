@@ -1,0 +1,88 @@
+<div class="container">
+  <h1>{{ textCondition }} vehículo</h1>
+  <form [formGroup]="formVehicles" style="display: flex; align-items: center; flex-direction: column; width: 100%">
+    <div style="display: flex; align-items: center; flex-direction: row; width: 100%; gap: 10px">
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Propietario</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="ownerId"
+          [matAutocomplete]="auto"
+          (input)="disableSendButton($event)"
+          [maxlength]="maxlengthOwner"
+        />
+        <mat-error *ngIf="formVehicles.get('ownerId')?.hasError('required')"> El propietario es obligatorio </mat-error>
+      </mat-form-field>
+
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayOwner">
+        <mat-option *ngFor="let owner of filteredOwners$ | async" [value]="owner"> {{ owner.name }} {{ owner.lastName }} </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Marca</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="brandId"
+          [matAutocomplete]="autoBrand"
+          (input)="disableSendButton($event)"
+          [maxlength]="maxlengthBrand"
+        />
+        <mat-error *ngIf="formVehicles.get('brandId')?.hasError('required')"> La marca es obligatoria </mat-error>
+      </mat-form-field>
+
+      <mat-autocomplete #autoBrand="matAutocomplete" [displayWith]="displayBrand">
+        <mat-option *ngFor="let brand of filteredBrands$ | async" [value]="brand"> {{ brand.name }} </mat-option>
+      </mat-autocomplete>
+    </div>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Modelo</mat-label>
+      <input type="text" matInput formControlName="model" [matAutocomplete]="autoModel" (input)="disableSendButton($event)" maxlength="40" />
+      <mat-error *ngIf="formVehicles.get('model')?.hasError('required')"> El modelo es obligatorio </mat-error>
+    </mat-form-field>
+
+    <mat-autocomplete #autoModel="matAutocomplete" [displayWith]="displayModel">
+      <mat-option *ngFor="let model of filteredModels$ | async" [value]="model"> {{ model.model }} </mat-option>
+    </mat-autocomplete>
+
+    <div style="display: flex; align-items: center; flex-direction: row; width: 100%; gap: 10px">
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <input matInput formControlName="year" (input)="disableSendButton($event)" maxlength="4" />
+        <mat-error *ngIf="formVehicles.get('year')?.hasError('required')"> El año es obligatorio </mat-error>
+        <mat-error *ngIf="formVehicles.get('year')?.hasError('minlength') && formVehicles.get('year')?.hasError('maxlength')">
+          El año debe tener 4 caracteres
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Color</mat-label>
+        <input matInput formControlName="color" (input)="disableSendButton($event)" />
+        <mat-error *ngIf="formVehicles.get('color')?.hasError('required')"> El color es obligatorio </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Numero de serie</mat-label>
+      <input matInput formControlName="serialNumber" (input)="disableSendButton($event)" maxlength="20" />
+      <mat-error *ngIf="formVehicles.get('serialNumber')?.hasError('required')"> El numero de serie es obligatorio </mat-error>
+      <mat-error *ngIf="formVehicles.get('serialNumber')?.hasError('minlength') && formVehicles.get('serialNumber')?.hasError('maxlength')">
+        El numero de serie debe tener de minimo 17 caracteres y maximo 20 caracteres
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Placas</mat-label>
+      <input matInput formControlName="plates" (input)="disableSendButton($event)" maxlength="15" />
+      <mat-error *ngIf="formVehicles.get('plates')?.hasError('required')"> Las placas son obligatorias </mat-error>
+      <mat-error *ngIf="formVehicles.get('plates')?.hasError('minlength') && formVehicles.get('plates')?.hasError('maxlength')">
+        Las placas deben tener de minimo 6 caracteres y maximo 15 caracteres
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div style="display: flex; align-items: center; justify-content: end; flex-direction: row; gap: 10px; height: 40px">
+  <button (click)="toggleShowTable()" class="buttonReset">Regresar a la tabla</button>
+  <button mat-raised-button [ngClass]="disabledSendButton ? 'buttonDisabled' : 'buttonReset'" (click)="saveVehicle()">
+    {{ textCondition }} vehículo
+  </button>
+</div>

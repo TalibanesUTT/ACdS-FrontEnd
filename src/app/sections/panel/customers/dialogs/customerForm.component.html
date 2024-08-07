@@ -1,3 +1,4 @@
+s
 <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px">
   <h1>{{ textButton }} cliente</h1>
   <button>
@@ -30,8 +31,11 @@
     </mat-form-field>
     <mat-form-field class="inputForm" appearance="outline">
       <mat-label>Teléfono</mat-label>
-      <input matInput (input)="onPhoneFormat($event)" placeholder="Teléfono" formControlName="phoneNumber" [disabled]="isDisabled" />
+      <input matInput (input)="onPhoneFormat($event)" placeholder="Teléfono" formControlName="phoneNumber" (input)="validateForm($event)" />
       <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">Este campo es requerido</mat-error>
+      <mat-error *ngIf="form.get('phoneNumber')?.hasError('invalidPhone') && !form.get('phoneNumber')?.hasError('required')"
+        >Teléfono no válido</mat-error
+      >
     </mat-form-field>
     <!-- <mat-slide-toggle *ngIf="action === 'edit'" formControlName="active" [disabled]="isDisabled"> Activo </mat-slide-toggle> -->
     <button [ngClass]="isDisabled ? 'buttonAddDisabled' : 'buttonAdd'" [disabled]="isDisabled" (click)="submit()">

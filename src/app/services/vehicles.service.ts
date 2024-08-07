@@ -33,4 +33,9 @@ export class VehiclesService {
       headers: { Authorization: 'Bearer ' + this.authService.getToken() },
     });
   }
+  getModelByBrand(brandId: number): Observable<any> {
+    return this.http.get(this.API_URL + `/car-models/${brandId}`, {
+      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
+    });
+  }
 }

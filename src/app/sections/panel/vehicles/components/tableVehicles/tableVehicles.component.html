@@ -1,0 +1,76 @@
+<div class="container">
+  <form [formGroup]="form" style="display: flex; flex-direction: row; height: 5%; margin-bottom: 20px; height: 40px">
+    <div style="display: flex; flex-direction: row; width: 40%">
+      <input formControlName="myControl" type="text" placeholder="Búsqueda..." class="inputSimple" />
+
+      <select formControlName="filter" type="text" class="select" style="width: 50%">
+        <option value="all" [defaultSelected]="true">Filtrar por...</option>
+        <option value="brand">Marca</option>
+        <option value="year">Año</option>
+        <option value="color">Color</option>
+        <option value="plates">Placas</option>
+      </select>
+    </div>
+    <div style="display: flex; flex-direction: row; width: 30%; gap: 20px; margin-left: 20px">
+      <select formControlName="brand" class="select">
+        <option value="all" [defaultSelected]="true">Marca</option>
+        <option *ngFor="let brand of brands" [value]="brand.name">{{ brand.name }}</option>
+      </select>
+
+      <select formControlName="owner" class="select">
+        <option value="all" [defaultSelected]="true">Propietario</option>
+        <option *ngFor="let owner of owners" [value]="owner.name + ' ' + owner.lastName">{{ owner.name }} {{ owner.lastName }}</option>
+      </select>
+    </div>
+
+    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 30%">
+      <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="resetFilters()">Reiniciar filtros</button>
+      <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="toggleShowTable('add')">
+        <mat-icon>add</mat-icon>
+        Nuevo vehículo
+      </button>
+    </div>
+  </form>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" border="1">
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Marca</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.model.brand }}</td>
+      </ng-container>
+      <ng-container matColumnDef="model">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Modelo</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.model.model }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Año</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.year }}</td>
+      </ng-container>
+      <ng-container matColumnDef="color">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Color</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.color }}</td>
+      </ng-container>
+      <ng-container matColumnDef="plates">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Placas</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.plates }}</td>
+      </ng-container>
+      <ng-container matColumnDef="owner">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Propietario</th>
+        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.owner }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="custom-header">Acciones</th>
+        <td mat-cell *matCellDef="let element" style="display: flex; align-items: center; justify-content: center">
+          <button (click)="toggleShowTable('edit', element)" matTooltip="Editar vehículo" style="width: 40px; height: 40px">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons aria-label="Selecciona la página de elementos periódicos"> </mat-paginator>
+  </div>
+</div>

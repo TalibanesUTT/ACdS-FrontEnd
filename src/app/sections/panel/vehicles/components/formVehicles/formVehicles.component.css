@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+.buttonReset {
+  color: white;
+  width: 25%;
+  height: 100%;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #bc0505;
+  box-shadow: 0px 0px 5px 0px #000000;
+}
+
+.buttonReset:hover {
+  background-color: #f2494e;
+}
+
+.buttonDisabled {
+  opacity: 0.5;
+  color: white;
+  width: 25%;
+  height: 100%;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #bc0505;
+  box-shadow: 0px 0px 5px 0px #000000;
+}

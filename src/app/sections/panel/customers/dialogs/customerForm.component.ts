@@ -10,9 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import { startWith, map, filter } from 'rxjs/operators';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChangeDetectionStrategy, inject, model, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -89,22 +87,23 @@ export class CustomerFormComponent {
     }
   }
   newFormControls(data: any): FormGroup {
-    return this.formBuilder.group(
-      {
-        name: [data.name, [Validators.required, CustomValidators.namePattern]],
-        lastName: [data.lastName, [Validators.required, CustomValidators.namePattern]],
-        email: [data.email, [Validators.required, CustomValidators.emailPattern]],
-        phoneNumber: [data.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
-        active: [data.active, [Validators.required]],
-      },
-      { validators: CustomValidators.validatorMatchPassword }
-    );
+    return this.formBuilder.group({
+      name: [data.name, [Validators.required, CustomValidators.namePattern]],
+      lastName: [data.lastName, [Validators.required, CustomValidators.namePattern]],
+      email: [data.email, [Validators.required, CustomValidators.emailPattern]],
+      phoneNumber: [data.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
+      active: [data.active, [Validators.required]],
+    });
   }
 
   submit() {
     this.form.value.phoneNumber = this.form.value.phoneNumber.replace(/\D/g, '');
     console.log('user', this.form.value);
     console.log('userModify', this.userTemporaly);
+    if (this.form.invalid) {
+      console.log('Formulario inválido');
+      return;
+    }
     if (this.data.action === 'edit') {
       this.customerService.putCustomer(this.form.value, this.data.item.id).subscribe((res) => {
         SweetAlert.success('Éxito', res.message);
@@ -148,7 +147,8 @@ export class CustomerFormComponent {
   validateForm($event: any) {
     if (this.form.invalid) {
       this.isDisabled = true;
+    } else {
+      this.isDisabled = false;
     }
-    this.isDisabled = false;
   }
 }

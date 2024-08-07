@@ -33,19 +33,21 @@ export class CustomValidators {
     const confirmPassword = control.get('passwordConfirmation')?.value;
     return password && confirmPassword && password === confirmPassword ? null : { passwordsMismatchUpdate: true };
   };
-  //validar de año
-  static yearPattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const pattern = /^[0-9]{4}$/;
-    return pattern.test(control.value) ? null : { invalidYear: true };
-  };
-  //validar de placa
+  // Nueva validación para Placas
   static platePattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const pattern = /^[a-zA-Z]{3}-[0-9]{3}$/;
+    const pattern = /^.{6,15}$/;
     return pattern.test(control.value) ? null : { invalidPlate: true };
   };
-  //validar numero de serie de auto
-  static serialNumberPattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const pattern = /^[a-zA-Z0-9]{17}$/;
-    return pattern.test(control.value) ? null : { invalidSerialNumber: true };
+
+  // Nueva validación para Número de Serie (VIN)
+  static numberSeriePattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const pattern = /^\d{17,25}$/;
+    return pattern.test(control.value) ? null : { invalidVin: true };
+  };
+
+  // Nueva validación para Año
+  static yearPattern: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const pattern = /^\d{1,4}$/;
+    return pattern.test(control.value) ? null : { invalidYear: true };
   };
 }

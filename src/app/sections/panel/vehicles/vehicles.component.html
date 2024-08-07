@@ -1,109 +1,16 @@
-<div class="container">
-  <form [formGroup]="form" style="display: flex; flex-direction: row; height: 5%; margin-bottom: 20px; height: 40px">
-    <div style="display: flex; flex-direction: row; width: 40%">
-      <input formControlName="myControl" type="text" placeholder="Búsqueda..." class="inputSimple" />
-
-      <select formControlName="filter" type="text" class="select" style="width: 50%">
-        <option value="all" [defaultSelected]="true">Filtrar por...</option>
-        <option value="name">Dueño</option>
-        <option value="model">Modelo</option>
-        <option value="plates">Placas</option>
-      </select>
-    </div>
-    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 40%">
-      <select formControlName="Estatus" class="select">
-        <option value="all" [defaultSelected]="true">Estatus</option>
-        <option value="active">Activo</option>
-        <option value="inactive">Inactivo</option>
-      </select>
-      <button class="buttonReset" (click)="resetFilters()">Reiniciar filtros</button>
-    </div>
-    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 20%">
-      <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="openDialog($event, 'add')">
-        <mat-icon>add</mat-icon>
-        Nuevo vehiculo
-      </button>
-    </div>
-  </form>
-
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" border="1">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">ID</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">{{ element.id }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="owner">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Dueño</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.owner }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="model">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Modelo</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.model }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="color">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Color</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.color }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="plates">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Placas</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.plates }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="serialNumber">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Numero de serie</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.serialNumber }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="year">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Año</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          {{ element.year }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="active">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Activo</th>
-        <td mat-cell *matCellDef="let element" class="custom-column">
-          <div *ngIf="element.active" class="userActive">
-            <mat-icon>check</mat-icon>
-          </div>
-          <div *ngIf="!element.active" class="userInactive">
-            <mat-icon>block</mat-icon>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="custom-header">Acciones</th>
-        <td mat-cell *matCellDef="let element" style="display: flex; align-items: center; justify-content: center">
-          <button
-            [disabled]="user.email === element.email"
-            matTooltip="Editar nombre de la marca"
-            style="width: 40px; height: 40px"
-            (click)="openDialog(element, 'edit')"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecciona la página de elementos periódicos"> </mat-paginator>
-  </div>
+<div *ngIf="showTable">
+  <app-table-Vehicles
+    [showTable]="showTable"
+    (showTableChange)="showTable = $event"
+    [dataVehicle]="dataVehicle"
+    (dataVehicleChange)="dataVehicle = $event"
+  ></app-table-Vehicles>
+</div>
+<div *ngIf="!showTable">
+  <app-form-Vehicles
+    [showTable]="showTable"
+    (showTableChange)="showTable = $event"
+    [dataVehicle]="dataVehicle"
+    (dataVehicleChange)="dataVehicle = $event"
+  ></app-form-Vehicles>
 </div>
