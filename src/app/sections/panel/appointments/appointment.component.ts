@@ -1,20 +1,18 @@
-import { AfterViewInit, Component, OnInit, ViewChild, inject } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { MatDialog } from '@angular/material/dialog';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormBuilder } from '@angular/forms';
-import { MatLabel } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { Appointment, AppointmentService } from './appointment.service';
-import { catchError, Observable, tap } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Component, OnInit} from '@angular/core';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableModule} from '@angular/material/table';
+import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
+import {Appointment, AppointmentService} from './appointment.service';
+import {AppointmentActionsComponent} from "./appointment-actions.component";
+import {MatDialog} from "@angular/material/dialog";
+import {AppointmentFormComponent} from "./appointment-form.compoment";
+import {MatButton} from "@angular/material/button";
+import {MatIcon} from "@angular/material/icon";
+import {RoleEnum, UserRoleService} from "./user-role.service";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {MatOption, MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-appointment',
@@ -24,39 +22,53 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     MatTableModule,
     MatPaginatorModule,
-    MatIconModule,
-    MatFormField,
-    FormsModule,
+    MatInput,
+    MatSelect,
+    MatLabel,
+    MatOption,
     AsyncPipe,
     NgIf,
-    NgFor,
-    MatSlideToggle,
-    MatAutocompleteModule,
+    MatIcon,
+    AppointmentActionsComponent,
+    MatButton,
+    DatePipe,
     ReactiveFormsModule,
-    MatLabel,
-    MatInputModule,
-    MatSelectModule,
+    MatFormField
   ],
 })
-export class appointmentComponent implements OnInit{
+export class AppointmentComponent implements OnInit {
   displayedColumns: string[] = ['date', 'time', 'reason', 'actions'];
-  appointments$ = this.service.appointments$.pipe();
+  appointments$ = this.service.appointments$
 
-  constructor(private service: AppointmentService) {}
+  constructor(
+    private roleService: UserRoleService,
+    private service: AppointmentService,
+    private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
-    this.service.getUserAppointments();
-  }
-  
-  createAppointment(appointment: Appointment) {
-    this.service.createAppointment(appointment);
+    switch (this.roleService.role) {
+      case RoleEnum.CUSTOMER:
+        this.service.getUserAppointments();
+        break;
+      default:
+        this.service.getAllAppointments();
+        break;
+    }
   }
 
-  editAppointment(appointment: Appointment) {
-    this.service.updateAppointment(appointment);
+  openAppointmentDialog(appointment?: Appointment): void {
+    this.dialog.open(AppointmentFormComponent, {
+      width: '400px',
+      data: {appointment}
+    })
   }
-  
-  cancelAppointment(id: number) {
-    this.service.cancelAppointment(id);
+
+  createAppointment(): void {
+    this.openAppointmentDialog();
+  }
+
+  editAppointment(appointment: Appointment): void {
+    this.openAppointmentDialog(appointment);
   }
 }

@@ -62,7 +62,7 @@ export const routes: Routes = [
       },
       {
         path: 'appointments',
-        loadComponent: () => import('./sections/panel/appointments/appointment.component').then((m) => m.appointmentComponent),
+        loadComponent: () => import('./sections/panel/appointments/appointment.component').then((m) => m.AppointmentComponent),
       },
     ],
   },
