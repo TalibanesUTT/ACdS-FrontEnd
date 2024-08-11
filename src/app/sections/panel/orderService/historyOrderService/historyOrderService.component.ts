@@ -26,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { MatTableDataSource } from '@angular/material/table';
 import { changeStatusOrderComponent } from '../dialog/changeStatusOrder/changeStatusOrder.component';
+import { ProfileService } from '../../../../services/profile.service';
 
 @Component({
   selector: 'app-history-order-service',
@@ -64,23 +65,29 @@ export class historyOrderServiceComponent {
   @Output() showForm = new EventEmitter<string>();
   dataSource = new MatTableDataSource<IHistory>();
   readonly dialog = inject(MatDialog);
-
   displayedColumns: string[] = ['status', 'comments', 'time'];
-
   showCancelButton = true;
   showOnHoldButton = true;
   showRollbackButton = true;
   showContinueButton = false;
+  UserData: any;
+  token = localStorage.getItem('token');
 
-  constructor(private orderDetailService: ServiceOrdersService) {}
+  constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
+    this.getProfile();
+  }
 
   ngOnInit() {
     if (this.itemOrderService && Array.isArray(this.itemOrderService.history)) {
       this.dataSource.data = this.itemOrderService.history;
       this.dataSource.paginator = this.paginator;
-
       this.evaluateButtonVisibility(this.itemOrderService.actualStatus);
     }
+  }
+  getProfile() {
+    this.profileService.getProfile().subscribe((data) => {
+      this.UserData = data;
+    });
   }
   resetValueShowButton() {
     this.showCancelButton = true;

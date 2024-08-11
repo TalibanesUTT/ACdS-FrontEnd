@@ -26,4 +26,7 @@ export class VehiclesService {
   getModelByBrand(brandId: number): Observable<any> {
     return this.http.get(this.API_URL + `/car-models/${brandId}`, {});
   }
+  getVehicleByOwner(ownerId: number): Observable<any> {
+    return this.http.get(this.API_URL + `/vehicles/owner/${ownerId}`, {});
+  }
 }

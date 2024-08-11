@@ -24,6 +24,7 @@ import { RouterOutlet } from '@angular/router';
 import { formOrderServiceComponent } from './forms/formOrderService/formEditOrderService.component';
 import { tabOrderServiceComponent } from './tabOrdersService/tabOrderService.component';
 import { formEditOrderServiceComponent } from './forms/formEditOrderService/formOrderService.component';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-orderService',
@@ -60,19 +61,45 @@ import { formEditOrderServiceComponent } from './forms/formEditOrderService/form
 export class orderServiceComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   formFilter: FormGroup;
-  displayedColumns: string[] = ['fileNumber', 'createDate', 'actualStatus', 'vehicle', 'client', 'services', 'totalCost'];
+  displayedColumns: string[] = ['fileNumber', 'createDate', 'actualStatus', 'vehicle', 'services', 'totalCost'];
   dataSource = new MatTableDataSource<IOrderService>();
   servicesData: IService[] = [];
   originalData: IOrderService[] = [];
   filterCost = false;
   menuOptions = 'table';
   itemOrderService!: IOrderService;
+  UserData: any;
+  token = localStorage.getItem('token');
 
-  constructor(private fb: FormBuilder, private serviceOrdersService: ServiceOrdersService) {
+  constructor(private fb: FormBuilder, private serviceOrdersService: ServiceOrdersService, private profileService: ProfileService) {
     this.formFilter = this.newFormControls();
     this.setupFilter();
-    this.getAllServiceOrders();
+    this.getProfile();
+    // this.getAllServiceOrders();
     this.getAllService();
+  }
+  getProfile() {
+    this.profileService.getProfile().subscribe(
+      (response) => {
+        this.UserData = response;
+        console.log(this.UserData);
+        if (this.UserData.role != 'customer') {
+          this.getAllServiceOrders();
+          const vehicleIndex = this.displayedColumns.indexOf('vehicle');
+          if (vehicleIndex !== -1) {
+            this.displayedColumns.splice(vehicleIndex + 1, 0, 'client');
+          }
+          return;
+        }
+        this.serviceOrdersService.getAllServiceOrdersByUser(this.UserData.id).subscribe(
+          (response) => {
+            this.dataSource.data = response.data;
+          },
+          (error) => {}
+        );
+      },
+      (error) => {}
+    );
   }
 
   ngAfterViewInit() {

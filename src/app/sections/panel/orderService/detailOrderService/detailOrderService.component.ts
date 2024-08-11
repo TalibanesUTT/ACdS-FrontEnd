@@ -25,6 +25,7 @@ import { VehiclesService } from '../../../../services/vehicles.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { CommonModule } from '@angular/common';
+import { ProfileService } from '../../../../services/profile.service';
 @Component({
   selector: 'app-detail-order-service',
   standalone: true,
@@ -65,8 +66,12 @@ export class detailOrderServiceComponent {
   formDetailOrderService!: FormGroup;
   disableButtonForm = true;
   textCondition = '';
+  UserData: any;
+  token = localStorage.getItem('token');
 
-  constructor(private fb: FormBuilder, private orderDetailService: ServiceOrdersService) {}
+  constructor(private fb: FormBuilder, private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
+    this.getProfile();
+  }
 
   ngOnInit() {
     if (this.itemOrderService) {
@@ -79,6 +84,12 @@ export class detailOrderServiceComponent {
         this.textCondition = 'Guardar detalle ';
       }
     }
+  }
+  getProfile() {
+    this.profileService.getProfile().subscribe((response) => {
+      this.UserData = response;
+      console.log(this.UserData);
+    });
   }
   validateForm() {
     if (this.formDetailOrderService.valid) {

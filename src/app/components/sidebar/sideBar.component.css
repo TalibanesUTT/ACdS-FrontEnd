@@ -55,3 +55,15 @@ img {
 .profile-photo p {
   color: white;
 }
+.miProfile {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  color: #bc0505;
+  font-size: small;
+  height: 20px;
+}
+.miProfile:hover {
+  cursor: pointer;
+  color: #f2494e;
+}

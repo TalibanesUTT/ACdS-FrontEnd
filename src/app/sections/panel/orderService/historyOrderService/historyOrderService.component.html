@@ -1,22 +1,14 @@
 <div class="container">
   <section
-    style="
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      gap: 15px;
-      margin-bottom: 15px;
-      height: 40px;
-      margin-top: 15px;
-      margin-right: 5px;
-    "
+    *ngIf="UserData.role != 'customer'"
+    style="display: flex; flex-direction: row; justify-content: end; gap: 15px; height: 40px; margin-top: 15px; margin-right: 5px"
   >
     <button *ngIf="showCancelButton" (click)="openDialog('cancel')" class="buttonCancel">Cancelar</button>
     <button *ngIf="showOnHoldButton" class="buttonContinue" (click)="openDialog('onHold')">En espera</button>
     <button *ngIf="showRollbackButton" class="buttonRollback" (click)="openDialog('rollback')">Revertir estatus</button>
     <button *ngIf="showContinueButton" class="buttonContinue" (click)="openDialog('continue')">Continuar</button>
   </section>
-  <div class="mat-elevation-z8">
+  <div class="mat-elevation-z8" style="margin-top: 15px">
     <table mat-table [dataSource]="dataSource" border="">
       <!-- File Number Column -->
       <ng-container matColumnDef="status">

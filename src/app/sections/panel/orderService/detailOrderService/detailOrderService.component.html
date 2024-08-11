@@ -1,8 +1,10 @@
 <div class="container">
-  <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px">
+  <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px" *ngIf="UserData?.role != 'customer'">
     <button class="buttonReset" *ngIf="dataSource?.detail === null" (click)="addDetailOrderService()">Añadir detalle de la orden de servicio</button>
   </section>
-
+  <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px" *ngIf="UserData?.role === 'customer'">
+    <p>Nota: Aun no se ha añadido un tú detalle de la orden de servicio, podras verlo una vez que el mecánico lo haya añadido.</p>
+  </section>
   <form *ngIf="dataSource?.detail != null" [formGroup]="formDetailOrderService" style="height: 400px">
     <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-top: -40px; margin-bottom: 15px">
       <h1>Detalle de la orden de servicio</h1>

@@ -26,7 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { formEditOrderServiceComponent } from '../forms/formEditOrderService/formOrderService.component';
 import { formOrderServiceComponent } from '../forms/formOrderService/formEditOrderService.component';
-
+import { ProfileService } from '../../../../services/profile.service';
 @Component({
   selector: 'app-info-order-service',
   standalone: true,
@@ -69,8 +69,15 @@ export class infoOrderServiceComponent {
   vehiclesData: any[] = [];
   filteredVehicles: any[] = [];
   showFormEditOrderService = false;
-
-  constructor(private fb: FormBuilder, private serviceOrderService: ServiceOrdersService, private vehicleService: VehiclesService) {
+  UserData: any;
+  token = localStorage.getItem('token');
+  constructor(
+    private fb: FormBuilder,
+    private serviceOrderService: ServiceOrdersService,
+    private vehicleService: VehiclesService,
+    private profileService: ProfileService
+  ) {
+    this.getProfile();
     this.formOrderService = this.newFormControls();
   }
 
@@ -81,7 +88,11 @@ export class infoOrderServiceComponent {
     this.getAllServices();
     this.getAllVehicles();
   }
-
+  getProfile() {
+    this.profileService.getProfile().subscribe((res) => {
+      this.UserData = res;
+    });
+  }
   newFormControls() {
     return this.fb.group({
       // Información
