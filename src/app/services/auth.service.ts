@@ -32,10 +32,6 @@ export class AuthService {
 
   logout() {
     //get with headers
-    return this.http.delete(this.API_URL + '/logout', {
-      headers: {
-        Authorization: 'Bearer ' + this.getToken(),
-      },
-    });
+    return this.http.delete(this.API_URL + '/logout', {});
   }
 }

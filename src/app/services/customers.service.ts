@@ -12,25 +12,15 @@ export class CustomersService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAllCustomers(): Observable<ICustomerResponse> {
-    return this.http.get<ICustomerResponse>(this.API_URL + '/customers', {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get<ICustomerResponse>(this.API_URL + '/customers', {});
   }
   postCustomer(data: any): Observable<any> {
-    return this.http.post(this.API_URL + '/customers', data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.post(this.API_URL + '/customers', data, {});
   }
   putCustomer(data: any, id: number): Observable<any> {
-    return this.http.put(this.API_URL + `/customers/${id}`, data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.put(this.API_URL + `/customers/${id}`, data, {});
   }
   getCustomerById(id: number): Observable<ICustomerResponse> {
-    return this.http.get<ICustomerResponse>(this.API_URL + `/customers/${id}`, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.get<ICustomerResponse>(this.API_URL + `/customers/${id}`, {});
   }
 }

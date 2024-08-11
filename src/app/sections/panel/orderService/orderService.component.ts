@@ -23,7 +23,6 @@ import { MatDateRangeInput } from '@angular/material/datepicker';
 import { RouterOutlet } from '@angular/router';
 import { formOrderServiceComponent } from './forms/formOrderService/formEditOrderService.component';
 import { tabOrderServiceComponent } from './tabOrdersService/tabOrderService.component';
-import { appointmentComponent } from '../appointments/appointment.component';
 import { formEditOrderServiceComponent } from './forms/formEditOrderService/formOrderService.component';
 
 @Component({
@@ -52,7 +51,6 @@ import { formEditOrderServiceComponent } from './forms/formEditOrderService/form
     RouterOutlet,
     formOrderServiceComponent,
     tabOrderServiceComponent,
-    appointmentComponent,
     formEditOrderServiceComponent,
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],

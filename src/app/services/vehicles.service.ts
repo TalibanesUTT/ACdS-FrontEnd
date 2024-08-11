@@ -12,30 +12,18 @@ export class VehiclesService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAllVehicles(): Observable<any> {
-    return this.http.get(this.API_URL + '/vehicles', {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get(this.API_URL + '/vehicles', {});
   }
   postVehicle(data: any): Observable<any> {
-    return this.http.post(this.API_URL + '/vehicles', data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.post(this.API_URL + '/vehicles', data, {});
   }
   putVehicle(data: any, id: number): Observable<any> {
-    return this.http.put(this.API_URL + `/vehicles/${id}`, data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.put(this.API_URL + `/vehicles/${id}`, data, {});
   }
   getVehicleById(id: number): Observable<any> {
-    return this.http.get(this.API_URL + `/vehicles/${id}`, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.get(this.API_URL + `/vehicles/${id}`, {});
   }
   getModelByBrand(brandId: number): Observable<any> {
-    return this.http.get(this.API_URL + `/car-models/${brandId}`, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.get(this.API_URL + `/car-models/${brandId}`, {});
   }
 }

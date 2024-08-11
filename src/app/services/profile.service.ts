@@ -12,41 +12,21 @@ export class ProfileService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getProfile(): Observable<any> {
-    return this.http.get(this.API_URL + '/profile', {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get(this.API_URL + '/profile', {});
   }
 
   putProfile(data: IUser, id: number): Observable<any> {
     if (data.phoneNumber) {
       data.phoneNumber = data.phoneNumber.replace(/-/g, '') as '1231231231';
     }
-    return this.http.put(
-      this.API_URL + `/user-management/updateProfile/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: 'Bearer ' + this.authService.getToken(),
-        },
-      }
-    );
+    return this.http.put(this.API_URL + `/user-management/updateProfile/${id}`, data, {});
   }
 
   putUserTemporaly(data: IUser, id: number): Observable<any> {
     if (data.phoneNumber) {
       data.phoneNumber = data.phoneNumber.replace(/-/g, '') as '1231231231';
     }
-    return this.http.put(
-      this.API_URL + `/user-management/updateProfile/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: 'Bearer ' + this.authService.getToken(),
-        },
-      }
-    );
+    return this.http.put(this.API_URL + `/user-management/updateProfile/${id}`, data, {});
   }
   updatePassword(
     data: {
@@ -56,15 +36,7 @@ export class ProfileService {
     },
     id: number
   ): Observable<any> {
-    return this.http.put(
-      this.API_URL + '/user-management/updatePassword/' + id,
-      data,
-      {
-        headers: {
-          Authorization: 'Bearer ' + this.authService.getToken(),
-        },
-      }
-    );
+    return this.http.put(this.API_URL + '/user-management/updatePassword/' + id, data, {});
   }
 
   recoverPassword(email: string): Observable<any> {
