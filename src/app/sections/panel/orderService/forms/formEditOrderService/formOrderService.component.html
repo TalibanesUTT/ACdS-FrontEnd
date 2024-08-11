@@ -1,0 +1,90 @@
+<div class="container">
+  {{ dataSource | json }}
+  <h1>Nueva orden de servicio</h1>
+  <form [formGroup]="formOrderService" style="display: flex; flex-direction: column; gap: 15px">
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>No. de expediente</mat-label>
+        <input type="text" matInput formControlName="fileNumber" (input)="validateForm()" />
+        <mat-error *ngIf="formOrderService.get('fileNumber')?.errors as errors">
+          <!-- Prioriza el error de 'required' sobre 'invalidAlphanumeric' -->
+          <span *ngIf="errors['required']; else alphanumericError">El número de expediente es requerido</span>
+          <ng-template #alphanumericError>
+            <span *ngIf="errors['invalidAlphanumeric']">El número de expediente debe ser alfanumérico</span>
+          </ng-template>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Depende de una cita</mat-label>
+        <mat-select formControlName="dependsOnAppointment" (input)="validateForm()">
+          <mat-option [value]="false">No</mat-option>
+          <mat-option [value]="true">Sí</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formOrderService.get('dependsOnAppointment')?.hasError('required')"> Este campo es requerido </mat-error>
+      </mat-form-field>
+      <!--  -->
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline" *ngIf="formOrderService.get('dependsOnAppointment')?.value">
+        <mat-label>Cita</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="appointmentDisplay"
+          [matAutocomplete]="autoAppointment"
+          (input)="filterAppointments($event); validateForm()"
+        />
+        <mat-autocomplete #autoAppointment="matAutocomplete" (optionSelected)="onAppointmentSelected($event.option.value)">
+          <mat-option *ngFor="let appointment of appointmentsPendingData" [value]="appointment.id">
+            {{ appointment.date }} - {{ appointment.time }} - {{ appointment.customer.name }} {{ appointment.customer.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Vehículo</mat-label>
+        <input type="text" matInput formControlName="vehicleDisplay" [matAutocomplete]="auto" (input)="filterVehicles($event); validateForm()" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onVehicleSelected($event.option.value)">
+          <mat-option *ngFor="let vehicle of filteredVehicles" [value]="vehicle.id">
+            {{ vehicle.model.brand }} {{ vehicle.model.model }} - {{ vehicle.year }} - {{ vehicle.color }} - {{ vehicle.owner }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="formOrderService.get('vehicleDisplay')?.hasError('required')"> El vehículo es requerido </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Kilometraje</mat-label>
+        <input type="text" matInput formControlName="initialMileage" type="number" (input)="validateForm()" />
+        <mat-error *ngIf="formOrderService.get('initialMileage')?.hasError('required')"> El kilometraje es requerido </mat-error>
+      </mat-form-field>
+    </section>
+    <section>
+      <mat-form-field appearance="outline">
+        <mat-label>Correo de notificación</mat-label>
+        <input type="text" matInput formControlName="notifyTo" (input)="validateForm()" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Servicios</mat-label>
+        <mat-select formControlName="servicesIds" multiple>
+          <mat-option *ngFor="let service of servicesData" [value]="service.id">{{ service.name }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formOrderService.get('servicesIds')?.hasError('required')"> Al menos un servicio es requerido </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Notas</mat-label>
+        <textarea matInput formControlName="notes" (input)="validateForm()"></textarea>
+        <mat-error *ngIf="formOrderService.get('notes')?.hasError('required')"> Las notas son requeridas </mat-error>
+      </mat-form-field>
+    </section>
+  </form>
+  <section style="display: flex; flex-direction: row; height: 40px; gap: 10px; width: 100%; justify-content: end">
+    <button class="buttonReset" (click)="closeForm()">Cerrar</button>
+    <button (click)="sendForm()" [ngClass]="buttonDisabled ? 'buttonDisabled' : 'buttonReset'" [disabled]="buttonDisabled">
+      <mat-icon>add</mat-icon>
+      Guardar orden de servicio
+    </button>
+  </section>
+</div>

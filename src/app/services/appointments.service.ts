@@ -33,4 +33,12 @@ export class AppointmentService {
       headers: { Authorization: 'Bearer ' + this.authService.getToken() },
     });
   }
+
+  getAppointmentPending(): Observable<any> {
+    return this.http.get(this.API_URL + '/appointments/pending', {
+      headers: {
+        Authorization: 'Bearer ' + this.authService.getToken(),
+      },
+    });
+  }
 }

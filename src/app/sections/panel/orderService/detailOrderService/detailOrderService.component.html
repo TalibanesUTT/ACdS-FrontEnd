@@ -1,0 +1,56 @@
+<div class="container">
+  <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px">
+    <button class="buttonReset" *ngIf="dataSource?.detail === null" (click)="addDetailOrderService()">Añadir detalle de la orden de servicio</button>
+  </section>
+
+  <form *ngIf="dataSource?.detail != null" [formGroup]="formDetailOrderService" style="height: 400px">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-top: -40px; margin-bottom: 15px">
+      <h1>Detalle de la orden de servicio</h1>
+      <button class="buttonReset" (click)="closeForm()">Cerrar</button>
+    </div>
+
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Presupuesto</mat-label>
+        <input type="text" matInput formControlName="budget" type="number" (input)="validateForm()" />
+        <mat-error *ngIf="formDetailOrderService.get('budget')?.hasError('required')"> El presupuesto es requerido </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Costo total</mat-label>
+        <input type="text" matInput formControlName="totalCost" type="number" (input)="validateForm()" />
+        <mat-error *ngIf="formDetailOrderService.get('totalCost')?.hasError('required')"> El costo total es requerido </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de salida</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName="departureDate" (input)="validateForm()" />
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <mat-error *ngIf="formDetailOrderService.get('departureDate')?.hasError('required')"> La fecha de salida es requerida </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="textCondition === 'Actualizar detalle'">
+        <mat-label>Dias de reparación</mat-label>
+        <input type="text" matInput [value]="dataSource?.detail?.repairDays" type="number" [readonly]="true" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Kilometraje final</mat-label>
+        <input type="text" matInput formControlName="finalMileage" type="number" (input)="validateForm()" />
+        <mat-error *ngIf="formDetailOrderService.get('finalMileage')?.hasError('required')"> El kilometraje final es requerido </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Observaciones</mat-label>
+        <textarea matInput formControlName="observations" (input)="validateForm()"></textarea>
+        <mat-error *ngIf="formDetailOrderService.get('observations')?.hasError('required')"> Las observaciones son requeridas </mat-error>
+      </mat-form-field>
+    </section>
+    <div style="display: flex; flex-direction: row; justify-content: end; height: 40px; gap: 10px">
+      <button class="buttonReset" (click)="changeButton()" *ngIf="textCondition === 'Actualizar detalle'">Editar detalle</button>
+      <button [ngClass]="disableButtonForm ? 'buttonDisabled' : 'buttonReset'" (click)="sendForm()" [disabled]="disableButtonForm">
+        {{ textCondition }}
+      </button>
+    </div>
+  </form>
+</div>

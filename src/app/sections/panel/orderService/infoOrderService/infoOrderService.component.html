@@ -1,0 +1,114 @@
+<div class="container" *ngIf="!showFormEditOrderService">
+  <form [formGroup]="formOrderService">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-bottom: 15px; margin-top: 15px">
+      <h1>Información</h1>
+      <div style="display: flex; flex-direction: row; height: 40px; gap: 15px; width: 50%; justify-content: space-between; align-items: center">
+        <button (click)="editForm()" class="buttonReset">
+          <mat-icon style="margin-right: 5px">edit</mat-icon>
+          Editar orden de servicio
+        </button>
+        <button class="buttonReset" (click)="closeForm()">Cerrar</button>
+      </div>
+    </div>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>No. de expediente</mat-label>
+        <input type="text" matInput formControlName="fileNumber" [readonly]="true" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de servicio</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName="createDate" [readonly]="true" />
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Estatus</mat-label>
+        <input type="text" matInput formControlName="actualStatus" [readonly]="true" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Kilometraje</mat-label>
+        <input type="text" matInput formControlName="initialMileage" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Servicios</mat-label>
+        <mat-select formControlName="servicesIds" multiple>
+          <mat-option *ngFor="let service of servicesData" [value]="service.id">{{ service.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Correo de notificación</mat-label>
+        <input type="text" matInput formControlName="emailNotification" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <section>
+      <mat-form-field appearance="outline">
+        <mat-label>Notas</mat-label>
+        <textarea matInput formControlName="notes" [readonly]="true"></textarea>
+      </mat-form-field>
+    </section>
+    <h1>Información de la cita</h1>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Depende de una cita</mat-label>
+        <mat-select formControlName="dependsOnAppointment" [disabled]="true">
+          <mat-option value="0">No</mat-option>
+          <mat-option value="1">Sí</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="customer" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <section class="someInputs" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">
+      <mat-form-field appearance="outline">
+        <mat-label>Día de la cita</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="date" [readonly]="true" />
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de la cita</mat-label>
+        <input type="text" matInput formControlName="time" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <h1>Informacion del auto</h1>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Marca</mat-label>
+        <input type="text" matInput formControlName="brand" [readonly]="true" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Modelo</mat-label>
+        <input type="text" matInput formControlName="model" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <input type="text" matInput formControlName="year" [readonly]="true" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Color</mat-label>
+        <input type="text" matInput formControlName="color" [readonly]="true" />
+      </mat-form-field>
+    </section>
+    <section class="someInputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Dueño</mat-label>
+        <input type="text" matInput formControlName="owner" [readonly]="true" />
+      </mat-form-field>
+    </section>
+  </form>
+  <section style="display: flex; flex-direction: row; justify-content: end; gap: 5px; height: 44px"></section>
+</div>
+<app-form-edit-order-service
+  *ngIf="showFormEditOrderService"
+  [itemOrderService]="itemOrderService"
+  [showFormEditOrderService]="showFormEditOrderService"
+  (changeShowFormEditOrderService)="changeShowFormEditOrderService($event)"
+></app-form-edit-order-service>

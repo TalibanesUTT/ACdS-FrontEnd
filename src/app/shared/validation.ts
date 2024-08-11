@@ -53,4 +53,10 @@ export class CustomValidators {
     const pattern = /^\d{1,4}$/;
     return pattern.test(control.value) ? null : { invalidYear: true };
   };
+
+  //Alphanumeric cuanlquier signo, numero, letra, permite guiones y espacios
+  static alphanumeric: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const pattern = /^[a-zA-Z0-9\s-]+$/;
+    return pattern.test(control.value) ? null : { invalidAlphanumeric: true };
+  };
 }

@@ -55,6 +55,16 @@
       <img [src]="isActiveRoute('/home/vehicles') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
       Vehículos
     </li>
+    <li
+      *ngIf="role === 'Administrador' || role === 'Administrativo'"
+      (click)="getRoute('Ordenes de servicio')"
+      [routerLink]="'/home/orderService'"
+      routerLinkActive="active-link"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/orderService') }"
+    >
+      <img [src]="isActiveRoute('/home/orderService') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
+      Ordenes de servicio
+    </li>
     <!--
     <li
       (click)="getRoute('Citas')"

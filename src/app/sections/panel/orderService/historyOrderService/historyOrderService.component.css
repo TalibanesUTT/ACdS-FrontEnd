@@ -1,0 +1,142 @@
+/* Estilos existentes ajustados */
+table {
+  width: 100%;
+}
+.buttonCancel {
+  color: white;
+  width: 15%;
+  height: 100%;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #bc0505;
+  box-shadow: 0px 0px 5px 0px #000000;
+  color: white;
+}
+.buttonCancel:hover {
+  background-color: #f2494e;
+}
+.buttonContinue {
+  color: white;
+  width: 15%;
+  height: 100%;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #f2c94c;
+  box-shadow: 0px 0px 5px 0px #000000;
+}
+.buttonContinue:hover {
+  background-color: #f2d86c;
+}
+.buttonRollback {
+  color: white;
+  width: 15%;
+  height: 100%;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #0d47a1;
+  box-shadow: 0px 0px 5px 0px #000000;
+  color: white;
+}
+.buttonRollback:hover {
+  background-color: #5472d3;
+}
+.select {
+  border: 1px solid #f2494e;
+  background-color: #ffebeb;
+  width: 100%;
+  font-size: larger;
+}
+.select {
+  border: 1px solid #f2494e;
+  background-color: #ffebeb;
+  width: 100%;
+  font-size: larger;
+}
+
+.inputSimple {
+  border: none;
+  background-color: white;
+  outline: none;
+  width: 100%;
+  font-size: larger;
+  box-shadow: 0px 0px 2px 0px black;
+}
+
+.stateComplete {
+  width: 50%;
+  border: 2px solid #31603c;
+  border-radius: 999px;
+  background-color: #90ffa9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  font-weight: 500;
+}
+
+.stateIncomplete {
+  width: 50%;
+  border: 2px solid #bc0505;
+  border-radius: 999px;
+  background-color: #f2494e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  font-weight: 500;
+}
+
+.userActive {
+  width: 100%;
+  height: 32px;
+  border-radius: 999px;
+  background-color: #90ffa9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userInactive {
+  width: 100%;
+  height: 32px;
+  border-radius: 999px;
+  background-color: #f2494e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Nuevos estilos para centrar el contenido de las celdas */
+td {
+  background-color: white; /* Cambia este valor al color que desees */
+  color: #000; /* Color del texto */
+  text-align: center;
+  vertical-align: middle; /* Centra verticalmente */
+  padding: 8px; /* Ajusta el padding según sea necesario */
+}
+
+th {
+  background-color: #f2494e !important; /* Cambia este valor al color que desees */
+  color: white !important; /* Color del texto */
+  text-align: center; /* Centra horizontalmente */
+  vertical-align: middle; /* Centra verticalmente */
+  padding: 8px; /* Ajusta el padding según sea necesario */
+}
+
+.centerSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.buttonFilterCost {
+  color: white;
+  height: auto;
+  border-radius: 0px;
+  background-color: #bc0505;
+  box-shadow: 0px 0px 5px 0px #000000;
+  color: white;
+}
+.buttonFilterCost:hover {
+  background-color: #f2494e;
+}
