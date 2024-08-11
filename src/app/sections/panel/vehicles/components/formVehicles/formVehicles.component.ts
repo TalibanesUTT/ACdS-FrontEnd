@@ -235,7 +235,7 @@ export class formVehiclesComponent {
     this.formVehicles.value.year = parseInt(this.formVehicles.value.year, 10);
     if (this.textCondition === 'Nuevo') {
       delete this.formVehicles.value.id;
-      this.formVehicles.value.model = this.formVehicles.value.model.model;
+      // this.formVehicles.value.model = this.formVehicles.value.model.model;
       this.vehiclesService.postVehicle(this.formVehicles.value).subscribe(
         (response) => {
           SweetAlert.success('Success', response.message);
