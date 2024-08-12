@@ -1,0 +1,13 @@
+<mat-form-field style="width: 100%" appearance="fill">
+  <mat-label>Select a customer</mat-label>
+  <input type="text"
+         placeholder="Start typing..."
+         matInput
+         [formControl]="customerCtrl"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectionChange($event)">
+    <mat-option *ngFor="let customer of filteredCustomers$ | async" [value]="customer">
+      {{ customer.name }} {{ customer.lastName }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

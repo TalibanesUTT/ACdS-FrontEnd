@@ -9,6 +9,23 @@ export interface Appointment {
   date: string;
   time: string;
   reason: string;
+  userId?: number;
+  status: string;
+}
+
+export interface Customer {
+  id: number,
+  name: string,
+  lastName: string
+  email: string,
+  phoneNumber: string,
+}
+
+interface UpdateAppointment {
+  userId?: number;
+  date?: string;
+  time?: string;
+  reason?: string;
 }
 
 interface AppointmentState {
@@ -23,6 +40,7 @@ export class AppointmentService {
   private readonly snackBarContig: MatSnackBarConfig = {
     duration: 3000,
     verticalPosition: 'top',
+    horizontalPosition: 'right'
   };
 
   private state = new BehaviorSubject<AppointmentState>({
@@ -69,6 +87,13 @@ export class AppointmentService {
       })
   }
 
+  getCustomers(): Observable<Customer[]> {
+    return this.http.get<ResponseGlobalTyped<Customer[]>>('/customers').pipe(
+      map(res => res.data),
+      catchError(this.handleError.bind(this))
+    )
+  }
+
   getAllAppointments(): void {
     this.updateState({loading: true});
     this.http.get<ResponseGlobalTyped<Appointment[]>>(`${this.path}/all`)
@@ -82,27 +107,45 @@ export class AppointmentService {
       })
   }
 
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 
   createAppointment(appointment: Omit<Appointment, 'id'>): Observable<Appointment> {
-    return this.http.post<ResponseGlobalTyped<Appointment>>(this.path, appointment)
+    const formattedAppointment = {
+      ...appointment,
+      date: this.formatDate(appointment.date),
+    }
+    return this.http.post<ResponseGlobalTyped<Appointment>>(this.path, formattedAppointment)
       .pipe(
         map(response => response.data),
         tap(newAppointment => {
           const currentAppointments = this.state.getValue().appointments;
           this.updateState({appointments: [...currentAppointments, newAppointment], loading: false});
+          this.snackBar.open('Cita creada', 'Cerrar', this.snackBarContig);
         }),
         catchError(this.handleError.bind(this)),
       )
   }
 
-  updateAppointment(appointment: Appointment): Observable<Appointment> {
-    return this.http.put<ResponseGlobalTyped<Appointment>>(`${this.path}/${appointment.id}`, appointment)
+  updateAppointment(id: number, appointment: UpdateAppointment): Observable<Appointment> {
+    const formattedAppointment = {
+      ...appointment,
+      date: appointment.date ? this.formatDate(appointment.date) : undefined,
+    }
+    return this.http.put<ResponseGlobalTyped<Appointment>>(`${this.path}/${id}`, formattedAppointment)
       .pipe(
         map(response => response.data),
         tap(updatedAppointment => {
           const currentAppointments = this.state.getValue().appointments;
           const updatedAppointments = currentAppointments.map(app => app.id === updatedAppointment.id ? updatedAppointment : app);
           this.updateState({appointments: updatedAppointments, loading: false});
+          this.snackBar.open('Cita actualizada', 'Cerrar', this.snackBarContig);
         }),
         catchError(this.handleError.bind(this)),
       );

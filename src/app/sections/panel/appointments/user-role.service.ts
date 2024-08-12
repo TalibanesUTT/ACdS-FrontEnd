@@ -34,12 +34,13 @@ export enum ActionEnum {
 })
 export class UserRoleService {
   private permissions: { [role in RoleEnum]: ActionEnum[] } = {
-    [RoleEnum.CUSTOMER]: [ActionEnum.READ, ActionEnum.CREATE],
+    [RoleEnum.CUSTOMER]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE],
     [RoleEnum.ROOT]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
     [RoleEnum.ADMIN]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
     [RoleEnum.MECHANIC]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
   };
   private userRole = new BehaviorSubject<RoleEnum>(RoleEnum.CUSTOMER);
+  readonly role$ = this.userRole.asObservable()
 
   constructor(private http: HttpClient) {
     this.http.get<User>('/profile').pipe(
@@ -49,9 +50,5 @@ export class UserRoleService {
 
   hasPermission(action: ActionEnum): boolean {
     return this.permissions[this.userRole.getValue()].includes(action);
-  }
-
-  get role(): RoleEnum {
-    return this.userRole.getValue();
   }
 }

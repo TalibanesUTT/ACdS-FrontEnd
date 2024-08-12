@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {NgIf} from '@angular/common';
@@ -20,7 +20,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu"; // 
         <mat-icon>visibility</mat-icon>
         <span>Ver detalle</span>
       </button>
-      <button mat-menu-item (click)="onEdit()" *ngIf="canEdit">
+      <button mat-menu-item (click)="triggerEdit()" *ngIf="canEdit">
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
       </button>
@@ -34,6 +34,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu"; // 
 })
 export class AppointmentActionsComponent {
   @Input() appointment!: Appointment;
+  @Output() onEdit = new EventEmitter<void>();
 
   constructor(private userRoleService: UserRoleService) {
   }
@@ -51,10 +52,10 @@ export class AppointmentActionsComponent {
     // Implement view logic
   }
 
-  onEdit(): void {
-    console.log('Edit appointment', this.appointment);
-    // Implement edit logic
+  triggerEdit(): void {
+    this.onEdit.emit();
   }
+
 
   onDelete(): void {
     console.log('Delete appointment', this.appointment);
