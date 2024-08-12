@@ -57,7 +57,7 @@ import { SweetAlert } from '../../../shared/SweetAlert';
 export class expensesComponent {
   formFilterMonthAndYear: FormGroup;
   formExpenditure: FormGroup;
-  buttonDisabled = false;
+  buttonDisabled = true;
   expenses = [
     { name: 'spareParts', value: 0, nameEspanol: 'Refacciones' },
     { name: 'payroll', value: 0, nameEspanol: 'Nómina' },
@@ -143,29 +143,29 @@ export class expensesComponent {
         // Si no hay gastos para el mes y año seleccionado, se limpian los valores del formulario
         this.formExpenditure.patchValue({
           data: {
-            spareParts: '0.00',
-            payroll: '0.00',
-            cleaning: '0.00',
-            water: '0.00',
-            electricity: '0.00',
-            radios: '0.00',
-            telephones: '0.00',
-            pettyCash: '0.00',
-            vacation: '0.00',
-            insurancePolicies: '0.00',
-            christmasBonusFund: '0.00',
-            vehicleRepairService: '0.00',
-            workshopMaintenance: '0.00',
-            officeEquipment: '0.00',
-            administrativeServices: '0.00',
-            taxPayments: '0.00',
-            workshopRents: '0.00',
-            sponsorshipAdvertising: '0.00',
-            workshopMaterialsTools: '0.00',
-            gasolineVouchers: '0.00',
-            settlement: '0.00',
-            uniforms: '0.00',
-            others: '0.00',
+            spareParts: '',
+            payroll: '',
+            cleaning: '',
+            water: '',
+            electricity: '',
+            radios: '',
+            telephones: '',
+            pettyCash: '',
+            vacation: '',
+            insurancePolicies: '',
+            christmasBonusFund: '',
+            vehicleRepairService: '',
+            workshopMaintenance: '',
+            officeEquipment: '',
+            administrativeServices: '',
+            taxPayments: '',
+            workshopRents: '',
+            sponsorshipAdvertising: '',
+            workshopMaterialsTools: '',
+            gasolineVouchers: '',
+            settlement: '',
+            uniforms: '',
+            others: '',
           },
         });
       }
@@ -177,29 +177,29 @@ export class expensesComponent {
       month: [, Validators.required],
       year: [, Validators.required],
       data: this.fb.group({
-        spareParts: ['0.00'],
-        payroll: ['0.00'],
-        cleaning: ['0.00'],
-        water: ['0.00'],
-        electricity: ['0.00'],
-        radios: ['0.00'],
-        telephones: ['0.00'],
-        pettyCash: ['0.00'],
-        vacation: ['0.00'],
-        insurancePolicies: ['0.00'],
-        christmasBonusFund: ['0.00'],
-        vehicleRepairService: ['0.00'],
-        workshopMaintenance: ['0.00'],
-        officeEquipment: ['0.00'],
-        administrativeServices: ['0.00'],
-        taxPayments: ['0.00'],
-        workshopRents: ['0.00'],
-        sponsorshipAdvertising: ['0.00'],
-        workshopMaterialsTools: ['0.00'],
-        gasolineVouchers: ['0.00'],
-        settlement: ['0.00'],
-        uniforms: ['0.00'],
-        others: ['0.00'],
+        spareParts: [],
+        payroll: [],
+        cleaning: [],
+        water: [],
+        electricity: [],
+        radios: [],
+        telephones: [],
+        pettyCash: [],
+        vacation: [],
+        insurancePolicies: [],
+        christmasBonusFund: [],
+        vehicleRepairService: [],
+        workshopMaintenance: [],
+        officeEquipment: [],
+        administrativeServices: [],
+        taxPayments: [],
+        workshopRents: [],
+        sponsorshipAdvertising: [],
+        workshopMaterialsTools: [],
+        gasolineVouchers: [],
+        settlement: [],
+        uniforms: [],
+        others: [],
       }),
     });
   }
@@ -278,5 +278,8 @@ export class expensesComponent {
       // Si no es el año actual, muestra todos los meses
       this.months = [...this.allMonths];
     }
+  }
+  editButtonDisabled() {
+    this.buttonDisabled = !this.buttonDisabled;
   }
 }
