@@ -55,7 +55,7 @@ export class LoginComponent {
           return;
         }
         localStorage.setItem('token', res.data || '');
-        this.router.navigate(['/home/dashboard']);
+        this.router.navigate(['/home/perfil']);
       },
       (err) => {
         SweetAlert.error('Error', err.error.error.message);

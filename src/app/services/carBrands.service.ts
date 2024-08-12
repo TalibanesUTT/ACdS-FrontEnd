@@ -12,31 +12,15 @@ export class CarBrandsService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getCardBrands(): Observable<any> {
-    return this.http.get(this.API_URL + '/car-brands', {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get(this.API_URL + '/car-brands', {});
   }
   postCarBrand(data: any): Observable<any> {
-    return this.http.post(this.API_URL + '/car-brands', data, {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.post(this.API_URL + '/car-brands', data, {});
   }
   putCarBrand(data: any, id: number): Observable<any> {
-    return this.http.put(this.API_URL + `/car-brands/${id}`, data, {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.put(this.API_URL + `/car-brands/${id}`, data, {});
   }
   getCarBrandById(id: number): Observable<any> {
-    return this.http.get(this.API_URL + `/car-brands/${id}`, {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get(this.API_URL + `/car-brands/${id}`, {});
   }
 }

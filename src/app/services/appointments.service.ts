@@ -12,25 +12,19 @@ export class AppointmentService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAllAppointments(): Observable<any> {
-    return this.http.get(this.API_URL + '/appointments', {
-      headers: {
-        Authorization: 'Bearer ' + this.authService.getToken(),
-      },
-    });
+    return this.http.get(this.API_URL + '/appointments', {});
   }
   postAppointment(data: any): Observable<any> {
-    return this.http.post(this.API_URL + '/appointments', data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.post(this.API_URL + '/appointments', data, {});
   }
   putAppointment(data: any, id: number): Observable<any> {
-    return this.http.put(this.API_URL + `/appointments/${id}`, data, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.put(this.API_URL + `/appointments/${id}`, data, {});
   }
   getAppointmentById(id: number): Observable<any> {
-    return this.http.get(this.API_URL + `/appointments/${id}`, {
-      headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-    });
+    return this.http.get(this.API_URL + `/appointments/${id}`, {});
+  }
+
+  getAppointmentPending(): Observable<any> {
+    return this.http.get(this.API_URL + '/appointments/pending', {});
   }
 }

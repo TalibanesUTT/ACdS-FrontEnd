@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth.service';
 import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SweetAlert } from '../../../shared/SweetAlert';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-reactiveCount',
@@ -26,12 +27,12 @@ export class reactiveCountComponent {
   resendCodeDisabled = true;
   role = this.user.role;
   dataModify = localStorage.getItem('dataModify');
+  id = localStorage.getItem('id');
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private profileService: ProfileService) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.verifyEmailForm = this.newFormControls();
   }
-
   newFormControls(): FormGroup {
     return this.fb.group({
       code: ['', [Validators.required]],
@@ -46,7 +47,7 @@ export class reactiveCountComponent {
         if (res.message === 'Sesión iniciada correctamente.') {
           localStorage.setItem('token', res.data);
           SweetAlert.success('Éxito', res.message);
-          this.router.navigate(['/home/dashboard']);
+          this.router.navigate(['/home/perfil']);
           return;
         }
         localStorage.setItem('token', res.data);
@@ -83,13 +84,13 @@ export class reactiveCountComponent {
   resendCode(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const url = localStorage.getItem('url') || '';
-    this.authService.resendCode(user.id).subscribe(
+    this.authService.resendCode(this.id ? this.id : user).subscribe(
       (res) => {
         SweetAlert.success('Éxito', res.message);
         localStorage.setItem('url', res.url);
       },
       (err) => {
-        SweetAlert.error('Error', 'El código ingresado es incorrecto');
+        SweetAlert.error('Error', 'Hubo un error al reenviar el código');
       }
     );
   }

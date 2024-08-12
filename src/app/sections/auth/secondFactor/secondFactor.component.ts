@@ -44,10 +44,11 @@ export class secondFactorComponent {
         localStorage.setItem('token', res.data);
         SweetAlert.success('Éxito', res.message);
         this.resendCodeDisabled = true;
-        this.router.navigate(['/home/dashboard']);
+        this.router.navigate(['/home/perfil']);
       },
       (err) => {
-        SweetAlert.error('Error', err.message);
+        console.log(err);
+        SweetAlert.error('Error', err.error.error);
       }
     );
   }

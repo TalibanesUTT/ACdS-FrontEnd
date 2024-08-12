@@ -64,11 +64,25 @@ export const routes: Routes = [
         path: 'appointments',
         loadComponent: () => import('./sections/panel/appointments/appointment.component').then((m) => m.AppointmentComponent),
       },
+      {
+        path: 'orderService',
+        loadComponent: () => import('./sections/panel/orderService/orderService.component').then((m) => m.orderServiceComponent),
+      },
+      {
+        path: 'expenses',
+        loadComponent: () => import('./sections/panel/expenses/expenses.component').then((m) => m.expensesComponent),
+      },
     ],
   },
   {
     //RouteDefault
     path: '',
+    redirectTo: 'ACdS',
+    pathMatch: 'full',
+  },
+  {
+    //RouteNotFound
+    path: '**',
     redirectTo: 'ACdS',
     pathMatch: 'full',
   },

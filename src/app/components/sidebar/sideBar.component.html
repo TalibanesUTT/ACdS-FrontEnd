@@ -6,7 +6,7 @@
     {{ role }}
   </div>
   <ul>
-    <li
+    <!-- <li
       (click)="getRoute('Dashboard')"
       [routerLink]="'/home/dashboard'"
       routerLinkActive="active-link"
@@ -14,27 +14,8 @@
     >
       <img [src]="isActiveRoute('/home/dashboard') ? 'assets/icons/homeActive.svg' : 'assets/icons/homeInactive.svg'" alt="" />
       Home
-    </li>
-    <li
-      *ngIf="role === 'Administrador'"
-      (click)="getRoute('Usuarios')"
-      [routerLink]="'/home/users'"
-      routerLinkActive="active-link"
-      [ngClass]="{ 'active-border': isActiveRoute('/home/users') }"
-    >
-      <img [src]="isActiveRoute('/home/users') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
-      Usuarios
-    </li>
-    <li
-      *ngIf="role === 'Administrador' || role === 'Administrativo'"
-      (click)="getRoute('Marcas')"
-      [routerLink]="'/home/carBrand'"
-      routerLinkActive="active-link"
-      [ngClass]="{ 'active-border': isActiveRoute('/home/carBrand') }"
-    >
-      <img [src]="isActiveRoute('/home/carBrand') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
-      Marcas
-    </li>
+    </li> -->
+    <li (click)="getRoute('Perfil')" [routerLink]="'/home/perfil'" routerLinkActive="active-link" class="miProfile">Mi perfil</li>
     <li
       *ngIf="role === 'Administrador' || role === 'Administrativo'"
       (click)="getRoute('Clientes')"
@@ -47,32 +28,76 @@
     </li>
     <li
       *ngIf="role === 'Administrador' || role === 'Administrativo'"
-      (click)="getRoute('Vehiculos')"
+      (click)="getRoute('Marcas')"
+      [routerLink]="'/home/carBrand'"
+      routerLinkActive="active-link"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/carBrand') }"
+    >
+      <img [src]="isActiveRoute('/home/carBrand') ? 'assets/icons/brandActive.svg' : 'assets/icons/brandInactive.svg'" alt="" />
+      Marcas
+    </li>
+
+    <li
+      *ngIf="role === 'Administrador' || role === 'Administrativo' || role === 'Cliente'"
+      (click)="getRoute('Vehículos')"
       [routerLink]="'/home/vehicles'"
       routerLinkActive="active-link"
       [ngClass]="{ 'active-border': isActiveRoute('/home/vehicles') }"
     >
-      <img [src]="isActiveRoute('/home/vehicles') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
+      <img [src]="isActiveRoute('/home/vehicles') ? 'assets/icons/vehicleActive.svg' : 'assets/icons/vehicleInactive.svg'" alt="" />
       Vehículos
     </li>
-    
+
     <li
       (click)="getRoute('Citas')"
       [routerLink]="'/home/appointments'"
       routerLinkActive="active-link"
       [ngClass]="{ 'active-border': isActiveRoute('/home/appointments') }"
     >
-      <img [src]="isActiveRoute('/home/appointments') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
+      <img [src]="isActiveRoute('/home/appointments') ? 'assets/icons/appointmentActive.svg' : 'assets/icons/appointmentInactive.svg'" alt="" />
       Citas
     </li>
     <li
-      (click)="getRoute('Perfil')"
-      [routerLink]="'/home/perfil'"
+      *ngIf="role === 'Administrador' || role === 'Administrativo' || role === 'Cliente'"
+      (click)="getRoute('Órdenes de servicio')"
+      [routerLink]="'/home/orderService'"
       routerLinkActive="active-link"
-      [ngClass]="{ 'active-border': isActiveRoute('/home/perfil') }"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/orderService') }"
     >
-      <img [src]="isActiveRoute('/home/perfil') ? 'assets/icons/profileActive.svg' : 'assets/icons/profileInactive.svg'" alt="" />
-      Perfil
+      <img [src]="isActiveRoute('/home/orderService') ? 'assets/icons/orderServiceActive.svg' : 'assets/icons/orderServiceInactive.svg'" alt="" />
+      Órdenes de servicio
     </li>
+    <li
+      *ngIf="role === 'Administrador'"
+      (click)="getRoute('Egresos')"
+      [routerLink]="'/home/expenses'"
+      routerLinkActive="active-link"
+      [ngClass]="{
+        'active-border': isActiveRoute('/home/expenses')
+      }"
+    >
+      <img [src]="isActiveRoute('/home/expenses') ? 'assets/icons/expensesActive.svg' : 'assets/icons/expensesInactive.svg'" alt="" />
+      Egresos
+    </li>
+    <li
+      *ngIf="role === 'Administrador'"
+      (click)="getRoute('Usuarios')"
+      [routerLink]="'/home/users'"
+      routerLinkActive="active-link"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/users') }"
+    >
+      <img [src]="isActiveRoute('/home/users') ? 'assets/icons/userActive.svg' : 'assets/icons/userInactive.svg'" alt="" />
+      Usuarios
+    </li>
+    <!-- <li
+      *ngIf="role === 'Administrador' || role === 'Administrativo'"
+      (click)="getRoute('Reportes')"
+      [routerLink]="'/home/reports'"
+      routerLinkActive="active-link"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/reports') }"
+    >
+      <img [src]="isActiveRoute('/home/reports') ? 'assets/icons/reportsActive.svg' : 'assets/icons/reportsInactive.svg'" alt="" />
+      Reportes
+    </li> -->
   </ul>
 </div>

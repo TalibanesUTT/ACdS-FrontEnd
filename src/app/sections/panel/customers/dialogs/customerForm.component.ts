@@ -92,7 +92,7 @@ export class CustomerFormComponent {
       lastName: [data.lastName, [Validators.required, CustomValidators.namePattern]],
       email: [data.email, [Validators.required, CustomValidators.emailPattern]],
       phoneNumber: [data.phoneNumber, [Validators.required, CustomValidators.phonePattern]],
-      active: [data.active, [Validators.required]],
+      active: [data.active, []],
     });
   }
 
@@ -111,6 +111,7 @@ export class CustomerFormComponent {
       delete this.form.value.active;
       this.customerService.postCustomer(this.form.value).subscribe(
         (res) => {
+          SweetAlert.success('Éxito', res.message);
           this.dialogRef.close();
         },
         (err) => {
@@ -145,8 +146,10 @@ export class CustomerFormComponent {
   validateForm($event: any) {
     if (this.form.invalid) {
       this.isDisabled = true;
+      console.log('invalid');
     } else {
       this.isDisabled = false;
+      console.log('valid');
     }
   }
 }

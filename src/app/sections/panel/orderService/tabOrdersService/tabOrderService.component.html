@@ -1,0 +1,23 @@
+<mat-tab-group>
+  <mat-tab label="Información">
+    <app-info-order-service
+      [itemOrderService]="itemOrderService"
+      [menuOption]="menuOption"
+      (showForm)="handleShowForm($event)"
+    ></app-info-order-service>
+  </mat-tab>
+  <mat-tab label="Detalle">
+    <app-detail-order-service
+      [itemOrderService]="itemOrderService"
+      [menuOption]="menuOption"
+      (showForm)="handleShowForm($event)"
+    ></app-detail-order-service>
+  </mat-tab>
+  <mat-tab label="Historial">
+    <app-history-order-service
+      [itemOrderService]="itemOrderService"
+      [menuOption]="menuOption"
+      (showForm)="handleShowForm($event)"
+    ></app-history-order-service>
+  </mat-tab>
+</mat-tab-group>

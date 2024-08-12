@@ -11,12 +11,14 @@ import { ProfileService } from '../../services/profile.service';
 import { FormGroup, FormControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert } from '../../shared/SweetAlert';
 import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, signal } from '@angular/core';
 import { NavigationEnd } from '@angular/router';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-sideBar',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterOutlet, MatFormField, MatInputModule, MatLabel, MatButtonModule, RouterLink, ReactiveFormsModule, MatExpansionModule],
   templateUrl: './sideBar.component.html',
   styleUrls: ['./sideBar.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -27,6 +29,7 @@ export class sideBarComponent {
   title = 'acds-frontend';
   urlSidebar = '';
   role: string = '';
+  readonly panelOpenState = signal(false);
 
   constructor(private router: Router, private profileService: ProfileService, private cdr: ChangeDetectorRef) {
     this.initializeComponent();

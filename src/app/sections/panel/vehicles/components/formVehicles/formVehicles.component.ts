@@ -68,21 +68,63 @@ export class formVehiclesComponent {
     private usersService: UsersService,
     private carBrandsService: CarBrandsService
   ) {
+    console.log(this.dataVehicle);
+
+    this.getAllOwners();
+    this.getAllBrands();
     this.formVehicles = this.newFormControls();
-    this.getOwners();
-    this.getBrands();
-    setTimeout(() => {
-      if (this.textCondition === 'Editar') {
-        this.getModels();
-      }
-    }, 500);
+    this.filteredOwners$ = this.formVehicles.get('ownerId')!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterOwners(value))
+    );
+    this.filteredBrands$ = this.formVehicles.get('brandId')!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterBrands(value))
+    );
+    this.filteredModels$ = this.formVehicles.get('model')!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterModels(value))
+    );
+  }
+  ngOnInit() {
+    if (this.dataVehicle.action === 'edit') {
+      this.textCondition = 'Editar';
+      this.disabledSendButton = false;
+      setTimeout(() => {
+        this.assignFormValues();
+      }, 500); // Espera medio segundo para asegurar que los datos estén cargados
+    } else {
+      this.textCondition = 'Agregar';
+    }
+  }
+
+  assignFormValues() {
+    this.formVehicles.patchValue({
+      id: this.dataVehicle.id,
+      serialNumber: this.dataVehicle.serialNumber,
+      year: this.dataVehicle.year,
+      color: this.dataVehicle.color,
+      plates: this.dataVehicle.plates,
+    });
+
+    const owner = this.owners.find((o) => o.name + ' ' + o.lastName === this.dataVehicle.owner);
+    if (owner) {
+      this.formVehicles.patchValue({ ownerId: owner });
+    }
+
+    const brand = this.brands.find((b) => b.name === this.dataVehicle.brandId);
+    if (brand) {
+      this.formVehicles.patchValue({ brandId: brand });
+      this.onBrandSelected(brand);
+    }
+    console.log('formularios', this.formVehicles.value);
   }
 
   newFormControls(): FormGroup {
     return this.fb.group({
       id: [''],
       ownerId: ['', [Validators.required]],
-      serialNumber: ['', [Validators.required, Validators.maxLength(20), Validators.minLength(17), CustomValidators.onlyNumbers]],
+      serialNumber: ['', [Validators.maxLength(20), Validators.minLength(17), CustomValidators.onlyNumbers]],
       model: ['', [Validators.required]],
       brandId: ['', [Validators.required]],
       year: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]],
@@ -90,183 +132,131 @@ export class formVehiclesComponent {
       plates: ['', [Validators.required, Validators.maxLength(15), Validators.minLength(6)]],
     });
   }
-  getOwners(): void {
-    this.usersService.getAllUsers().subscribe((data) => {
-      this.owners = data.data;
-      const owner = this.owners.find((owner) => owner.name + ' ' + owner.lastName === this.dataVehicle.ownerId);
-      this.formVehicles.get('ownerId')?.setValue(owner);
-      if (this.textCondition === 'Nuevo') {
-        this.formVehicles.reset();
-      }
-      this.setupOwnerAutocomplete(); // Aquí se llama a la función para inicializar el autocompletado
+  //*Obtener todos los propietarios
+  getAllOwners() {
+    this.usersService.getAllUsers().subscribe((res: any) => {
+      this.owners = res.data;
+      console.log(this.owners);
     });
   }
-
-  setupOwnerAutocomplete(): void {
-    this.filteredOwners$ = this.formVehicles.get('ownerId')!.valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : this.displayOwner(value))),
-      map((name) => (name ? this._filterOwners(name) : this.owners.slice()))
-    );
-  }
-
-  private _filterOwners(name: string): any[] {
-    const filterValue = name.toLowerCase();
+  private _filterOwners(value: any): any[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
     return this.owners.filter((owner) => `${owner.name} ${owner.lastName}`.toLowerCase().includes(filterValue));
   }
 
-  displayOwner(owner: any): string {
-    if (owner) {
-      const ownerFullName = `${owner.name} ${owner.lastName}`;
-      this.maxlengthOwner = ownerFullName.length;
-    }
-
+  displayOwner = (owner: any): string => {
+    this.setOwnerMaxLength(owner);
     return owner ? `${owner.name} ${owner.lastName}` : '';
-  }
+  };
 
-  getBrands(): void {
-    this.carBrandsService.getCardBrands().subscribe((data) => {
-      this.brands = data.data;
-      const brand = this.brands.find((brand) => brand.name === this.dataVehicle.brandId);
-      this.formVehicles.get('brandId')?.setValue(brand);
-      if (this.textCondition === 'Nuevo') {
-        this.formVehicles.reset();
-      }
-      this.setupBrandAutocomplete(); // Aquí se llama a la función para inicializar el autocompletado
+  //*Obtener todas las marcas
+  onBrandSelected(brand: any): void {
+    this.setBrandMaxLength(brand);
+    this.getAllModels(brand.id);
+  }
+  getAllBrands() {
+    this.carBrandsService.getCardBrands().subscribe((res: any) => {
+      this.brands = res.data;
+      console.log(this.brands);
     });
   }
-
-  setupBrandAutocomplete(): void {
-    this.filteredBrands$ = this.formVehicles.get('brandId')!.valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : this.displayBrand(value))),
-      map((name) => (name ? this._filterBrands(name) : this.brands.slice()))
-    );
-
-    // Suscribirse a los cambios de valor de brandId para ejecutar getModels
-    this.formVehicles.get('brandId')!.valueChanges.subscribe((brand) => {
-      if (brand && typeof brand === 'object') {
-        this.getModels();
-      }
-    });
+  private _filterBrands(value: any): any[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+    return this.brands.filter((brand) => brand.name.toLowerCase().includes(filterValue));
   }
+  displayBrand = (brand: any): string => {
+    this.setBrandMaxLength(brand);
+    return brand ? brand.name : '';
+  };
+  //*Obtener todos los modelos
+  getAllModels(brandId: any) {
+    this.vehiclesService.getModelByBrand(brandId).subscribe((res: any) => {
+      this.models = res.data;
+      console.log(this.models);
 
-  private _filterBrands(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.brands.filter((brand) => `${brand.name}`.toLowerCase().includes(filterValue));
-  }
-
-  displayBrand(brand: any): string {
-    if (brand) {
-      const brandName = `${brand.name}`;
-      this.maxlengthBrand = brandName.length;
-    }
-    return brand ? `${brand.name}` : '';
-  }
-
-  // Función para obtener los modelos de los vehículos
-  getModels(): void {
-    const selectedBrand = this.formVehicles.get('brandId')?.value;
-    if (selectedBrand && selectedBrand.id) {
-      this.vehiclesService.getModelByBrand(selectedBrand.id).subscribe(
-        (data) => {
-          if (data.data && data.data.length > 0) {
-            this.models = data.data;
-            this.setupModelAutocomplete(); // Inicializar el autocompletado de modelos
-          } else {
-            // Si no hay modelos, limpiar las opciones
-            this.models = [];
-            this.setupModelAutocomplete();
-          }
-        },
-        (error) => {
-          // En caso de error, limpiar las opciones
-          this.models = [];
-          this.setupModelAutocomplete();
+      if (this.dataVehicle.action === 'edit') {
+        const model = this.models.find((m) => m.model.toLowerCase() === this.dataVehicle.model.toLowerCase());
+        if (model) {
+          this.formVehicles.patchValue({ model: model });
+          this.formVehicles.value.model = model;
+        } else {
+          console.error(`Modelo ${this.dataVehicle.model} no encontrado en la lista de modelos`);
         }
-      );
-    } else {
-      // Si no hay una marca seleccionada, también limpiar las opciones
-      this.models = [];
-      this.setupModelAutocomplete();
+      }
+    });
+  }
+  private _filterModels(value: any): any[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+    return this.models.filter((model) => model.model.toLowerCase().includes(filterValue));
+  }
+  saveVehicle() {
+    // Asegúrate de que brandId y ownerId sean números y que el modelo sea una cadena
+    const formValue = {
+      ...this.formVehicles.value,
+      brandId: this.formVehicles.value.brandId?.id || this.formVehicles.value.brandId.id,
+      ownerId: parseInt(this.formVehicles.value.ownerId.id),
+      model: typeof this.formVehicles.value.model === 'object' ? this.formVehicles.value.model.model : this.formVehicles.value.model,
+      year: parseInt(this.formVehicles.value.year),
+    };
+
+    if (this.dataVehicle.action === 'add') {
+      delete formValue.id;
+      this.vehiclesService.postVehicle(formValue).subscribe((res: any) => {
+        SweetAlert.success('Success', res.message);
+        this.toggleShowTable();
+      });
+      return;
     }
-  }
 
-  setupModelAutocomplete(): void {
-    this.filteredModels$ = this.formVehicles.get('model')!.valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : this.displayModel(value))),
-      map((name) => (name ? this._filterModels(name) : this.models.slice()))
-    );
-  }
-
-  private _filterModels(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.models.filter((model) => model.model && model.model.toLowerCase().includes(filterValue));
-  }
-
-  displayModel(model: any): string {
-    if (typeof model === 'string') {
-      return model; // Esto maneja el caso en el que `model` es solo un string.
-    }
-    return model ? `${model.model}` : '';
+    console.log('edit');
+    const ID = this.dataVehicle.id;
+    delete formValue.id;
+    console.log('formValueEdit', formValue);
+    this.vehiclesService.putVehicle(formValue, ID).subscribe((res: any) => {
+      SweetAlert.success('Success', res.message);
+      this.toggleShowTable();
+    });
   }
 
   toggleShowTable() {
     this.showTable = !this.showTable;
     this.showTableChange.emit(this.showTable); // Emitir el nuevo valor
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['dataVehicle'] && this.dataVehicle) {
-      if (this.dataVehicle.action === 'edit' || this.dataVehicle.action === 'detail') {
-        this.textCondition = 'Editar';
-        this.formVehicles.patchValue(this.dataVehicle);
-        this.disabledSendButton = false;
-        return;
-      }
-      this.textCondition = 'Nuevo';
-    }
+  displayModel(model: any): string {
+    return model ? model.model : '';
   }
-
-  saveVehicle() {
-    this.formVehicles.value.ownerId = parseInt(this.formVehicles.value.ownerId.id, 10);
-    this.formVehicles.value.brandId = parseInt(this.formVehicles.value.brandId.id, 10);
-    this.formVehicles.value.year = parseInt(this.formVehicles.value.year, 10);
-    if (this.textCondition === 'Nuevo') {
-      delete this.formVehicles.value.id;
-      this.formVehicles.value.model = this.formVehicles.value.model.model;
-      this.vehiclesService.postVehicle(this.formVehicles.value).subscribe(
-        (response) => {
-          SweetAlert.success('Success', response.message);
-          this.toggleShowTable();
-        },
-        (error) => {
-          SweetAlert.error('Error', error.message);
-        }
-      );
-    }
-    if (this.textCondition === 'Editar') {
-      const IDVEHICLE = this.dataVehicle.id;
-      delete this.formVehicles.value.id;
-      // this.formVehicles.value.model = this.formVehicles.value.model.model;
-      this.vehiclesService.putVehicle(this.formVehicles.value, IDVEHICLE).subscribe(
-        (response) => {
-          SweetAlert.success('Success', response.message);
-          this.toggleShowTable();
-        },
-        (error) => {
-          SweetAlert.error('Error', error.message);
-        }
-      );
-    }
-  }
-
   disableSendButton($event: any) {
-    if (this.formVehicles.valid) {
+    if (this.formVehicles.invalid) {
+      this.disabledSendButton = true;
+    } else {
       this.disabledSendButton = false;
-      return;
     }
-    this.disabledSendButton = true;
+  }
+
+  setOwnerMaxLength(owner: any) {
+    if (owner) {
+      this.maxlengthOwner = owner.name.length + owner.lastName.length + 1; // Espacio entre nombre y apellido
+      this.formVehicles.get('ownerId')!.setValidators([Validators.required, Validators.maxLength(this.maxlengthOwner)]);
+      this.formVehicles.get('ownerId')!.updateValueAndValidity();
+    }
+  }
+
+  setBrandMaxLength(brand: any) {
+    if (brand) {
+      this.maxlengthBrand = brand.name.length;
+      this.formVehicles.get('brandId')!.setValidators([Validators.required, Validators.maxLength(this.maxlengthBrand)]);
+      this.formVehicles.get('brandId')!.updateValueAndValidity();
+    }
+  }
+  getSerialNumberErrorMessage() {
+    const control = this.formVehicles.get('serialNumber');
+
+    if (control?.hasError('invalidNumber')) {
+      return 'Solo se permiten números';
+    } else if (control?.hasError('minlength')) {
+      return 'Debe tener de mínimo 17 caracteres y máximo 20 caracteres';
+    }
+
+    return ''; // No mostrar nada si no hay errores
   }
 }

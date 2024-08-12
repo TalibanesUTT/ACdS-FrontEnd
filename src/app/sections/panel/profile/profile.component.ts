@@ -157,12 +157,14 @@ export class profileComponent {
       return;
     }
     let onlyEmailModify = false;
+    localStorage.setItem('id', this.id.toString());
     delete this.userData.emailConfirmed;
     delete this.userData.phoneConfirmed;
     delete this.userData.id;
     this.userData.role = this.mapRoleSpanish(this.userData.role);
     this.profileService.putProfile(this.userData, this.id).subscribe(
       (res) => {
+        // localStorage.setItem('id', res.id);
         localStorage.setItem('user', JSON.stringify(this.userData));
         if (modifyPhone && modifyEmail) {
           localStorage.setItem('dataModify', 'both');

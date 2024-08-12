@@ -17,6 +17,11 @@ import { MatPaginatorIntlEspañol } from '../../../../../shared/MatPaginatorIntl
 import { RouterOutlet } from '@angular/router';
 import { CarBrandsService } from '../../../../../services/carBrands.service';
 import { UsersService } from '../../../../../services/users.service';
+import { ProfileService } from '../../../../../services/profile.service';
+import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { JsonPipe } from '@angular/common';
+import { SweetAlert } from '../../../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-table-Vehicles',
@@ -39,6 +44,8 @@ import { UsersService } from '../../../../../services/users.service';
     MatSelectModule,
     tableVehiclesComponent,
     RouterOutlet,
+    CommonModule,
+    JsonPipe,
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
 })
@@ -48,24 +55,55 @@ export class tableVehiclesComponent implements AfterViewInit {
   @Input() dataVehicle: any;
   @Output() dataVehicleChange = new EventEmitter<any>();
   form: FormGroup;
-  displayedColumns: string[] = ['brand', 'model', 'year', 'color', 'plates', 'owner', 'actions'];
+  displayedColumns: string[] = ['brand', 'model', 'year', 'color', 'plates'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
   owners: any;
   brands: any;
+  token = localStorage.getItem('token');
+  userData: any = {};
 
   constructor(
     private vehicleService: VehiclesService,
     private fb: FormBuilder,
     private carBrandsService: CarBrandsService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private profileService: ProfileService
   ) {
+    this.getProfile();
     this.getBrand();
     this.getOwner();
-    this.getAllVehicles();
     this.form = this.newFormControls();
     this.setupFilter();
+  }
+  getProfile() {
+    this.profileService.getProfile().subscribe(
+      (res) => {
+        this.userData = res;
+        if (this.userData?.role !== 'customer') {
+          this.displayedColumns.push('actions');
+
+          const vehicleIndex = this.displayedColumns.indexOf('plates');
+          if (vehicleIndex !== -1) {
+            this.displayedColumns.splice(vehicleIndex + 1, 0, 'owner');
+          }
+          this.getAllVehicles();
+          return;
+        }
+        this.vehicleService.getVehicleByOwner(this.userData.id).subscribe(
+          (res) => {
+            this.dataSource.data = res.data;
+          },
+          (err) => {
+            return 'No se encontró el vehículo';
+          }
+        );
+      },
+      (err) => {
+        return 'No se encontró el usuario';
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -74,10 +112,11 @@ export class tableVehiclesComponent implements AfterViewInit {
   getAllVehicles() {
     this.vehicleService.getAllVehicles().subscribe(
       (res) => {
+        console.log(res);
         this.dataSource.data = res.data;
       },
       (err) => {
-        // SweetAlert.error('Error', err.error.error.message);
+        SweetAlert.error('Error', err.error.error.message);
       }
     );
   }
