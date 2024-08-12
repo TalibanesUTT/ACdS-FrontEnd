@@ -22,9 +22,9 @@
         <option *ngFor="let owner of owners" [value]="owner.name + ' ' + owner.lastName">{{ owner.name }} {{ owner.lastName }}</option>
       </select>
     </div>
-    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 30%; justify-content: end">
+    <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 100%; justify-content: end">
       <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="resetFilters()">Reiniciar filtros</button>
-      <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="toggleShowTable('add')" *ngIf="userData.role != 'customer'">
+      <button matTooltip="Agregar nueva marca" class="buttonReset" (click)="toggleShowTable('add')" *ngIf="userData?.role != 'customer'">
         <mat-icon>add</mat-icon>
         Nuevo vehículo
       </button>

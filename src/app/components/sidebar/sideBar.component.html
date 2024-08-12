@@ -39,7 +39,7 @@
 
     <li
       *ngIf="role === 'Administrador' || role === 'Administrativo' || role === 'Cliente'"
-      (click)="getRoute('Vehiculos')"
+      (click)="getRoute('Vehículos')"
       [routerLink]="'/home/vehicles'"
       routerLinkActive="active-link"
       [ngClass]="{ 'active-border': isActiveRoute('/home/vehicles') }"
@@ -89,15 +89,15 @@
       <img [src]="isActiveRoute('/home/users') ? 'assets/icons/userActive.svg' : 'assets/icons/userInactive.svg'" alt="" />
       Usuarios
     </li>
-    <li
+    <!-- <li
       *ngIf="role === 'Administrador' || role === 'Administrativo'"
       (click)="getRoute('Reportes')"
-      [routerLink]="'/home/reportes'"
+      [routerLink]="'/home/reports'"
       routerLinkActive="active-link"
-      [ngClass]="{ 'active-border': isActiveRoute('/home/reportes') }"
+      [ngClass]="{ 'active-border': isActiveRoute('/home/reports') }"
     >
-      <img [src]="isActiveRoute('/home/reportes') ? 'assets/icons/reportsActive.svg' : 'assets/icons/reportsInactive.svg'" alt="" />
+      <img [src]="isActiveRoute('/home/reports') ? 'assets/icons/reportsActive.svg' : 'assets/icons/reportsInactive.svg'" alt="" />
       Reportes
-    </li>
+    </li> -->
   </ul>
 </div>

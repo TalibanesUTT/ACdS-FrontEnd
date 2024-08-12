@@ -21,6 +21,7 @@ import { ProfileService } from '../../../../../services/profile.service';
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { JsonPipe } from '@angular/common';
+import { SweetAlert } from '../../../../../shared/SweetAlert';
 
 @Component({
   selector: 'app-table-Vehicles',
@@ -54,14 +55,14 @@ export class tableVehiclesComponent implements AfterViewInit {
   @Input() dataVehicle: any;
   @Output() dataVehicleChange = new EventEmitter<any>();
   form: FormGroup;
-  displayedColumns: string[] = ['brand', 'model', 'year', 'color', 'plates', 'actions'];
+  displayedColumns: string[] = ['brand', 'model', 'year', 'color', 'plates'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
   owners: any;
   brands: any;
   token = localStorage.getItem('token');
-  userData: any;
+  userData: any = {};
 
   constructor(
     private vehicleService: VehiclesService,
@@ -80,7 +81,9 @@ export class tableVehiclesComponent implements AfterViewInit {
     this.profileService.getProfile().subscribe(
       (res) => {
         this.userData = res;
-        if (this.userData.role !== 'customer') {
+        if (this.userData?.role !== 'customer') {
+          this.displayedColumns.push('actions');
+
           const vehicleIndex = this.displayedColumns.indexOf('plates');
           if (vehicleIndex !== -1) {
             this.displayedColumns.splice(vehicleIndex + 1, 0, 'owner');
@@ -102,16 +105,18 @@ export class tableVehiclesComponent implements AfterViewInit {
       }
     );
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
   getAllVehicles() {
     this.vehicleService.getAllVehicles().subscribe(
       (res) => {
+        console.log(res);
         this.dataSource.data = res.data;
       },
       (err) => {
-        // SweetAlert.error('Error', err.error.error.message);
+        SweetAlert.error('Error', err.error.error.message);
       }
     );
   }

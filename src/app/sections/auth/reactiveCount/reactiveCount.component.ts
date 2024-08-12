@@ -47,7 +47,7 @@ export class reactiveCountComponent {
         if (res.message === 'Sesión iniciada correctamente.') {
           localStorage.setItem('token', res.data);
           SweetAlert.success('Éxito', res.message);
-          this.router.navigate(['/home/dashboard']);
+          this.router.navigate(['/home/perfil']);
           return;
         }
         localStorage.setItem('token', res.data);
