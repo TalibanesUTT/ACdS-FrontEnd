@@ -26,6 +26,17 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../../services/profile.service';
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-detail-order-service',
   standalone: true,
@@ -102,10 +113,11 @@ export class detailOrderServiceComponent {
     this.formDetailOrderService = this.fb.group({
       id: [this.dataSource!.detail!.id],
       budget: [this.dataSource!.detail!.budget, [Validators.required]],
-      totalCost: [this.dataSource!.detail!.totalCost, [Validators.required]],
-      departureDate: [this.dataSource!.detail!.departureDate, [Validators.required]],
-      finalMileage: [this.dataSource!.detail!.finalMileage, [Validators.required]],
-      observations: [this.dataSource!.detail!.observations, [Validators.required]],
+      totalCost: [this.dataSource!.detail!.totalCost, []],
+      departureDate: [this.dataSource!.detail!.departureDate, []],
+      finalMileage: [this.dataSource!.detail!.finalMileage, []],
+      observations: [this.dataSource!.detail!.observations, []],
+      repairDays: [this.dataSource!.detail!.repairDays, []],
     });
   }
 
@@ -128,15 +140,20 @@ export class detailOrderServiceComponent {
   sendForm() {
     const formValue = { ...this.formDetailOrderService.value };
     formValue.finalMileage = Number(formValue.finalMileage); // Asegurarse de que finalMileage sea un número
-
+    if (formValue.departureDate === '') delete formValue.departureDate; // Si departureDate es null, eliminarlo
     const ID = this.dataSource!.id ?? 0;
     delete formValue.id;
+    delete formValue.repairDays;
 
     this.orderDetailService.postServiceOrderDetail(formValue, ID).subscribe(
       (res) => {
         SweetAlert.success('Succes', res.message);
         this.textCondition = 'Actualizar detalle';
         this.disableButtonForm = true;
+        console.log('deatlle', res.data.detail);
+        if (this.dataSource && this.dataSource.detail) {
+          this.dataSource.detail.repairDays = res.data.detail.repairDays;
+        }
         // this.closeForm();
       },
       (err) => {

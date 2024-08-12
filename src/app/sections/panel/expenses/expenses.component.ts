@@ -264,9 +264,11 @@ export class expensesComponent {
     this.expenseService.postExpenditure(formExpenditureValues).subscribe(
       (data) => {
         SweetAlert.success('success', data.message);
+        this.buttonDisabled = true;
       },
       (error) => {
-        SweetAlert.error('error', error.error.message);
+        console.log(error);
+        SweetAlert.error('error', error.error.error.message);
       }
     );
   }

@@ -68,7 +68,7 @@ export class orderServiceComponent implements AfterViewInit {
   filterCost = false;
   menuOptions = 'table';
   itemOrderService!: IOrderService;
-  UserData: any;
+  UserData: any = {};
   token = localStorage.getItem('token');
 
   constructor(private fb: FormBuilder, private serviceOrdersService: ServiceOrdersService, private profileService: ProfileService) {

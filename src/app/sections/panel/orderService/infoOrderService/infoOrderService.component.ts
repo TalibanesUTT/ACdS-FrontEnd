@@ -69,7 +69,7 @@ export class infoOrderServiceComponent {
   vehiclesData: any[] = [];
   filteredVehicles: any[] = [];
   showFormEditOrderService = false;
-  UserData: any;
+  UserData: any = {};
   token = localStorage.getItem('token');
   constructor(
     private fb: FormBuilder,

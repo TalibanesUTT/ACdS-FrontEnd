@@ -3,7 +3,7 @@
     <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-bottom: 15px; margin-top: 15px">
       <h1>Información</h1>
       <div style="display: flex; flex-direction: row; height: 40px; gap: 15px; width: 50%; justify-content: end; align-items: center">
-        <button (click)="editForm()" class="buttonReset" *ngIf="UserData.role != 'customer'">
+        <button (click)="editForm()" class="buttonReset" *ngIf="UserData?.role != 'customer'">
           <mat-icon style="margin-right: 5px">edit</mat-icon>
           Editar orden de servicio
         </button>
@@ -50,13 +50,13 @@
         <textarea matInput formControlName="notes" [readonly]="true"></textarea>
       </mat-form-field>
     </section>
-    <h1 *ngIf="UserData.role != 'customer'">Información de la cita</h1>
-    <section class="someInputs" *ngIf="UserData.role != 'customer'">
+    <h1 *ngIf="UserData?.role != 'customer'">Información de la cita</h1>
+    <section class="someInputs" *ngIf="UserData?.role != 'customer'">
       <mat-form-field appearance="outline">
         <mat-label>Depende de una cita</mat-label>
         <mat-select formControlName="dependsOnAppointment" [disabled]="true">
-          <mat-option value="0">No</mat-option>
-          <mat-option value="1">Sí</mat-option>
+          <mat-option value="0" [disabled]="true">No</mat-option>
+          <mat-option value="1" [disabled]="true">Sí</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">

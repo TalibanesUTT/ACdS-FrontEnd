@@ -70,7 +70,7 @@ export class historyOrderServiceComponent {
   showOnHoldButton = true;
   showRollbackButton = true;
   showContinueButton = false;
-  UserData: any;
+  UserData: any = {};
   token = localStorage.getItem('token');
 
   constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {

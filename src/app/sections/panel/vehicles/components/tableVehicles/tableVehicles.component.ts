@@ -116,7 +116,7 @@ export class tableVehiclesComponent implements AfterViewInit {
         this.dataSource.data = res.data;
       },
       (err) => {
-        SweetAlert.error('Error', err.error.error.message);
+        // SweetAlert.error('Error', err.error.error.message);
       }
     );
   }

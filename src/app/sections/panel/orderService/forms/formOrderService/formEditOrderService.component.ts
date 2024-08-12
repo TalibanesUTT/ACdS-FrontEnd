@@ -194,10 +194,25 @@ export class formOrderServiceComponent {
     this.orderServiceService.putServiceOrder(formValue, this.ID).subscribe(
       (res) => {
         SweetAlert.success('success', res.message);
+        console.log(res);
+        this.formOrderService.value.fileNumber = res.data.fileNumber;
+        this.formOrderService.value.initialMileage = res.data.initialMileage;
+        this.formOrderService.value.notes = res.data.notes;
+        this.formOrderService.value.vehicleId = res.data.vehicle.id;
+        this.formOrderService.value.vehicleDisplay = `${res.data.vehicle.model.brand} ${res.data.vehicle.model.model} - ${res.data.vehicle.year} - ${res.data.vehicle.color} - ${res.data.vehicle.owner}`;
+        this.formOrderService.value.servicesIds = res.data.services.map((service: any) => service.id);
+        this.formOrderService.value.dependsOnAppointment = res.data.appointment ? true : false;
+        this.formOrderService.value.appointmentId = res.data.appointment ? res.data.appointment.id : '';
+        this.formOrderService.value.appointmentDisplay = res.data.appointment
+          ? `${res.data.appointment.date} - ${res.data.appointment.time} - ${res.data.appointment.customer.name} ${res.data.appointment.customer.lastName}`
+          : '';
+        this.formOrderService.value.notifyTo = res.data.notifyTo;
+        this.getAppointmentPending();
         this.closeForm();
       },
       (err) => {
-        SweetAlert.error('Error', err.error.message);
+        console.log(err);
+        SweetAlert.error('Error', err.error.error.message);
       }
     );
   }

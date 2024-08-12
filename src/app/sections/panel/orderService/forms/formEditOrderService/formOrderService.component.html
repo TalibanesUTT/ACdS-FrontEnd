@@ -54,7 +54,7 @@
         <mat-error *ngIf="formOrderService.get('vehicleDisplay')?.hasError('required')"> El vehículo es requerido </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Kilometraje</mat-label>
+        <mat-label>Kilometraje inicial</mat-label>
         <input type="text" matInput formControlName="initialMileage" type="number" (input)="validateForm()" />
         <mat-error *ngIf="formOrderService.get('initialMileage')?.hasError('required')"> El kilometraje es requerido </mat-error>
       </mat-form-field>
