@@ -6,12 +6,13 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {jwtInterceptor} from './interceptors/jwt.interceptor';
 import {apiInterceptor} from './interceptors/api.interceptor';
-import {provideNativeDateAdapter} from "@angular/material/core";
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideNativeDateAdapter(),
+    [{provide: MAT_DATE_LOCALE, useValue: 'es-MX'}],
     provideAnimationsAsync(),
     provideAnimationsAsync(),
     provideHttpClient(

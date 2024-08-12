@@ -13,6 +13,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-appointment',
@@ -37,8 +38,8 @@ import {MatOption, MatSelect} from "@angular/material/select";
   ],
 })
 export class AppointmentComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'time', 'reason', 'actions'];
-  appointments$ = this.service.appointments$
+  displayedColumns: string[] = ['date', 'time', 'reason', 'status', 'customer', 'actions'];
+  readonly appointments$ = this.service.appointments$
 
   constructor(
     private roleService: UserRoleService,
@@ -46,15 +47,16 @@ export class AppointmentComponent implements OnInit {
     private dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
-    switch (this.roleService.role) {
-      case RoleEnum.CUSTOMER:
-        this.service.getUserAppointments();
-        break;
-      default:
-        this.service.getAllAppointments();
-        break;
-    }
+  ngOnInit() {
+    this.roleService.role$.pipe(
+      tap(currentRole => {
+        if (currentRole !== RoleEnum.CUSTOMER) {
+          this.service.getAllAppointments()
+        } else {
+          this.service.getUserAppointments()
+        }
+      })
+    ).subscribe()
   }
 
   openAppointmentDialog(appointment?: Appointment): void {
