@@ -210,4 +210,8 @@ export class infoOrderServiceComponent {
   changeShowFormEditOrderService(event: boolean) {
     this.showFormEditOrderService = event;
   }
+  changeItemOrderService(event: IOrderService) {
+    this.itemOrderService = event;
+    this.populateForm(this.itemOrderService);
+  }
 }

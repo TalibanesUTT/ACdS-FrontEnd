@@ -64,6 +64,7 @@ export class formOrderServiceComponent {
   @Input() showFormEditOrderService!: boolean;
   dataSource!: IOrderService;
   @Output() changeShowFormEditOrderService = new EventEmitter<boolean>();
+  @Output() changeItemOrderService = new EventEmitter<IOrderService>();
   servicesData: IService[] = [];
   vehiclesData: any[] = [];
   appointmentsPendingData: any[] = [];
@@ -174,6 +175,9 @@ export class formOrderServiceComponent {
   closeForm() {
     this.changeShowFormEditOrderService.emit(false);
   }
+  changeItemOrder(item: IOrderService) {
+    this.changeItemOrderService.emit(item);
+  }
   sendForm() {
     const formValue = { ...this.formOrderService.value };
     if (formValue.appointmentId === 0) {
@@ -195,6 +199,7 @@ export class formOrderServiceComponent {
       (res) => {
         SweetAlert.success('success', res.message);
         console.log(res);
+        this.changeItemOrder(res.data);
         this.formOrderService.value.fileNumber = res.data.fileNumber;
         this.formOrderService.value.initialMileage = res.data.initialMileage;
         this.formOrderService.value.notes = res.data.notes;

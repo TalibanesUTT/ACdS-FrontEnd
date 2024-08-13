@@ -11,7 +11,7 @@
       </div>
     </div>
     <section class="someInputs">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" *ngIf="UserData?.role != 'customer'">
         <mat-label>No. de expediente</mat-label>
         <input type="text" matInput formControlName="fileNumber" [readonly]="true" />
       </mat-form-field>
@@ -33,13 +33,21 @@
       </mat-form-field>
     </section>
     <section class="someInputs">
-      <mat-form-field appearance="outline">
+      <!--input solo cuando es cusotmer-->
+      <mat-form-field appearance="outline" *ngIf="UserData?.role != 'customer'">
         <mat-label>Servicios</mat-label>
         <mat-select formControlName="servicesIds" multiple [disabled]="true">
           <mat-option *ngFor="let service of servicesData" [value]="service.id" [disabled]="true">{{ service.name }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <!--input solo cuando es cusotmer-->
+      <mat-form-field appearance="outline" *ngIf="UserData?.role === 'customer'">
+        <mat-label>Servicios</mat-label>
+        <mat-select formControlName="servicesIds" multiple [disabled]="true">
+          <mat-option *ngFor="let service of itemOrderService.services" [value]="service.id" [disabled]="true">{{ service.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="UserData?.role != 'customer'">
         <mat-label>Correo de notificación</mat-label>
         <input type="text" matInput formControlName="emailNotification" [readonly]="true" />
       </mat-form-field>
@@ -64,14 +72,14 @@
         <input type="text" matInput formControlName="customer" [readonly]="true" />
       </mat-form-field>
     </section>
-    <section class="someInputs" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">
-      <mat-form-field appearance="outline">
+    <section class="someInputs" *ngIf="UserData?.role != 'customer'">
+      <mat-form-field appearance="outline" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">
         <mat-label>Día de la cita</mat-label>
         <input matInput [matDatepicker]="picker2" formControlName="date" [readonly]="true" />
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" *ngIf="formOrderService && formOrderService.get('dependsOnAppointment')?.value === '1'">
         <mat-label>Hora de la cita</mat-label>
         <input type="text" matInput formControlName="time" [readonly]="true" />
       </mat-form-field>
@@ -97,7 +105,7 @@
         <input type="text" matInput formControlName="color" [readonly]="true" />
       </mat-form-field>
     </section>
-    <section class="someInputs">
+    <section class="someInputs" *ngIf="UserData?.role != 'customer'">
       <mat-form-field appearance="outline">
         <mat-label>Dueño</mat-label>
         <input type="text" matInput formControlName="owner" [readonly]="true" />
@@ -109,6 +117,7 @@
 <app-form-edit-order-service
   *ngIf="showFormEditOrderService"
   [itemOrderService]="itemOrderService"
+  (changeItemOrderService)="changeItemOrderService($event)"
   [showFormEditOrderService]="showFormEditOrderService"
   (changeShowFormEditOrderService)="changeShowFormEditOrderService($event)"
 ></app-form-edit-order-service>

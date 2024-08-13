@@ -61,7 +61,7 @@ import { ProfileService } from '../../../services/profile.service';
 export class orderServiceComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   formFilter: FormGroup;
-  displayedColumns: string[] = ['fileNumber', 'createDate', 'actualStatus', 'vehicle', 'services', 'totalCost'];
+  displayedColumns: string[] = ['createDate', 'actualStatus', 'vehicle', 'services', 'totalCost'];
   dataSource = new MatTableDataSource<IOrderService>();
   servicesData: IService[] = [];
   originalData: IOrderService[] = [];
@@ -70,6 +70,20 @@ export class orderServiceComponent implements AfterViewInit {
   itemOrderService!: IOrderService;
   UserData: any = {};
   token = localStorage.getItem('token');
+  serviceOrdersStatuses = [
+    { key: 'Recibido', value: 'Recibido' },
+    { key: 'En revisión', value: 'En revisión' },
+    { key: 'Emitido', value: 'Emitido' },
+    { key: 'Aprobado', value: 'Aprobado' },
+    { key: 'En proceso', value: 'En proceso' },
+    { key: 'En chequeo', value: 'En chequeo' },
+    { key: 'Completado', value: 'Completado' },
+    { key: 'Listo para recoger', value: 'Listo para recoger' },
+    { key: 'Entregado', value: 'Entregado' },
+    { key: 'Finalizado', value: 'Finalizado' },
+    { key: 'En espera', value: 'En espera' },
+    { key: 'Cancelado', value: 'Cancelado' },
+  ];
 
   constructor(private fb: FormBuilder, private serviceOrdersService: ServiceOrdersService, private profileService: ProfileService) {
     this.formFilter = this.newFormControls();
@@ -83,7 +97,11 @@ export class orderServiceComponent implements AfterViewInit {
       (response) => {
         this.UserData = response;
         console.log(this.UserData);
-        if (this.UserData.role != 'customer') {
+        // Verifica si el rol no es 'customer'
+        if (this.UserData.role !== 'customer') {
+          // Agrega 'fileNumber' al inicio de displayedColumns
+          this.displayedColumns.unshift('fileNumber');
+
           this.getAllServiceOrders();
           const vehicleIndex = this.displayedColumns.indexOf('vehicle');
           if (vehicleIndex !== -1) {
@@ -133,6 +151,7 @@ export class orderServiceComponent implements AfterViewInit {
       services: ['all'],
       totalCost: [''],
       filterCost: [false],
+      serviceOrdersStatuses: ['all'],
       dateRange: this.fb.group({
         start: [null],
         end: [null],
@@ -155,6 +174,7 @@ export class orderServiceComponent implements AfterViewInit {
     const selectedServiceId = value.services !== 'all' ? parseInt(value.services, 10) : null;
     const costFilterValue = value.totalCost ? parseFloat(value.totalCost) : null;
     const filterCost = value.filterCost;
+    const selectedStatus = value.serviceOrdersStatuses !== 'all' ? value.serviceOrdersStatuses : null;
 
     // Convertir las fechas a objetos Date y normalizarlas
     const startDate = value.dateRange.start ? new Date(value.dateRange.start).setHours(0, 0, 0, 0) : null;
@@ -191,25 +211,29 @@ export class orderServiceComponent implements AfterViewInit {
             : (data.detail?.totalCost ?? 0) >= costFilterValue
           : true;
 
+      const statusMatch = selectedStatus ? data.actualStatus === selectedStatus : true;
+
       // Aplicar otros filtros seleccionados
       switch (selectedFilter) {
         case 'fileNumber':
-          return serviceMatch && costMatch && data.fileNumber.toLowerCase().includes(filterValue);
+          return serviceMatch && costMatch && statusMatch && data.fileNumber.toLowerCase().includes(filterValue);
         case 'vehicle':
           return (
             serviceMatch &&
             costMatch &&
+            statusMatch &&
             (data.vehicle.model.brand.toLowerCase().includes(filterValue) ||
               data.vehicle.model.model.toLowerCase().includes(filterValue) ||
               data.vehicle.year.toString().includes(filterValue) ||
               data.vehicle.color.toLowerCase().includes(filterValue))
           );
         case 'client':
-          return serviceMatch && costMatch && data.vehicle.owner.toLowerCase().includes(filterValue);
+          return serviceMatch && costMatch && statusMatch && data.vehicle.owner.toLowerCase().includes(filterValue);
         default:
           return (
             serviceMatch &&
             costMatch &&
+            statusMatch &&
             (data.fileNumber.toLowerCase().includes(filterValue) ||
               data.vehicle.model.brand.toLowerCase().includes(filterValue) ||
               data.vehicle.model.model.toLowerCase().includes(filterValue) ||
@@ -221,14 +245,13 @@ export class orderServiceComponent implements AfterViewInit {
     };
 
     // Forzar el filtro para desencadenar el `filterPredicate`
-    this.dataSource.filter = filterValue || selectedServiceId || costFilterValue || startDate || endDate ? 'activate' : '';
+    this.dataSource.filter = filterValue || selectedServiceId || costFilterValue || startDate || endDate || selectedStatus ? 'activate' : '';
   }
 
   toggleFilterCost() {
     this.filterCost = !this.filterCost;
     this.formFilter.patchValue({ filterCost: this.filterCost });
   }
-
   resetFilters() {
     this.formFilter.reset({
       myControl: '',
@@ -236,8 +259,38 @@ export class orderServiceComponent implements AfterViewInit {
       services: 'all',
       totalCost: '',
       filterCost: false,
+      serviceOrdersStatuses: 'all',
     });
-    this.dataSource.data = this.originalData;
+
+    if (this.UserData.role === 'customer') {
+      // Si el rol es 'customer', cargar solo los datos correspondientes a este usuario
+      this.serviceOrdersService.getAllServiceOrdersByUser(this.UserData.id).subscribe(
+        (response) => {
+          this.dataSource.data = response.data;
+        },
+        (error) => {
+          // Manejo de errores si es necesario
+        }
+      );
+    } else {
+      // Si no es 'customer', cargar todos los datos
+      this.dataSource.data = this.originalData;
+    }
+
+    if (this.UserData.role === 'customer') {
+      // Si el rol es 'customer', cargar solo los datos correspondientes a este usuario
+      this.serviceOrdersService.getAllServiceOrdersByUser(this.UserData.id).subscribe(
+        (response) => {
+          this.dataSource.data = response.data;
+        },
+        (error) => {
+          // Manejo de errores si es necesario
+        }
+      );
+    } else {
+      // Si no es 'customer', cargar todos los datos
+      this.dataSource.data = this.originalData;
+    }
   }
   editMenuOption(action: string, item?: IOrderService) {
     this.itemOrderService = item!;
