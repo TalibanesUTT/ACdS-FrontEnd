@@ -39,9 +39,7 @@ export class ProfileService {
     return this.http.put(this.API_URL + '/user-management/updatePassword/' + id, data, {});
   }
 
-  recoverPassword(email: { email: string; fromAdmin: boolean }): Observable<any> {
-    return this.http.post(this.API_URL + '/user-management/recoverPassword', {
-      email,
-    });
+  recoverPassword(data: { email: string; fromAdmin: boolean }): Observable<any> {
+    return this.http.post(this.API_URL + '/user-management/recoverPassword', data);
   }
 }

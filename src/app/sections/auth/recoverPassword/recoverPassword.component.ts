@@ -37,7 +37,12 @@ export class recoverPasswordComponent {
   }
 
   verify(): void {
-    this.profileService.recoverPassword(this.verifyEmailForm.value.email).subscribe(
+    const data = {
+      email: this.verifyEmailForm.value.email,
+      fromAdmin: false,
+    };
+
+    this.profileService.recoverPassword(data).subscribe(
       (res) => {
         SweetAlert.success('success', res.message);
         this.router.navigate(['/login']);
