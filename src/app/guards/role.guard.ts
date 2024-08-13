@@ -1,7 +1,7 @@
-import {CanActivateFn, Router} from '@angular/router';
-import {inject} from '@angular/core';
-import {RoleEnum, UserRoleService} from '../sections/panel/appointments/user-role.service';
-import {catchError, map, of} from 'rxjs';
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { RoleEnum, UserRoleService } from '../sections/panel/appointments/user-role.service';
+import { catchError, map, of } from 'rxjs';
 
 const roleGuard: CanActivateFn = (route, state) => {
   const requiredRoles = route.data['roles'] as RoleEnum[];
@@ -9,8 +9,7 @@ const roleGuard: CanActivateFn = (route, state) => {
   const userRoleService = inject(UserRoleService);
 
   return userRoleService.roleFromNetwork$.pipe(
-    map(userRole => {
-      console.log(userRole)
+    map((userRole) => {
       if (requiredRoles.includes(userRole) || userRole === RoleEnum.ROOT) {
         return true;
       } else {
@@ -19,6 +18,6 @@ const roleGuard: CanActivateFn = (route, state) => {
     }),
     catchError(() => of(router.createUrlTree(['/'])))
   );
-}
+};
 
 export default roleGuard;

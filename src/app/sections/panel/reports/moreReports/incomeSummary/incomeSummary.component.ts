@@ -99,8 +99,6 @@ export class incomeSummaryComponent {
   }
 
   aplicateService() {
-    console.log('aplicate', this.formAccountingBalance.value);
-
     const startDate = new Date(this.formAccountingBalance.get('startDate')?.value);
     const endDate = new Date(this.formAccountingBalance.get('endDate')?.value);
 
@@ -113,14 +111,9 @@ export class incomeSummaryComponent {
       .toString()
       .padStart(2, '0')}`;
 
-    console.log('Start Date:', formattedStartDate);
-    console.log('End Date:', formattedEndDate);
-
     const differenceInDays = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
 
     this.reportService.getIncomeSummary(formattedStartDate, formattedEndDate).subscribe((data) => {
-      console.log(data);
-
       // Si el rango de fechas es mayor a 2 días
       if (differenceInDays <= 2) {
         this.totalIncome = data[1] ? data[1][0].TotalIncome : null;
@@ -139,9 +132,6 @@ export class incomeSummaryComponent {
         this.showIncomePerMonth = true;
       }
 
-      console.log('Total Income:', this.totalIncome);
-      console.log('Average Income Per Day:', this.AverageIncomePerDay);
-      console.log('Average Income Per Month:', this.AverageIncomePerMonth);
       this.dataSource.data = data[0];
       this.dataSource.paginator = this.paginator;
     });

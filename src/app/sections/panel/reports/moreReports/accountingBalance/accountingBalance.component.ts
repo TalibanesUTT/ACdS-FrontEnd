@@ -144,8 +144,6 @@ export class accountingBalanceComponent {
   }
 
   onPeriodChange(event: any) {
-    console.log(event);
-
     // Limpiar los campos de los inputs cuando se cambia el período
     this.formAccountingBalance.reset({
       period: event.value,
@@ -176,12 +174,9 @@ export class accountingBalanceComponent {
     }
   }
 
-  viewLog() {
-    console.log(this.formAccountingBalance.value);
-  }
+  viewLog() {}
 
   aplicateService($event: any) {
-    console.log(this.formAccountingBalance.value);
     if (this.formAccountingBalance.value.period === 'anual') {
       const input = $event.target as HTMLInputElement;
       if (input.value.length > 4) {
@@ -189,7 +184,6 @@ export class accountingBalanceComponent {
         this.formAccountingBalance.patchValue({ yearOnly: input.value });
       }
       this.reportService.getAccountingBalance(this.formAccountingBalance.value.yearOnly).subscribe((data) => {
-        console.log(data[0][0]);
         this.formAccountingBalance.patchValue({
           AverageExpenditurePerDay: data[0][0].AverageExpenditurePerDay || 0,
           AverageExpenditurePerMonth: data[0][0].AverageExpenditurePerMonth || 0,
@@ -204,9 +198,7 @@ export class accountingBalanceComponent {
     if (this.formAccountingBalance.value.period === 'mensual') {
       let month = this.formAccountingBalance.value.both.split('-')[1];
       let year = this.formAccountingBalance.value.both.split('-')[0];
-      console.log(year, month);
       this.reportService.getAccountingBalance(year, month).subscribe((data) => {
-        console.log(data[0][0]);
         this.formAccountingBalance.patchValue({
           AverageExpenditurePerDay: data[0][0].AverageExpenditurePerDay || 0,
           AverageExpenditurePerMonth: data[0][0].AverageExpenditurePerMonth || 0,

@@ -146,10 +146,8 @@ export class CustomerFormComponent {
   validateForm($event: any) {
     if (this.form.invalid) {
       this.isDisabled = true;
-      console.log('invalid');
     } else {
       this.isDisabled = false;
-      console.log('valid');
     }
   }
 }

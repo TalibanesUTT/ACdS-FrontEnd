@@ -47,7 +47,6 @@ export class secondFactorComponent {
         this.router.navigate(['/home/perfil']);
       },
       (err) => {
-        console.log(err);
         SweetAlert.error('Error', err.error.error);
       }
     );

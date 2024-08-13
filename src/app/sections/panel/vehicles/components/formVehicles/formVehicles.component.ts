@@ -68,8 +68,6 @@ export class formVehiclesComponent {
     private usersService: UsersService,
     private carBrandsService: CarBrandsService
   ) {
-    console.log(this.dataVehicle);
-
     this.getAllOwners();
     this.getAllBrands();
     this.formVehicles = this.newFormControls();
@@ -117,7 +115,6 @@ export class formVehiclesComponent {
       this.formVehicles.patchValue({ brandId: brand });
       this.onBrandSelected(brand);
     }
-    console.log('formularios', this.formVehicles.value);
   }
 
   newFormControls(): FormGroup {
@@ -136,7 +133,6 @@ export class formVehiclesComponent {
   getAllOwners() {
     this.usersService.getAllUsers().subscribe((res: any) => {
       this.owners = res.data;
-      console.log(this.owners);
     });
   }
   private _filterOwners(value: any): any[] {
@@ -157,7 +153,6 @@ export class formVehiclesComponent {
   getAllBrands() {
     this.carBrandsService.getCardBrands().subscribe((res: any) => {
       this.brands = res.data;
-      console.log(this.brands);
     });
   }
   private _filterBrands(value: any): any[] {
@@ -172,7 +167,6 @@ export class formVehiclesComponent {
   getAllModels(brandId: any) {
     this.vehiclesService.getModelByBrand(brandId).subscribe((res: any) => {
       this.models = res.data;
-      console.log(this.models);
 
       if (this.dataVehicle.action === 'edit') {
         const model = this.models.find((m) => m.model.toLowerCase() === this.dataVehicle.model.toLowerCase());
@@ -208,10 +202,8 @@ export class formVehiclesComponent {
       return;
     }
 
-    console.log('edit');
     const ID = this.dataVehicle.id;
     delete formValue.id;
-    console.log('formValueEdit', formValue);
     this.vehiclesService.putVehicle(formValue, ID).subscribe((res: any) => {
       SweetAlert.success('Success', res.message);
       this.toggleShowTable();

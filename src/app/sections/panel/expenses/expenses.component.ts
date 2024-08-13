@@ -130,10 +130,8 @@ export class expensesComponent {
   }
 
   getExpenditures(month: number, year: number) {
-    console.log(month, year);
     this.expenseService.getExpenditures(month, year).subscribe(
       (data) => {
-        console.log(data);
         // Asigna los valores de data al formulario de gastos
         this.formExpenditure.patchValue({
           data: data.data.data,
@@ -267,7 +265,6 @@ export class expensesComponent {
         this.buttonDisabled = true;
       },
       (error) => {
-        console.log(error);
         SweetAlert.error('error', error.error.error.message);
       }
     );

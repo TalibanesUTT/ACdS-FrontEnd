@@ -112,7 +112,6 @@ export class tableVehiclesComponent implements AfterViewInit {
   getAllVehicles() {
     this.vehicleService.getAllVehicles().subscribe(
       (res) => {
-        console.log(res);
         this.dataSource.data = res.data;
       },
       (err) => {

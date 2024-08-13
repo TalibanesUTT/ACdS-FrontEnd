@@ -201,7 +201,6 @@ export class formOrderServiceComponent {
     this.orderServiceService.putServiceOrder(formValue, this.ID).subscribe(
       (res) => {
         SweetAlert.success('success', res.message);
-        console.log(res);
         this.changeItemOrder(res.data);
         this.formOrderService.value.fileNumber = res.data.fileNumber;
         this.formOrderService.value.initialMileage = res.data.initialMileage;
@@ -219,7 +218,6 @@ export class formOrderServiceComponent {
         this.closeForm();
       },
       (err) => {
-        console.log(err);
         SweetAlert.error('Error', err.error.error.message);
       }
     );

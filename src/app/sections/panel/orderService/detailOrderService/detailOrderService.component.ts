@@ -90,7 +90,6 @@ export class detailOrderServiceComponent {
     if (this.itemOrderService) {
       this.dataSource = this.itemOrderService;
       if (this.dataSource.detail) {
-        console.log(this.dataSource.detail);
         this.initializeForm();
         this.textCondition = 'Actualizar detalle';
       } else {
@@ -101,7 +100,6 @@ export class detailOrderServiceComponent {
   getProfile() {
     this.profileService.getProfile().subscribe((response) => {
       this.UserData = response;
-      console.log(this.UserData);
     });
   }
   validateForm() {
@@ -155,7 +153,6 @@ export class detailOrderServiceComponent {
         SweetAlert.success('Succes', res.message);
         this.textCondition = 'Actualizar detalle';
         this.disableButtonForm = true;
-        console.log('deatlle', res.data.detail);
         if (this.dataSource && this.dataSource.detail) {
           this.dataSource.detail.repairDays = res.data.detail.repairDays;
         }

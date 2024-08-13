@@ -96,7 +96,6 @@ export class orderServiceComponent implements AfterViewInit {
     this.profileService.getProfile().subscribe(
       (response) => {
         this.UserData = response;
-        console.log(this.UserData);
         // Verifica si el rol no es 'customer'
         if (this.UserData.role !== 'customer') {
           // Agrega 'fileNumber' al inicio de displayedColumns
