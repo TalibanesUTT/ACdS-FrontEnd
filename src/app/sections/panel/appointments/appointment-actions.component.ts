@@ -40,8 +40,11 @@ export class AppointmentActionsComponent {
     return this.userRoleService.hasPermission(ActionEnum.UPDATE);
   }
 
-  get canDelete(): boolean {
-    return this.userRoleService.hasPermission(ActionEnum.DELETE);
+  get canDelete(): boolean{
+    if (this.appointment.status === 'Pendiente') {
+      return this.userRoleService.hasPermission(ActionEnum.DELETE);
+    }
+    return false
   }
 
   triggerEdit(): void {

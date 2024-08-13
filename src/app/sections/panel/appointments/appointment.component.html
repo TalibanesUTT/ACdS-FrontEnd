@@ -65,7 +65,7 @@
         <button (click)="editAppointment(appointment)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button (click)="cancelAppointment(appointment)">
+        <button *ngIf="isPending(appointment.status)" (click)="cancelAppointment(appointment)">
           <mat-icon>delete</mat-icon>
         </button>
 
