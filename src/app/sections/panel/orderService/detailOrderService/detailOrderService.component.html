@@ -3,7 +3,7 @@
     <button class="buttonReset" *ngIf="dataSource?.detail === null" (click)="addDetailOrderService()">Añadir detalle de la orden de servicio</button>
   </section>
   <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px" *ngIf="dataSource?.detail === null">
-    <p>Nota: Aún no se ha añadido detalle a tu orden de servicio, podrás verlo una vez que se haya añadido.</p>
+    <p>Nota: Aún no se ha añadido detalle a la orden de servicio, podrás verlo una vez que se haya añadido.</p>
   </section>
   <form *ngIf="dataSource?.detail != null" [formGroup]="formDetailOrderService" style="height: 400px">
     <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-top: -40px; margin-bottom: 15px">
@@ -31,7 +31,7 @@
         <!-- <mat-error *ngIf="formDetailOrderService.get('departureDate')?.hasError('required')"> La fecha de salida es requerida </mat-error> -->
       </mat-form-field>
       <mat-form-field appearance="outline" matTooltip="Este campo se llenará automáticamente">
-        <mat-label>Dias de reparación</mat-label>
+        <mat-label>Días de reparación</mat-label>
         <input type="text" matInput [value]="dataSource?.detail?.repairDays" type="number" [readonly]="true" [readonly]="true" />
       </mat-form-field>
       <mat-form-field appearance="outline">

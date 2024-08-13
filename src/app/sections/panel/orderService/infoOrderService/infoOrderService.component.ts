@@ -102,7 +102,7 @@ export class infoOrderServiceComponent {
       actualStatus: ['', [Validators.required]],
       initialMileage: ['', [Validators.required]],
       notes: [''],
-      emailNotification: [''],
+      notifyTo: ['', [Validators.required]],
       servicesIds: [[], [Validators.required]],
 
       // Información de la cita
@@ -142,6 +142,7 @@ export class infoOrderServiceComponent {
       actualStatus: orderService.actualStatus,
       initialMileage: orderService.initialMileage,
       notes: orderService.notes,
+      notifyTo: orderService.notifyTo,
 
       // Servicios
       servicesIds: orderService.services ? orderService.services.map((service) => service.id) : [],

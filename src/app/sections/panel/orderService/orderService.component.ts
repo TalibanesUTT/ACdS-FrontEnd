@@ -197,12 +197,9 @@ export class orderServiceComponent implements AfterViewInit {
       if (!dateMatch) return false; // Si no coincide con la fecha, filtrar
 
       // Lógica para el filtro de servicio
-      const serviceMatch =
-        selectedServiceId === 7 // ID 7 es "Otros"
-          ? true // Si se selecciona "Otros", filtra todos los servicios
-          : selectedServiceId
-          ? data.services.some((service) => service.id === selectedServiceId)
-          : true;
+      const serviceMatch = selectedServiceId
+        ? data.services.some((service) => (selectedServiceId === 7 ? service.id === 7 : service.id === selectedServiceId))
+        : true;
 
       const costMatch =
         costFilterValue !== null

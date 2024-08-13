@@ -83,6 +83,7 @@ export class reactiveCountComponent {
   }
   resendCode(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log(user);
     const url = localStorage.getItem('url') || '';
     this.authService.resendCode(this.id ? this.id : user).subscribe(
       (res) => {

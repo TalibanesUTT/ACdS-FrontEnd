@@ -76,7 +76,9 @@ export class historyOrderServiceComponent {
   constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
     this.getProfile();
   }
-
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
   ngOnInit() {
     if (this.itemOrderService && Array.isArray(this.itemOrderService.history)) {
       this.dataSource.data = this.itemOrderService.history;

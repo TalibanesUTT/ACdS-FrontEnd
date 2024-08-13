@@ -43,6 +43,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
         localStorage.setItem('user', JSON.stringify(res.data) || '');
+        localStorage.setItem('id', res.data.id || '');
         if (res.message === 'Código de verificación reenviado') {
           localStorage.setItem('dataModify', 'phone');
           localStorage.setItem('url', res.url || '');

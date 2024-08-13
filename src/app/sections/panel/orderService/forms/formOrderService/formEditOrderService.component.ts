@@ -121,7 +121,7 @@ export class formOrderServiceComponent {
       appointmentDisplay: [''],
       vehicleId: ['', [Validators.required]],
       vehicleDisplay: ['', [Validators.required]],
-      notifyTo: [''],
+      notifyTo: ['', [CustomValidators.emailPattern]],
       notes: ['', [Validators.required]],
     });
   }

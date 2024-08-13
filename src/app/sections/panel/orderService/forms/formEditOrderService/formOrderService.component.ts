@@ -101,7 +101,7 @@ export class formEditOrderServiceComponent {
       appointmentDisplay: [''],
       vehicleId: ['', [Validators.required]],
       vehicleDisplay: ['', [Validators.required]],
-      notifyTo: [''],
+      notifyTo: ['', [CustomValidators.emailPattern]],
       notes: ['', [Validators.required]],
     });
   }
@@ -166,7 +166,7 @@ export class formEditOrderServiceComponent {
 
     // Eliminar campos innecesarios antes de enviar
     delete formValue.vehicleDisplay;
-    delete formValue.notifyTo;
+    // delete formValue.notifyTo;
     delete formValue.dependsOnAppointment;
     delete formValue.appointmentDisplay;
 
