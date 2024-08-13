@@ -237,7 +237,7 @@ export class expensesComponent {
   }
 
   updateButtonState(month: number, year: number) {
-    this.buttonDisabled = !(month && year);
+    // this.buttonDisabled = !(month && year);
   }
 
   onMonthChange() {

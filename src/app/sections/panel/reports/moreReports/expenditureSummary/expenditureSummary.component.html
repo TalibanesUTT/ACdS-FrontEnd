@@ -1,0 +1,68 @@
+<h1>Reporte de egresos</h1>
+<form [formGroup]="formAccountingBalance">
+  <section style="display: flex; flex-direction: row; width: 100%; justify-content: start; gap: 10px">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label style="margin-top: -10px">Selecciona un periodo</mat-label>
+      <mat-select formControlName="period" style="width: 100%" (selectionChange)="onPeriodChange($event)">
+        <mat-option value="anual">Anual</mat-option>
+        <mat-option value="mensual">Mensual</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Input para seleccionar Año y Mes, solo visible si se selecciona "mensual" -->
+    <div style="width: 100%" *ngIf="isMonthlySelected">
+      <!-- <label for="both">Año y mes</label> -->
+      <input
+        type="month"
+        id="both"
+        formControlName="both"
+        placeholder="Selecciona el mes y el año"
+        style="width: 100%"
+        (input)="aplicateService($event)"
+        class="calendar"
+      />
+    </div>
+
+    <!-- Input para seleccionar solo el Año, solo visible si se selecciona "anual" -->
+    <div style="width: 100%" *ngIf="isAnnualSelected">
+      <!-- <label for="yearOnly" style="margin-top: -0px">Selecciona el año</label> -->
+      <input
+        type="text"
+        maxlength="4"
+        id="yearOnly"
+        formControlName="yearOnly"
+        style="width: 100%"
+        min="1900"
+        max="2100"
+        placeholder="Escribe el año"
+        step="1"
+        (input)="aplicateService($event)"
+        class="calendar"
+      />
+    </div>
+  </section>
+  <h2>Datos</h2>
+  <div *ngFor="let rowIndex of [0, 4, 8, 12, 16, 20, 24]" style="display: flex; width: 100%; gap: 10px">
+    <div *ngFor="let control of formFields.slice(rowIndex, rowIndex + 4)" style="flex: 1 1 calc(25% - 10px); box-sizing: border-box">
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>{{ control.label }}</mat-label>
+        <input matInput [formControlName]="control.name" type="text" placeholder="0.00" [readonly]="true" />
+      </mat-form-field>
+    </div>
+  </div>
+  <h1 *ngIf="formAccountingBalance.value.period === 'anual'">Datos anuales</h1>
+  <div *ngIf="formAccountingBalance.value.period === 'anual'" style="display: flex; flex-direction: row; gap: 10px">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label> Total de egresos </mat-label>
+      <input type="text" matInput formControlName="TotalExpenditure" [readOnly]="true" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label> Total de egresos por día </mat-label>
+      <input type="text" matInput formControlName="AverageExpenditurePerDay" [readOnly]="true" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label> Total de otros egresos </mat-label>
+      <input type="text" matInput formControlName="TotalOthers" [readOnly]="true" />
+    </mat-form-field>
+  </div>
+</form>

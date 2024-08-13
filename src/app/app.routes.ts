@@ -72,6 +72,29 @@ export const routes: Routes = [
         path: 'expenses',
         loadComponent: () => import('./sections/panel/expenses/expenses.component').then((m) => m.expensesComponent),
       },
+      {
+        path: 'reports',
+        loadComponent: () => import('./sections/panel/reports/reports.component').then((m) => m.reportsComponent),
+        children: [
+          {
+            path: 'accounting-balance',
+            loadComponent: () =>
+              import('./sections/panel/reports/moreReports/accountingBalance /accountingBalance.component').then((m) => m.accountingBalanceComponent),
+          },
+          {
+            path: 'expenditure-summary',
+            loadComponent: () =>
+              import('./sections/panel/reports/moreReports/expenditureSummary/expenditureSummary.component').then(
+                (m) => m.expenditureSummaryComponent
+              ),
+          },
+          {
+            path: 'income-summary',
+            loadComponent: () =>
+              import('./sections/panel/reports/moreReports/incomeSummary/incomeSummary.component').then((m) => m.incomeSummaryComponent),
+          },
+        ],
+      },
     ],
   },
   {

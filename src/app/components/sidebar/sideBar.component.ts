@@ -76,7 +76,11 @@ export class sideBarComponent {
     this.editSectionText.emit(text);
   }
 
-  isActiveRoute(route: string): boolean {
-    return this.router.url === route;
+  isActiveRoute(route: string | string[]): boolean {
+    if (Array.isArray(route)) {
+      return route.some((r) => this.router.url.includes(r));
+    } else {
+      return this.router.url.includes(route);
+    }
   }
 }

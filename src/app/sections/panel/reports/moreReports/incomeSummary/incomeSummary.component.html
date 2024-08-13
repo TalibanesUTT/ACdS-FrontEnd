@@ -1,0 +1,97 @@
+<h1>Reporte de ingresos</h1>
+<form [formGroup]="formAccountingBalance">
+  <section style="display: flex; flex-direction: row; width: 100%; justify-content: start; gap: 10px">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Rango de fechas</mat-label>
+      <mat-date-range-input [formGroup]="formAccountingBalance" [rangePicker]="picker">
+        <input matStartDate formControlName="startDate" placeholder="Fecha de inicio" (dateChange)="onDateChange()" />
+        <input matEndDate formControlName="endDate" placeholder="Fecha de fin" (dateChange)="onDateChange()" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </section>
+
+  <div class="mat-elevation-z8">
+    <div *ngIf="dataSource && dataSource.data.length > 0; else noDataTemplate">
+      <table mat-table [dataSource]="dataSource" border="">
+        <!-- File Number Column -->
+        <ng-container matColumnDef="FileNumber">
+          <th mat-header-cell *matHeaderCellDef>No. de expediente</th>
+          <td mat-cell *matCellDef="let element">{{ element.FileNumber }}</td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="Date">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let element">{{ element.Date }}</td>
+        </ng-container>
+
+        <!-- Vehicle Column -->
+        <ng-container matColumnDef="Vehicle">
+          <th mat-header-cell *matHeaderCellDef>Vehículo</th>
+          <td mat-cell *matCellDef="let element">{{ element.Vehicle }}</td>
+        </ng-container>
+
+        <!-- Departure Date Column -->
+        <ng-container matColumnDef="DepartureDate">
+          <th mat-header-cell *matHeaderCellDef>Fecha de Salida</th>
+          <td mat-cell *matCellDef="let element">{{ element.DepartureDate }}</td>
+        </ng-container>
+
+        <!-- Repair Days Column -->
+        <ng-container matColumnDef="RepairDays">
+          <th mat-header-cell *matHeaderCellDef>Días de Reparación</th>
+          <td mat-cell *matCellDef="let element">{{ element.RepairDays }}</td>
+        </ng-container>
+
+        <!-- Initial Mileage Column -->
+        <ng-container matColumnDef="InitialMileage">
+          <th mat-header-cell *matHeaderCellDef>Kilometraje Inicial</th>
+          <td mat-cell *matCellDef="let element">{{ element.InitialMileage }}</td>
+        </ng-container>
+
+        <!-- Final Mileage Column -->
+        <ng-container matColumnDef="FinalMileage">
+          <th mat-header-cell *matHeaderCellDef>Kilometraje Final</th>
+          <td mat-cell *matCellDef="let element">{{ element.FinalMileage }}</td>
+        </ng-container>
+
+        <!-- Services Column -->
+        <ng-container matColumnDef="Services">
+          <th mat-header-cell *matHeaderCellDef>Servicios</th>
+          <td mat-cell *matCellDef="let element">{{ element.Services }}</td>
+        </ng-container>
+
+        <!-- Budget Column -->
+        <ng-container matColumnDef="Budget">
+          <th mat-header-cell *matHeaderCellDef>Presupuesto</th>
+          <td mat-cell *matCellDef="let element">${{ element.Budget }}</td>
+        </ng-container>
+
+        <!-- Total Cost Column -->
+        <ng-container matColumnDef="TotalCost">
+          <th mat-header-cell *matHeaderCellDef>Costo Total</th>
+          <td mat-cell *matCellDef="let element">${{ element.TotalCost }}</td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- Template to display when there's no data -->
+    <ng-template #noDataTemplate>
+      <p>No hay datos disponibles selecciona un rango de fechas</p>
+    </ng-template>
+
+    <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[10, 20]" aria-label="Select page"></mat-paginator>
+  </div>
+  <!-- Mostrar los párrafos solo si tienen valor -->
+  <div style="display: flex; flex-direction: column; width: 100%; justify-content: start; text-align: end">
+    <h2 style="margin-top: 10px" *ngIf="showIncome && dataSource.data.length > 0"><strong>Ingreso total: </strong>${{ totalIncome }}</h2>
+    <h2 *ngIf="showIncomePerDay"><strong>Ingreso promedio por día: </strong>${{ AverageIncomePerDay }}</h2>
+    <h2 *ngIf="showIncomePerMonth"><strong>Ingreso promedio por mes: </strong>${{ AverageIncomePerMonth }}</h2>
+  </div>
+</form>

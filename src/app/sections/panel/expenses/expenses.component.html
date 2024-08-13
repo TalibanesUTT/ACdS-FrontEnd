@@ -18,7 +18,7 @@
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Mes</mat-label>
         <mat-select formControlName="month" (selectionChange)="onMonthChange()" [disabled]="formFilterMonthAndYear.get('year')?.invalid ?? true">
-          <mat-option *ngFor="let month of months" [value]="month.value">{{ month.viewValue }}</mat-option>
+          <mat-option *ngFor="let month of months" [value]="month.value" [disabled]="buttonDisabled">{{ month.viewValue }}</mat-option>
         </mat-select>
         <mat-error *ngIf="formFilterMonthAndYear.get('month')?.invalid"> Mes inválido. </mat-error>
       </mat-form-field>
@@ -27,7 +27,7 @@
       style="width: 100%; display: flex; flex-direction: row; gap: 10px; height: 40px; align-items: center; padding-top: 9px; justify-content: end"
     >
       <button class="buttonReset" (click)="editButtonDisabled()" *ngIf="buttonDisabled">Editar gastos</button>
-
+      <button class="buttonReset" (click)="editButtonDisabled()" [disabled]="buttonDisabled" *ngIf="!buttonDisabled">Cancelar</button>
       <button [ngClass]="buttonDisabled ? 'buttonDisabled' : 'buttonReset'" (click)="sendForm()" [disabled]="buttonDisabled" *ngIf="!buttonDisabled">
         Guardar cambios
       </button>

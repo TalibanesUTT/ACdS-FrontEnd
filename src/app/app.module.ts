@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { CustomDateFormatPipe } from './shared/customDateFormaPipe';
 //components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './sections/auth/login/login.component';
@@ -110,14 +111,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatTooltipModule,
     MatTreeModule,
   ],
-  exports: [
-    headerComponent,
-    sideBarComponent,
-    formEditUserComponent,
-    formEditPasswordUserComponent,
-    UsersTableComponent,
-  ],
-  declarations: [],
+  exports: [headerComponent, sideBarComponent, formEditUserComponent, formEditPasswordUserComponent, UsersTableComponent],
+  declarations: [CustomDateFormatPipe],
   bootstrap: [],
   providers: [provideHttpClient()],
 })

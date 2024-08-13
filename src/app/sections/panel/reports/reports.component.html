@@ -1,0 +1,12 @@
+<ul *ngIf="showList">
+  <li>
+    <a [routerLink]="'/home/reports/accounting-balance'" routerLinkActive="active-link" (click)="hideList()">Balance contable</a>
+  </li>
+  <li>
+    <a [routerLink]="'/home/reports/expenditure-summary'" routerLinkActive="active-link" (click)="hideList()">Reporte de egresos</a>
+  </li>
+  <li>
+    <a [routerLink]="'/home/reports/income-summary'" routerLinkActive="active-link" (click)="hideList()">Reporte de ingresos</a>
+  </li>
+</ul>
+<router-outlet></router-outlet>
