@@ -174,9 +174,6 @@ export class AppointmentComponent implements OnInit {
       width: '400px',
       data: { appointment },
     });
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.getProfile();
-    });
   }
 
   haveEnabledActions(appointment: Appointment): boolean {
@@ -209,7 +206,7 @@ export class AppointmentComponent implements OnInit {
 
     // Filtrar por fecha exacta
     if (filters.startDate) {
-      const selectedDate = new Date(filters.startDate);
+      const selectedDate = new Date(filters.startDate - 1); // Restar un día para que la fecha sea exacta
 
       filteredData = filteredData.filter((appointment) => {
         const appointmentDate = new Date(appointment.date);
