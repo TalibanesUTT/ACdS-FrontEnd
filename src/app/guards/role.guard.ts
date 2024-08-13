@@ -8,9 +8,10 @@ const roleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const userRoleService = inject(UserRoleService);
 
-  return userRoleService.role$.pipe(
+  return userRoleService.roleFromNetwork$.pipe(
     map(userRole => {
-      if (requiredRoles.includes(userRole)) {
+      console.log(userRole)
+      if (requiredRoles.includes(userRole) || userRole === RoleEnum.ROOT) {
         return true;
       } else {
         return router.createUrlTree(['/']);
