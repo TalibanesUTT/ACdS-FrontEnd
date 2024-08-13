@@ -1,77 +1,83 @@
 <section>
-  <div style="display: flex; justify-content: space-between; margin: 3em 0; flex-wrap: wrap">
-    <form style="display: flex">
-      <mat-form-field>
-        <input [formControl]="searchCtrl" matInput placeholder="Busqueda"/>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select [formControl]="selectedStatusCtrl" placeholder="Filtrar por...">
-          @for (option of status; track status) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <button
-        style="
-          background-color: #e45453;
-          display: inline-block;
-          border-radius: 0 25px 25px 0;
-          height: 56px"
-        type="submit">
-        <mat-icon style="color: white">search</mat-icon>
-      </button>
+  <div style="display: flex; justify-content: space-between; flex-wrap: wrap; height: 55px">
+    <form
+      [formGroup]="formFilter"
+      style="display: flex; flex-direction: row; height: 5%; width: 100%; margin-bottom: 20px; height: 40px; height: 40px"
+    >
+      <div style="display: flex; flex-direction: row; width: 50%; height: 40px">
+        <input formControlName="myControl" type="text" placeholder="Buscar cliente..." class="inputSimple" *ngIf="userData?.role != 'customer'" />
+        <!-- <select formControlName="filter" type="text" class="select" style="width: 50%">
+          <option value="all" [defaultSelected]="true">Filtrar por...</option>
+          <option value="customer">Cliente</option>
+        </select> -->
+      </div>
+
+      <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 80%; justify-content: end; height: 40px">
+        <!--Select de serivcio-->
+        <select formControlName="horarios" type="text" class="select" style="width: 20%">
+          <option value="all" [defaultSelected]="true">Horaios</option>
+          <option *ngFor="let h of horarios" [value]="h.value">{{ h.viewValue }}</option>
+        </select>
+        <select formControlName="status" type="text" class="select" style="width: 20%">
+          <option value="all" [defaultSelected]="true">Estatus</option>
+          <option *ngFor="let s of status" [value]="s.value">{{ s.viewValue }}</option>
+        </select>
+        <button class="buttonResetFilter" matTooltip="Reiniciar filtros" (click)="resetFilters()">
+          <mat-icon><span class="material-symbols-outlined"> filter_alt_off </span></mat-icon>
+        </button>
+        <button style="width: 200px" class="buttonAdd" mat-button color="primary" (click)="createAppointment()">
+          <mat-icon>add</mat-icon>
+          <span>Nueva cita</span>
+        </button>
+      </div>
     </form>
-    <button style="width: 200px" class="buttonAdd" mat-button color="primary" (click)="createAppointment()">
-      <mat-icon>add</mat-icon>
-      <span>Nueva cita</span>
-    </button>
   </div>
-  <table mat-table [dataSource]="filteredAppointments$" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" border="" style="margin-top: 10px">
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Fecha</th>
-      <td mat-cell *matCellDef="let appointment"> {{ appointment.date | date }}</td>
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.date | date : "MM-dd-yy" }}</td>
     </ng-container>
 
     <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef> Hora</th>
-      <td mat-cell *matCellDef="let appointment"> {{ appointment.time }}</td>
+      <th mat-header-cell *matHeaderCellDef>Hora</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.time }}</td>
     </ng-container>
 
     <ng-container matColumnDef="reason">
-      <th mat-header-cell *matHeaderCellDef> Razón</th>
-      <td mat-cell *matCellDef="let appointment"> {{ appointment.reason }}</td>
+      <th mat-header-cell *matHeaderCellDef>Razón</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.reason }}</td>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Estado</th>
-      <td mat-cell *matCellDef="let appointment"> {{ appointment.status }}</td>
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.status }}</td>
     </ng-container>
 
     <ng-container matColumnDef="customer">
-      <th mat-header-cell *matHeaderCellDef> Cliente</th>
-      <td mat-cell *matCellDef="let appointment"> {{ appointment.customer.name }}</td>
+      <th mat-header-cell *matHeaderCellDef>Cliente</th>
+      <td mat-cell *matCellDef="let appointment">{{ appointment.customer.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Acciones</th>
-      <td mat-cell *matCellDef="let appointment">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let appointment" [ngClass]="haveEnabledActions(appointment) ? 'styleTD' : ''">
         @if (haveEnabledActions(appointment)) {
-          <app-appointment-actions (onEdit)="editAppointment(appointment)"
-          (onDelete)="cancelAppointment(appointment)"
-                                   [appointment]="appointment"></app-appointment-actions>
+        <button (click)="editAppointment(appointment)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button (click)="cancelAppointment(appointment)">
+          <mat-icon>delete</mat-icon>
+        </button>
+
         } @else {
-          <div></div>
+        <div></div>
         }
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Select page of appointments">
-  </mat-paginator>
-
+  <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons aria-label="Select page of appointments"> </mat-paginator>
 </section>
