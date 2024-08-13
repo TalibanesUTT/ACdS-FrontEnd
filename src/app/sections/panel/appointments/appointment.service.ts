@@ -12,6 +12,7 @@ export interface Appointment {
   time: string;
   reason: string;
   userId?: number;
+  customer?: Customer;
   status: Status;
 }
 
@@ -151,5 +152,22 @@ export class AppointmentService {
         }),
         catchError(this.handleError.bind(this)),
       );
+  }
+
+  cancelAppointment(id: number): Observable<void> {
+    return this.http.put<ResponseGlobalTyped<Appointment>>(`${this.path}/cancel/${id}`, {})
+    .pipe(
+      map(response => response.data),
+      tap(canceledAppointment => {
+        const currentAppointments = this.state.getValue().appointments;
+        const updatedAppointments = currentAppointments.map(app => app.id === canceledAppointment.id ? canceledAppointment : app);
+        this.updateState({appointments: updatedAppointments, loading: false});
+        this.snackBar.open('Cita cancelada', 'Cerrar', this.snackBarContig);
+      }
+      ),
+      catchError(this.handleError.bind(this)),
+      map(() => {})
+    )
+    
   }
 }

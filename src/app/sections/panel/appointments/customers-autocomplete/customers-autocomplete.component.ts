@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AppointmentService, Customer} from "../appointment.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -27,6 +27,7 @@ import {MatInput} from "@angular/material/input";
 })
 export class CustomersAutocompleteComponent implements OnInit {
   @Output() customerSelected = new EventEmitter<Customer>();
+  @Input() initialValue: Customer | undefined;
 
   customerCtrl = new FormControl('');
   filteredCustomers$ = new Observable<Customer[]>();
@@ -43,6 +44,7 @@ export class CustomersAutocompleteComponent implements OnInit {
         )
       )
     );
+    this.customerSelected.emit(this.initialValue);
   }
 
 

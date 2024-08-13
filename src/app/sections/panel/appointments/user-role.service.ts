@@ -34,7 +34,7 @@ export enum ActionEnum {
 })
 export class UserRoleService {
   private permissions: { [role in RoleEnum]: ActionEnum[] } = {
-    [RoleEnum.CUSTOMER]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE],
+    [RoleEnum.CUSTOMER]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
     [RoleEnum.ROOT]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
     [RoleEnum.ADMIN]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
     [RoleEnum.MECHANIC]: [ActionEnum.READ, ActionEnum.CREATE, ActionEnum.UPDATE, ActionEnum.DELETE],
@@ -53,5 +53,9 @@ export class UserRoleService {
 
   hasPermission(action: ActionEnum): boolean {
     return this.permissions[this.userRole.getValue()].includes(action);
+  }
+  
+  getLastRole(): RoleEnum {
+    return this.userRole.getValue();
   }
 }

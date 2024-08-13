@@ -20,7 +20,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu"; // 
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
       </button>
-      <button mat-menu-item (click)="onDelete()" *ngIf="canDelete">
+      <button mat-menu-item (click)="triggerDelete()" *ngIf="canDelete">
         <mat-icon>delete</mat-icon>
         <span>Delete</span>
       </button>
@@ -31,6 +31,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu"; // 
 export class AppointmentActionsComponent {
   @Input() appointment!: Appointment;
   @Output() onEdit = new EventEmitter<void>();
+  @Output() onDelete = new EventEmitter<void>();
 
   constructor(private userRoleService: UserRoleService) {
   }
@@ -47,9 +48,7 @@ export class AppointmentActionsComponent {
     this.onEdit.emit();
   }
 
-
-  onDelete(): void {
-    console.log('Delete appointment', this.appointment);
-    // Implement delete logic
+  triggerDelete(): void {
+    this.onDelete.emit();
   }
 }

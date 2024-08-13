@@ -10,9 +10,9 @@ import {Appointment, AppointmentService} from './appointment.service';
 import {AsyncPipe, NgFor, NgIf} from "@angular/common";
 import {RoleEnum, UserRoleService} from "./user-role.service";
 import {CustomersAutocompleteComponent} from "./customers-autocomplete/customers-autocomplete.component";
-import {map} from "rxjs/operators";
+import {map, startWith} from "rxjs/operators";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-form',
@@ -53,7 +53,7 @@ import { Observable } from 'rxjs';
         </mat-form-field>
 
         @if (canUpdateCustomer | async) {
-          <app-customers-autocomplete
+          <app-customers-autocomplete [initialValue]="data.appointment?.customer"
             (customerSelected)="appointmentForm.get('userId')?.setValue($event.id)"></app-customers-autocomplete>
         }
 
@@ -87,7 +87,10 @@ export class AppointmentFormComponent implements OnInit {
   )
   dateFilter = (date: Date | null): boolean => {
     const day = (date || new Date()).getDay();
-    return day !== 0 && day !== 6; // Disable weekends
+    const nextTwoMonths = new Date();
+        nextTwoMonths.setMonth(nextTwoMonths.getMonth() + 2);
+    const isBeforeTwoMonths = date ? date < nextTwoMonths: false;
+    return day !== 0 && isBeforeTwoMonths; // Disable weekends
   };
   availableTimes: Observable<string[]>;
 
@@ -107,10 +110,12 @@ export class AppointmentFormComponent implements OnInit {
       reason: ['', Validators.required],
       userId: [null]
     });
-    
-    this.availableTimes = this.appointmentForm.get('date')?.valueChanges.pipe(
-      map(date => this.generateTimeSlots(date))
-    ) ?? new Observable<string[]>();
+    // Assuming this is inside your component class
+this.availableTimes = this.appointmentForm.get('date')?.valueChanges.pipe(
+  startWith(new Date()), // Start with the current date
+  map(date => date ? new Date(date) : new Date()), // Convert to Date object
+  map(date => this.generateTimeSlots(date))
+) ?? of([]);
   }
 
   ngOnInit(): void {
@@ -148,12 +153,12 @@ export class AppointmentFormComponent implements OnInit {
     this.dialogRef.close();
   }
   
-  private generateTimeSlots(date: Date | null): string[] {
+  private generateTimeSlots(date: Date): string[] {
     const now = new Date();
-    const isToday = date?.toDateString() === now.toDateString();
+    const finalHour = "19:30";
     now.setHours(now.getHours() + 1);
-    const initialHour = isToday ? now.toTimeString().slice(0, 5) : "09:00";
-    const finalHour = "19:00";
+    const isToday = date.toDateString() === now.toDateString();
+    const initialHour = isToday ? now.toTimeString().slice(0, 5) : "09:30";
     const formatTime = (hour: number, minute: number): string =>
       `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
