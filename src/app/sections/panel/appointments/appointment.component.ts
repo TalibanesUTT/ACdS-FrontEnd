@@ -53,23 +53,19 @@ export class AppointmentComponent implements OnInit {
       this.service.getUserAppointments();
     }),
     switchMap(() => combineLatest([
-      this.service.appointments$.pipe(tap(appointments => console.log('Appointments:', appointments))),
+      this.service.appointments$,
       this.selectedStatusCtrl.valueChanges.pipe(startWith(null), tap(status => console.log('Selected status:', status))),
       this.searchCtrl.valueChanges.pipe(startWith(''), tap(searchValue => console.log('Search value:', searchValue)))
     ]).pipe(
       map(([appointments, status, searchValue]) => {
-        console.log('Filtering appointments...');
         const filteredByStatus = status
           ? appointments.filter(appointment => appointment.status === status)
           : appointments;
-        console.log('Filtered by status:', filteredByStatus);
-        
         if (!searchValue) return filteredByStatus;
   
         const normalizedValue = searchValue.toLowerCase();
         const result = filteredByStatus.filter(appointment => 
           this._filterAppointmentByColumnValue(appointment, normalizedValue));
-        console.log('Final filtered result:', result);
         return result;
       }),
       catchError(error => {

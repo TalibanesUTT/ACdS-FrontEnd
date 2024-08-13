@@ -12,6 +12,7 @@ import {RoleEnum, UserRoleService} from "./user-role.service";
 import {CustomersAutocompleteComponent} from "./customers-autocomplete/customers-autocomplete.component";
 import {map} from "rxjs/operators";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-form',
@@ -45,7 +46,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
         <mat-form-field>
           <mat-label>Hora</mat-label>
           <mat-select formControlName="time" [placeholder]="data.appointment?.time ??  ''">
-            <mat-option *ngFor="let time of availableTimes" [value]="time">
+            <mat-option *ngFor="let time of availableTimes | async" [value]="time">
               {{ time }}
             </mat-option>
           </mat-select>
@@ -88,7 +89,7 @@ export class AppointmentFormComponent implements OnInit {
     const day = (date || new Date()).getDay();
     return day !== 0 && day !== 6; // Disable weekends
   };
-  availableTimes: string[];
+  availableTimes: Observable<string[]>;
 
   constructor(
     private fb: FormBuilder,
@@ -100,21 +101,16 @@ export class AppointmentFormComponent implements OnInit {
   ) {
     this.isEditMode = !!data.appointment;
     this.minDate = new Date();
-    this.availableTimes = this.generateTimeSlots();
-    if (!this.availableTimes.length) {
-      this.snackBar.open('No hay horarios disponibles para citas', 'Cerrar',{
-        duration: 3000,
-        verticalPosition: 'top',
-        horizontalPosition: 'right'
-      });
-    }
-
     this.appointmentForm = this.fb.group({
       date: [null, Validators.required],
       time: [null, Validators.required],
       reason: ['', Validators.required],
       userId: [null]
     });
+    
+    this.availableTimes = this.appointmentForm.get('date')?.valueChanges.pipe(
+      map(date => this.generateTimeSlots(date))
+    ) ?? new Observable<string[]>();
   }
 
   ngOnInit(): void {
@@ -151,11 +147,12 @@ export class AppointmentFormComponent implements OnInit {
   onCancel(): void {
     this.dialogRef.close();
   }
-
-  private generateTimeSlots(): string[] {
+  
+  private generateTimeSlots(date: Date | null): string[] {
     const now = new Date();
+    const isToday = date?.toDateString() === now.toDateString();
     now.setHours(now.getHours() + 1);
-    const initialHour = now.toTimeString().slice(0, 5);
+    const initialHour = isToday ? now.toTimeString().slice(0, 5) : "09:00";
     const finalHour = "19:00";
     const formatTime = (hour: number, minute: number): string =>
       `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -167,3 +164,4 @@ export class AppointmentFormComponent implements OnInit {
     }).filter(time => time >= initialHour && time <= finalHour);
   }
 }
+

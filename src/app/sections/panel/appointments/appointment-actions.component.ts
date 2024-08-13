@@ -16,10 +16,6 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu"; // 
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onView()">
-        <mat-icon>visibility</mat-icon>
-        <span>Ver detalle</span>
-      </button>
       <button mat-menu-item (click)="triggerEdit()" *ngIf="canEdit">
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
@@ -45,11 +41,6 @@ export class AppointmentActionsComponent {
 
   get canDelete(): boolean {
     return this.userRoleService.hasPermission(ActionEnum.DELETE);
-  }
-
-  onView(): void {
-    console.log('View appointment', this.appointment);
-    // Implement view logic
   }
 
   triggerEdit(): void {
