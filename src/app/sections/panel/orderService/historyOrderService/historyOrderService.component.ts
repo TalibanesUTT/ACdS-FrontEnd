@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgIf, NgFor } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -53,6 +53,7 @@ import { ProfileService } from '../../../../services/profile.service';
     MatDateRangeInput,
     JsonPipe,
     MatTabsModule,
+    CommonModule
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
   templateUrl: './historyOrderService.component.html',
@@ -73,7 +74,10 @@ export class historyOrderServiceComponent {
   UserData: any = {};
   token = localStorage.getItem('token');
 
-  constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
+  constructor(
+    private orderDetailService: ServiceOrdersService, 
+    private profileService: ProfileService
+  ) {
     this.getProfile();
   }
   ngAfterViewInit() {
@@ -84,6 +88,7 @@ export class historyOrderServiceComponent {
       this.dataSource.data = this.itemOrderService.history;
       this.dataSource.paginator = this.paginator;
       this.evaluateButtonVisibility(this.itemOrderService.actualStatus);
+      this.getProgressStyles(this.itemOrderService.actualStatus);
     }
   }
   getProfile() {
@@ -147,6 +152,67 @@ export class historyOrderServiceComponent {
     this.showForm.emit('table');
   }
 
+  getProgressStyles(status: string) {
+    let progress = 0;
+    let color = '#e0e0e0'; // Default color
+  
+    switch (status) {
+      case 'Recibido':
+        progress = 10;
+        color = '#ADD8E6';
+        break;
+      case 'En revisión':
+        progress = 20;
+        color = '#FFFFE0';
+        break;
+      case 'Emitido':
+        progress = 30;
+        color = '#90EE90';
+        break;
+      case 'Aprobado':
+        progress = 40;
+        color = '#00FF00';
+        break;
+      case 'En proceso':
+        progress = 50;
+        color = '#FFA500';
+        break;
+      case 'En chequeo':
+        progress = 60;
+        color = '#D3D3D3';
+        break;
+      case 'Completado':
+        progress = 70;
+        color = '#0000FF';
+        break;
+      case 'Listo para recoger':
+        progress = 80;
+        color = '#006400';
+        break;
+      case 'Entregado':
+        progress = 90;
+        color = '#50C878';
+        break;
+      case 'Finalizado':
+        progress = 100;
+        color = '#800080';
+        break;
+      case 'En espera':
+        progress = 100;
+        color = '#F4A460';
+        break;
+      case 'Cancelado':
+        progress = 100;
+        color = '#FF0000';
+        break;
+    }
+  
+    return {
+      width: `${progress}%`,
+      backgroundColor: color,
+    };
+  }
+
   openDialog(type: string) {
     let text = '';
     let widthActual = '700px';
@@ -187,6 +253,7 @@ export class historyOrderServiceComponent {
         this.dataSource.data = result.data.history;
         this.resetValueShowButton();
         this.evaluateButtonVisibility(result.data.actualStatus);
+        this.itemOrderService.actualStatus = result.data.actualStatus;
       }
     });
   }

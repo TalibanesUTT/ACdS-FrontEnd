@@ -8,6 +8,16 @@
     <button *ngIf="showRollbackButton" class="buttonRollback" (click)="openDialog('rollback')">Revertir estatus</button>
     <button *ngIf="showContinueButton" class="buttonContinue" (click)="openDialog('continue')">Continuar</button>
   </section>
+
+  <div class="custom-progress-container">
+    <div class="custom-progress-bar" 
+    [ngStyle]="getProgressStyles(itemOrderService.actualStatus)"
+    ></div>
+  </div>
+  <div class="status-text">
+    {{ itemOrderService.actualStatus }}
+  </div>
+
   <div class="mat-elevation-z8" style="margin-top: 15px">
     <table mat-table [dataSource]="dataSource" border="">
       <!-- File Number Column -->

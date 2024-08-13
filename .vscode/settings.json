@@ -1,4 +1,7 @@
 {
-  "conventionalCommits.scopes": ["users"],
+  "conventionalCommits.scopes": [
+    "users",
+    "service-orders"
+  ],
   "prettier.printWidth": 80
 }
