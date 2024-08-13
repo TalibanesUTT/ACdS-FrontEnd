@@ -11,6 +11,7 @@ import {AsyncPipe, NgFor, NgIf} from "@angular/common";
 import {RoleEnum, UserRoleService} from "./user-role.service";
 import {CustomersAutocompleteComponent} from "./customers-autocomplete/customers-autocomplete.component";
 import {map} from "rxjs/operators";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-appointment-form',
@@ -92,6 +93,7 @@ export class AppointmentFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
+    private snackBar: MatSnackBar,
     private roleService: UserRoleService,
     public dialogRef: MatDialogRef<AppointmentFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { appointment?: Appointment }
@@ -99,6 +101,13 @@ export class AppointmentFormComponent implements OnInit {
     this.isEditMode = !!data.appointment;
     this.minDate = new Date();
     this.availableTimes = this.generateTimeSlots();
+    if (!this.availableTimes.length) {
+      this.snackBar.open('No hay horarios disponibles para citas', 'Cerrar',{
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      });
+    }
 
     this.appointmentForm = this.fb.group({
       date: [null, Validators.required],

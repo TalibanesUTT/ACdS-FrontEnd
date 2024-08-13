@@ -4,13 +4,15 @@ import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxj
 import {ResponseGlobalTyped} from "../../../interfaces/responseGlobal";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
+export type Status = 'Pendiente' | 'Completada' | 'Cancelada';
+
 export interface Appointment {
   id: number;
   date: string;
   time: string;
   reason: string;
   userId?: number;
-  status: string;
+  status: Status;
 }
 
 export interface Customer {
