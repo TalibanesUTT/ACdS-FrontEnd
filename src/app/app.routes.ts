@@ -65,6 +65,8 @@ export const routes: Routes = [
       {
         path: 'perfil',
         loadComponent: () => import('./sections/panel/profile/profile.component').then((m) => m.profileComponent),
+        canActivate: [roleGuard],
+        data: { roles: [RoleEnum.ADMIN, RoleEnum.CUSTOMER] },
       },
       {
         path: 'vehicles',
@@ -97,7 +99,7 @@ export const routes: Routes = [
           {
             path: 'accounting-balance',
             loadComponent: () =>
-              import('./sections/panel/reports/moreReports/accountingBalance /accountingBalance.component').then((m) => m.accountingBalanceComponent),
+              import('./sections/panel/reports/moreReports/accountingBalance/accountingBalance.component').then((m) => m.accountingBalanceComponent),
             canActivate: [roleGuard],
             data: { roles: [RoleEnum.ADMIN] },
           },
