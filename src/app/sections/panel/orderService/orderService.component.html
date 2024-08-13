@@ -28,7 +28,7 @@
       <button class="buttonResetFilter" matTooltip="Reiniciar filtros" (click)="resetFilters()">
         <mat-icon><span class="material-symbols-outlined"> filter_alt_off </span></mat-icon>
       </button>
-      <button matTooltip="Agregar nueva orden de servicio" (click)="editMenuOption('form')" class="buttonAdd">
+      <button matTooltip="Agregar nueva orden de servicio" (click)="editMenuOption('form')" class="buttonAdd" *ngIf="UserData?.role != 'customer'">
         <mat-icon>add</mat-icon>
         Nueva orden
       </button>
