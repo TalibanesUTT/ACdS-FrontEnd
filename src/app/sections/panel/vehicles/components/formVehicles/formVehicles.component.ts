@@ -174,7 +174,6 @@ export class formVehiclesComponent {
           this.formVehicles.patchValue({ model: model });
           this.formVehicles.value.model = model;
         } else {
-          console.error(`Modelo ${this.dataVehicle.model} no encontrado en la lista de modelos`);
         }
       }
     });

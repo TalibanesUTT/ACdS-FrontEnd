@@ -194,13 +194,6 @@ export class AppointmentComponent implements OnInit {
       );
     }
 
-    // Filtrar por `filter`
-    if (filters.filter && filters.filter !== 'all') {
-      filteredData = filteredData.filter(
-        (appointment) => appointment.customer && appointment.customer.name.toLowerCase().includes(filters.filter.toLowerCase())
-      );
-    }
-
     // Filtrar por `horarios`
     if (filters.horarios && filters.horarios !== 'all') {
       filteredData = filteredData.filter((appointment) => appointment.time === filters.horarios);
@@ -211,14 +204,19 @@ export class AppointmentComponent implements OnInit {
       filteredData = filteredData.filter((appointment) => appointment.status === filters.status);
     }
 
-    // Filtrar por rango de fechas
-    if (filters.dateRange.start && filters.dateRange.end) {
-      const startDate = new Date(filters.dateRange.start);
-      const endDate = new Date(filters.dateRange.end);
+    // Filtrar por fecha exacta
+    if (filters.startDate) {
+      const selectedDate = new Date(filters.startDate);
 
       filteredData = filteredData.filter((appointment) => {
         const appointmentDate = new Date(appointment.date);
-        return appointmentDate >= startDate && appointmentDate <= endDate;
+
+        // Comparar sólo el día, mes y año
+        return (
+          appointmentDate.getDate() === selectedDate.getDate() &&
+          appointmentDate.getMonth() === selectedDate.getMonth() &&
+          appointmentDate.getFullYear() === selectedDate.getFullYear()
+        );
       });
     }
 
@@ -235,7 +233,6 @@ export class AppointmentComponent implements OnInit {
   }
 
   cancelAppointment(appointment: Appointment): void {
-    console.log('Canceling appointment:', appointment);
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'la cita será cancelada y esta acción no se puede deshacer',
@@ -260,10 +257,8 @@ export class AppointmentComponent implements OnInit {
       filter: [''],
       horarios: ['all'],
       status: ['all'],
-      dateRange: this.fb.group({
-        start: [null],
-        end: [null],
-      }),
+      startDate: [null],
+      endDate: [null],
     });
   }
 
@@ -273,10 +268,8 @@ export class AppointmentComponent implements OnInit {
       filter: 'all',
       horarios: 'all',
       status: 'all',
-      dateRange: {
-        start: null,
-        end: null,
-      },
+      startDate: null, // Cambia a null para asegurarte de que se restablezca correctamente
+      endDate: null, // Cambia a null para asegurarte de que se restablezca correctamente
     });
     this.applyFilters(this.formFilter.value); // Aplicar filtros después de resetear
   }
