@@ -41,6 +41,9 @@ export class UserRoleService {
   };
   private userRole = new BehaviorSubject<RoleEnum>(RoleEnum.CUSTOMER);
   readonly role$ = this.userRole.asObservable()
+  readonly roleFromNetwork$ = this.http.get<User>('/profile').pipe(
+    map(response => response.role),
+  );
 
   constructor(private http: HttpClient) {
     this.http.get<User>('/profile').pipe(

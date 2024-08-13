@@ -5,10 +5,10 @@
         <input [formControl]="searchCtrl" matInput placeholder="Busqueda"/>
       </mat-form-field>
       <mat-form-field>
-        <mat-select [formControl]="selectedStatusCtrl" placeholder="Filtar por...">
-        @for (option of status; track status) {
-          <mat-option [value]="option">{{ option }}</mat-option>
-        }
+        <mat-select [formControl]="selectedStatusCtrl" placeholder="Filtrar por...">
+          @for (option of status; track status) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <button
