@@ -78,6 +78,8 @@ export class detailOrderServiceComponent {
   disableButtonForm = true;
   textCondition = '';
   UserData: any;
+  showButton = false;
+  readonly = true;
   token = localStorage.getItem('token');
 
   constructor(private fb: FormBuilder, private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
@@ -141,12 +143,15 @@ export class detailOrderServiceComponent {
     const formValue = { ...this.formDetailOrderService.value };
     formValue.finalMileage = Number(formValue.finalMileage); // Asegurarse de que finalMileage sea un número
     if (formValue.departureDate === '') delete formValue.departureDate; // Si departureDate es null, eliminarlo
+    if (formValue.totalCost === '') formValue.totalCost = 0; // Si totalCost es null, asignarle 0
+    if (formValue.finalMileage === '') formValue.finalMileage = 0; // Si finalMileage es null, asignarle 0
     const ID = this.dataSource!.id ?? 0;
     delete formValue.id;
     delete formValue.repairDays;
 
     this.orderDetailService.postServiceOrderDetail(formValue, ID).subscribe(
       (res) => {
+        this.showButton = false;
         SweetAlert.success('Succes', res.message);
         this.textCondition = 'Actualizar detalle';
         this.disableButtonForm = true;
@@ -166,6 +171,12 @@ export class detailOrderServiceComponent {
     this.showForm.emit('table');
   }
   changeButton() {
+    this.showButton = !this.showButton;
+    if (!this.showButton) {
+      this.readonly = true;
+    } else {
+      this.readonly = false;
+    }
     this.disableButtonForm = false;
   }
 }

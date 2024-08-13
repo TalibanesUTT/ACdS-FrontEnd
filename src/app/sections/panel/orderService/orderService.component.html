@@ -4,19 +4,19 @@
       <input formControlName="myControl" type="text" placeholder="Búsqueda..." class="inputSimple" />
       <select formControlName="filter" type="text" class="select" style="width: 50%">
         <option value="all" [defaultSelected]="true">Filtrar por...</option>
-        <option value="fileNumber">No. de expediente</option>
+        <option value="fileNumber" *ngIf="UserData?.role != 'customer'">No. de expediente</option>
         <option value="vehicle">Vehículo</option>
-        <option value="client">Cliente</option>
+        <option value="client" *ngIf="UserData?.role != 'customer'">Cliente</option>
       </select>
     </div>
 
     <div style="display: flex; flex-direction: row; gap: 20px; margin-left: 20px; width: 70%">
       <!--Select de serivcio-->
-      <select formControlName="services" type="text" class="select" style="width: 50%" *ngIf="UserData?.role != 'customer'">
+      <select formControlName="services" type="text" class="select" style="width: 50%">
         <option value="all" [defaultSelected]="true">Servicios</option>
         <option *ngFor="let service of servicesData" [value]="service.id">{{ service.name }}</option>
       </select>
-      <div style="display: flex; flex-direction: row; width: 100%">
+      <div style="display: flex; flex-direction: row; width: 100%" *ngIf="UserData?.role != 'customer'">
         <input formControlName="totalCost" type="number" placeholder="Flitrar costo..." class="inputSimple" />
         <!--Select de filtro de costos-->
         <button class="buttonFilterCost" (click)="toggleFilterCost()">
@@ -34,17 +34,23 @@
       </button>
     </div>
   </form>
-
-  <!-- Input de rango de fechas -->
-  <mat-form-field appearance="fill">
-    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
-      <input matStartDate formControlName="start" placeholder="Fecha de inicio" />
-      <input matEndDate formControlName="end" placeholder="Fecha de fin" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>
-
+  <form [formGroup]="formFilter" style="display: flex; flex-direction: row; height: 5%; margin-bottom: 40px; height: 40px">
+    <div style="display: flex; flex-direction: row; gap: 20px; width: 70%">
+      <select formControlName="serviceOrdersStatuses" type="text" class="select" style="width: 30%; height: 55px">
+        <option value="all" [defaultSelected]="true">Estatus</option>
+        <option *ngFor="let service of serviceOrdersStatuses" [value]="service.key">{{ service.value }}</option>
+      </select>
+      <!-- Input de rango de fechas -->
+      <mat-form-field appearance="outline">
+        <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Fecha de inicio" />
+          <input matEndDate formControlName="end" placeholder="Fecha de fin" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </form>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" border="">
       <!-- File Number Column -->
@@ -56,7 +62,7 @@
       <!-- Create Date Column -->
       <ng-container matColumnDef="createDate">
         <th mat-header-cell *matHeaderCellDef>Fecha de entrada</th>
-        <td mat-cell *matCellDef="let element">{{ element.createDate ? (element.createDate | date : "yyyy-MM-dd") : "-" }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.createDate ? (element.createDate | date : "dd-MM-yyyy") : "-" }}</td>
       </ng-container>
 
       <!-- Actual Status Column -->
