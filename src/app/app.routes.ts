@@ -1,4 +1,7 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
+import roleGuard from "./guards/role.guard";
+import {RoleEnum} from "./sections/panel/appointments/user-role.service";
+import jwtGuard from "./guards/jwt.guard";
 
 export const routes: Routes = [
   {
@@ -35,6 +38,7 @@ export const routes: Routes = [
     //Application
     path: 'home',
     loadComponent: () => import('./sections/panel/home/home.component').then((m) => m.HomeComponent),
+    canActivate: [jwtGuard],
     children: [
       {
         path: 'dashboard',
@@ -43,14 +47,21 @@ export const routes: Routes = [
       {
         path: 'users',
         loadComponent: () => import('./sections/panel/users/users.component').then((m) => m.usersComponent),
+        canActivate: [roleGuard],
+        data: {roles: [RoleEnum.ADMIN]},
       },
       {
         path: 'carBrand',
         loadComponent: () => import('./sections/panel/carBrand/carBrand.component').then((m) => m.carBrandComponent),
+        canActivate: [roleGuard],
+        data: {roles: [RoleEnum.ADMIN, RoleEnum.MECHANIC]},
       },
       {
         path: 'customers',
         loadComponent: () => import('./sections/panel/customers/customers.component').then((m) => m.customersComponent),
+        canActivate: [roleGuard],
+        data: {roles: [RoleEnum.ADMIN, RoleEnum.MECHANIC]},
+
       },
       {
         path: 'perfil',
@@ -59,6 +70,8 @@ export const routes: Routes = [
       {
         path: 'vehicles',
         loadComponent: () => import('./sections/panel/vehicles/vehicles.component').then((m) => m.vehiclesComponent),
+        canActivate: [roleGuard],
+        data: {roles: [RoleEnum.ADMIN, RoleEnum.MECHANIC]},
       },
       {
         path: 'appointments',
