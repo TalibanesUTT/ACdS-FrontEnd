@@ -115,11 +115,23 @@ export class AppointmentComponent implements OnInit {
     })
   }
 
+  haveEnabledActions(appointment: Appointment): boolean {
+    const isCustomer = this.roleService.getLastRole() === RoleEnum.CUSTOMER;
+    if (isCustomer) {
+      return appointment.status === 'Pendiente';
+    }
+    return true;
+  }
+
   createAppointment(): void {
     this.openAppointmentDialog();
   }
 
   editAppointment(appointment: Appointment): void {
     this.openAppointmentDialog(appointment);
+  }
+  cancelAppointment(appointment: Appointment): void {
+    console.log('Canceling appointment:', appointment);
+    this.service.cancelAppointment(appointment.id).subscribe();
   }
 }

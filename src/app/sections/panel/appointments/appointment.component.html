@@ -55,8 +55,13 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Acciones</th>
       <td mat-cell *matCellDef="let appointment">
-        <app-appointment-actions (onEdit)="editAppointment(appointment)"
-                                 [appointment]="appointment"></app-appointment-actions>
+        @if (haveEnabledActions(appointment)) {
+          <app-appointment-actions (onEdit)="editAppointment(appointment)"
+          (onDelete)="cancelAppointment(appointment)"
+                                   [appointment]="appointment"></app-appointment-actions>
+        } @else {
+          <div></div>
+        }
       </td>
     </ng-container>
 

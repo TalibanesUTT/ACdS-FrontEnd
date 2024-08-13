@@ -54,4 +54,8 @@ export class UserRoleService {
   hasPermission(action: ActionEnum): boolean {
     return this.permissions[this.userRole.getValue()].includes(action);
   }
+  
+  getLastRole(): RoleEnum {
+    return this.userRole.getValue();
+  }
 }
