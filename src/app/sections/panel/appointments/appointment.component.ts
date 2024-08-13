@@ -174,6 +174,9 @@ export class AppointmentComponent implements OnInit {
       width: '400px',
       data: { appointment },
     });
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.getProfile();
+    });
   }
 
   haveEnabledActions(appointment: Appointment): boolean {

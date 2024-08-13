@@ -120,7 +120,7 @@ this.availableTimes = this.appointmentForm.get('date')?.valueChanges.pipe(
 
   ngOnInit(): void {
     if (this.isEditMode) {
-      this.appointmentForm.patchValue(this.data.appointment!);
+      this.appointmentForm.patchValue({... this.data.appointment!,date: new Date(this.data.appointment!.date + 'T00:00:00')});
     }
   }
 

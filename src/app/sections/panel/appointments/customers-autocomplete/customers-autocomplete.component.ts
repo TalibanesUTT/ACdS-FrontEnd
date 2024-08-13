@@ -29,7 +29,7 @@ export class CustomersAutocompleteComponent implements OnInit {
   @Output() customerSelected = new EventEmitter<Customer>();
   @Input() initialValue: Customer | undefined;
 
-  customerCtrl = new FormControl('');
+  customerCtrl = new FormControl('')
   filteredCustomers$ = new Observable<Customer[]>();
 
   constructor(private appointmentsService: AppointmentService) {
@@ -44,7 +44,10 @@ export class CustomersAutocompleteComponent implements OnInit {
         )
       )
     );
-    this.customerSelected.emit(this.initialValue);
+  }
+  
+  get placeholder(): string {
+    return this.initialValue ? this.displayFn(this.initialValue) : 'Cliente';
   }
 
 
