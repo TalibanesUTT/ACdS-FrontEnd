@@ -13,6 +13,7 @@ import {CustomersAutocompleteComponent} from "./customers-autocomplete/customers
 import {map, startWith} from "rxjs/operators";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-appointment-form',
@@ -23,6 +24,7 @@ import { Observable, of } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    MatIcon,
     MatSelectModule,
     MatButtonModule,
     NgIf,
@@ -31,7 +33,12 @@ import { Observable, of } from 'rxjs';
     AsyncPipe
   ],
   template: `
-    <h2 mat-dialog-title>{{ isEditMode ? 'Editar' : 'Crear' }} Cita</h2>
+    <div style="display: flex; justify-content: space-between; padding: 1em; align-items: center;">
+    <h2 mat-dialog-title>{{ isEditMode ? 'Editar' : 'Crear' }} cita</h2>
+    <button (click)="onCancel()" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+</button>
+</div>
     <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
       <mat-dialog-content>
         <mat-form-field>
@@ -64,8 +71,14 @@ import { Observable, of } from 'rxjs';
       </mat-dialog-content>
 
       <mat-dialog-actions align="center">
-        <button mat-button (click)="onCancel()">Cancelar</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="appointmentForm.invalid">
+        <button style="  color: white;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border-radius: 5%;
+  background-color: #bc0505;
+  box-shadow: 0px 0px 5px 0px #000000;
+  color: white;" mat-raised-button color="primary" type="submit" [disabled]="appointmentForm.invalid">
           {{ isEditMode ? 'Actualizar' : 'Crear' }}
         </button>
       </mat-dialog-actions>
@@ -90,7 +103,10 @@ export class AppointmentFormComponent implements OnInit {
     const nextTwoMonths = new Date();
         nextTwoMonths.setMonth(nextTwoMonths.getMonth() + 2);
     const isBeforeTwoMonths = date ? date < nextTwoMonths: false;
-    return day !== 0 && isBeforeTwoMonths; // Disable weekends
+    const now = new Date();
+    const isToday = date ? date.toDateString() === now.toDateString() : false;
+    const isBetweenHours = isToday ? date ? date.getHours() >= 9 && date.getHours() <= 19 : false : true;
+    return day !== 0 && isBeforeTwoMonths && isBetweenHours; // Disable weekends
   };
   availableTimes: Observable<string[]>;
 

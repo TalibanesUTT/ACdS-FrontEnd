@@ -3,6 +3,7 @@ import {inject, Injectable} from "@angular/core";
 import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxjs";
 import {ResponseGlobalTyped} from "../../../interfaces/responseGlobal";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
+import { SweetAlert } from "../../../shared/SweetAlert";
 
 export type Status = 'Pendiente' | 'Completada' | 'Cancelada';
 
@@ -51,7 +52,6 @@ export class AppointmentService {
     loading: false,
     error: null,
   });
-
   readonly state$ = this.state.asObservable();
   readonly appointments$ = this.state$.pipe(map((state) => state.appointments));
 
@@ -72,7 +72,7 @@ export class AppointmentService {
     } else {
       errorMessage = error.error?.error?.message || `Codigo de error: ${error.status}\nMensaje: ${error.message}`;
     }
-    this.snackBar.open(errorMessage, 'Cerrar', this.snackBarContig);
+    SweetAlert.error("",errorMessage);
     return throwError(() => new Error(errorMessage));
 
   }
@@ -118,7 +118,6 @@ export class AppointmentService {
     return `${year}-${month}-${day}`;
   }
 
-
   createAppointment(appointment: Omit<Appointment, 'id'>): Observable<Appointment> {
     const formattedAppointment = {
       ...appointment,
@@ -130,7 +129,7 @@ export class AppointmentService {
         tap(newAppointment => {
           const currentAppointments = this.state.getValue().appointments;
           this.updateState({appointments: [...currentAppointments, newAppointment], loading: false});
-          this.snackBar.open('Cita creada', 'Cerrar', this.snackBarContig);
+          SweetAlert.success('Cita creada', 'La cita ha sido creada correctamente');
         }),
         catchError(this.handleError.bind(this)),
       )
@@ -148,7 +147,7 @@ export class AppointmentService {
           const currentAppointments = this.state.getValue().appointments;
           const updatedAppointments = currentAppointments.map(app => app.id === updatedAppointment.id ? updatedAppointment : app);
           this.updateState({appointments: updatedAppointments, loading: false});
-          this.snackBar.open('Cita actualizada', 'Cerrar', this.snackBarContig);
+          SweetAlert.success('Cita actualizada', 'La cita ha sido actualizada correctamente');
         }),
         catchError(this.handleError.bind(this)),
       );
@@ -162,7 +161,7 @@ export class AppointmentService {
         const currentAppointments = this.state.getValue().appointments;
         const updatedAppointments = currentAppointments.map(app => app.id === canceledAppointment.id ? canceledAppointment : app);
         this.updateState({appointments: updatedAppointments, loading: false});
-        this.snackBar.open('Cita cancelada', 'Cerrar', this.snackBarContig);
+        SweetAlert.success('Cita cancelada', 'La cita ha sido cancelada correctamente');
       }
       ),
       catchError(this.handleError.bind(this)),

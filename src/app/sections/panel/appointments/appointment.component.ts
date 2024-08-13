@@ -153,7 +153,8 @@ export class AppointmentComponent implements OnInit {
       }
     });
   }
-
+    
+  
   getAllApooointments(): void {
     this.appointmentAbelaService.getAllAppointments().subscribe((appointments) => {
       this.originalData = appointments.data;
@@ -260,6 +261,10 @@ export class AppointmentComponent implements OnInit {
       startDate: [null],
       endDate: [null],
     });
+  }
+
+  isPending(status: Status): boolean {
+    return status === 'Pendiente';
   }
 
   resetFilters(): void {
