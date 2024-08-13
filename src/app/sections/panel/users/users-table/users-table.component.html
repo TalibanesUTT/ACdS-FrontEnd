@@ -97,7 +97,12 @@
         >
           <mat-icon>edit</mat-icon>
         </button>
-        <button matTooltip="Restablecer contraseña" style="width: 40px; height: 40px" (click)="recoverPasswordModal(element)">
+        <button
+          matTooltip="Restablecer contraseña"
+          style="width: 40px; height: 40px"
+          (click)="recoverPasswordModal(element)"
+          [disabled]="user.email === element.email"
+        >
           <mat-icon>key</mat-icon>
         </button>
       </td>

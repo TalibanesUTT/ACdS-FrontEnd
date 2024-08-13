@@ -21,6 +21,7 @@ import { MatDateRangeInput } from '@angular/material/datepicker';
 import { RouterOutlet } from '@angular/router';
 import { ReportService } from '../../../../../services/reports.service';
 import moment, { Moment } from 'moment';
+import { CommonModule } from '@angular/common';
 
 // export const MY_FORMATS = {
 //   parse: {
@@ -69,6 +70,7 @@ import moment, { Moment } from 'moment';
     MatDateRangeInput,
     RouterOutlet,
     RouterLink,
+    CommonModule,
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol },
@@ -84,11 +86,11 @@ export class accountingBalanceComponent {
 
   formFields = [
     { name: 'TotalIncomes', label: 'Ingresos totales' },
-    { name: 'AverageIncomePerDay', label: 'Ingreso promedio por día' },
-    { name: 'AverageExpenditurePerMonth', label: 'Gasto promedio por mes' },
-    { name: 'TotalExpenditure', label: 'Egresos totales' },
-    { name: 'AverageExpenditurePerDay', label: 'Gasto promedio por día' },
+    { name: 'AverageIncomePerDay', label: 'Ingresos promedio por día' },
     { name: 'AverageIncomePerMonth', label: 'Ingreso promedio por mes' },
+    { name: 'TotalExpenditure', label: 'Egresos totales' },
+    { name: 'AverageExpenditurePerDay', label: 'Egresos promedio por día' },
+    { name: 'AverageExpenditurePerMonth', label: 'Egresos promedio por mes' },
     { name: 'Profit', label: 'Utilidad' },
   ];
 
@@ -122,16 +124,25 @@ export class accountingBalanceComponent {
     this.isAnnualSelected = period === 'anual';
 
     if (this.isMonthlySelected) {
+      this.formAccountingBalance.get('AverageIncomePerMonth')?.disable();
+      this.formAccountingBalance.get('AverageIncomePerMonth')?.setValue('');
+      this.formAccountingBalance.get('AverageExpenditurePerMonth')?.disable();
+      this.formAccountingBalance.get('AverageExpenditurePerMonth')?.setValue('');
       this.formAccountingBalance.get('both')?.enable();
       this.formAccountingBalance.get('yearOnly')?.disable();
     } else if (this.isAnnualSelected) {
+      this.formAccountingBalance.get('AverageIncomePerMonth')?.enable();
+      this.formAccountingBalance.get('AverageExpenditurePerMonth')?.enable();
       this.formAccountingBalance.get('both')?.disable();
       this.formAccountingBalance.get('yearOnly')?.enable();
     } else {
+      this.formAccountingBalance.get('AverageIncomePerMonth')?.enable();
+      this.formAccountingBalance.get('AverageExpenditurePerMonth')?.enable();
       this.formAccountingBalance.get('both')?.disable();
       this.formAccountingBalance.get('yearOnly')?.disable();
     }
   }
+
   onPeriodChange(event: any) {
     console.log(event);
 
@@ -172,6 +183,11 @@ export class accountingBalanceComponent {
   aplicateService($event: any) {
     console.log(this.formAccountingBalance.value);
     if (this.formAccountingBalance.value.period === 'anual') {
+      const input = $event.target as HTMLInputElement;
+      if (input.value.length > 4) {
+        input.value = input.value.slice(0, 4); // Limita el valor a los primeros 4 dígitos
+        this.formAccountingBalance.patchValue({ yearOnly: input.value });
+      }
       this.reportService.getAccountingBalance(this.formAccountingBalance.value.yearOnly).subscribe((data) => {
         console.log(data[0][0]);
         this.formAccountingBalance.patchValue({
@@ -204,10 +220,14 @@ export class accountingBalanceComponent {
     }
   }
   get visibleFormFields() {
-    return this.formFields.filter((control) => !(this.isMonthlySelected && control.name === 'AverageExpenditurePerMonth')).length;
+    return this.formFields.filter(
+      (control) => !(this.isMonthlySelected && (control.name === 'AverageExpenditurePerMonth' || control.name === 'AverageIncomePerMonth'))
+    ).length;
   }
   get groupedFormFields() {
-    const visibleFields = this.formFields.filter((control) => !(this.isMonthlySelected && control.name === 'AverageExpenditurePerMonth'));
+    const visibleFields = this.formFields.filter(
+      (control) => !(this.isMonthlySelected && (control.name === 'AverageExpenditurePerMonth' || control.name === 'AverageIncomePerMonth'))
+    );
     const groupedFields = [];
 
     for (let i = 0; i < visibleFields.length; i += 3) {

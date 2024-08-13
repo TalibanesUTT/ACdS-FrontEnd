@@ -27,13 +27,12 @@
     <div style="width: 100%" *ngIf="isAnnualSelected">
       <!-- <label for="yearOnly" style="margin-top: -0px">Selecciona el año</label> -->
       <input
-        type="text"
-        maxlength="4"
+        type="number"
+        min="1900"
+        max="2100"
         id="yearOnly"
         formControlName="yearOnly"
         style="width: 100%"
-        min="1900"
-        max="2100"
         placeholder="Escribe el año"
         step="1"
         (input)="aplicateService($event)"
@@ -61,8 +60,19 @@
       <input type="text" matInput formControlName="AverageExpenditurePerDay" [readOnly]="true" />
     </mat-form-field>
     <mat-form-field appearance="outline" style="width: 100%">
-      <mat-label> Total de otros egresos </mat-label>
-      <input type="text" matInput formControlName="TotalOthers" [readOnly]="true" />
+      <mat-label> Total de egresos por mes </mat-label>
+      <input type="text" matInput formControlName="AverageExpenditurePerMonth" [readOnly]="true" />
+    </mat-form-field>
+  </div>
+  <h1 *ngIf="formAccountingBalance.value.period === 'mensual'">Datos mesuales</h1>
+  <div *ngIf="formAccountingBalance.value.period === 'mensual'" style="display: flex; flex-direction: row; gap: 10px">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label> Total de egresos </mat-label>
+      <input type="text" matInput formControlName="TotalExpenditure" [readOnly]="true" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label> Total de egresos por día </mat-label>
+      <input type="text" matInput formControlName="AverageExpenditurePerDay" [readOnly]="true" />
     </mat-form-field>
   </div>
 </form>

@@ -101,7 +101,7 @@ export class formEditOrderServiceComponent {
       appointmentDisplay: [''],
       vehicleId: ['', [Validators.required]],
       vehicleDisplay: ['', [Validators.required]],
-      notifyTo: ['', [CustomValidators.emailPattern]],
+      notifyTo: ['', [CustomValidators.optionalEmail]],
       notes: ['', [Validators.required]],
     });
   }
@@ -163,7 +163,9 @@ export class formEditOrderServiceComponent {
     formValue.vehicleId = Number(formValue.vehicleId);
     formValue.appointmentId = Number(formValue.appointmentId);
     formValue.initialMileage = Number(formValue.initialMileage);
-
+    if (formValue.notifyTo === '') {
+      delete formValue.notifyTo;
+    }
     // Eliminar campos innecesarios antes de enviar
     delete formValue.vehicleDisplay;
     // delete formValue.notifyTo;
@@ -176,7 +178,7 @@ export class formEditOrderServiceComponent {
         this.closeForm();
       },
       (err) => {
-        SweetAlert.error('Error', err.error.message);
+        SweetAlert.error('Error', err.error.error.message);
       }
     );
   }

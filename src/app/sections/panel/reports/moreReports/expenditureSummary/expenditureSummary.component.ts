@@ -57,7 +57,7 @@ export class expenditureSummaryComponent {
 
   formFields = [
     { name: 'TotalSpareParts', label: 'Total refacciones' },
-    { name: 'AverageExpenditurePerMonth', label: 'Total gasto promedio por mes' },
+    // { name: 'AverageExpenditurePerMonth', label: 'Total gasto promedio por mes' },
     { name: 'TotalPayroll', label: 'Total nómina' },
     { name: 'TotalCleaning', label: 'Total limpieza' },
     { name: 'TotalWater', label: 'Total agua' },
@@ -78,10 +78,10 @@ export class expenditureSummaryComponent {
     { name: 'TotalGasolineVouchers', label: 'Total vales de gasolina' },
     { name: 'TotalSettlement', label: 'Total liquidación' },
     { name: 'TotalUniforms', label: 'Total uniformes' },
+    { name: 'TotalOthers', label: 'Total otros gastos ' },
 
     // { name: 'TotalExpenditure', label: 'Egresos totales' },
     // { name: 'AverageExpenditurePerDay', label: 'Gasto promedio por día' },
-    // { name: 'TotalOthers', label: 'Otros gastos totales' },
   ];
 
   constructor(private fb: FormBuilder, private reportService: ReportService) {
@@ -183,6 +183,12 @@ export class expenditureSummaryComponent {
   aplicateService($event: any) {
     console.log(this.formAccountingBalance.value);
     if (this.formAccountingBalance.value.period === 'anual') {
+      const input = $event.target as HTMLInputElement;
+      if (input.value.length > 4) {
+        input.value = input.value.slice(0, 4); // Limita el valor a los primeros 4 dígitos
+        this.formAccountingBalance.patchValue({ yearOnly: input.value });
+      }
+      console.log($event.target.value);
       this.reportService.getExpenditureSummary(this.formAccountingBalance.value.yearOnly).subscribe((data) => {
         console.log(data[0][0]);
         this.formAccountingBalance.patchValue({

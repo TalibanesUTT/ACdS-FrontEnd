@@ -121,7 +121,7 @@ export class formOrderServiceComponent {
       appointmentDisplay: [''],
       vehicleId: ['', [Validators.required]],
       vehicleDisplay: ['', [Validators.required]],
-      notifyTo: ['', [CustomValidators.emailPattern]],
+      notifyTo: ['', [CustomValidators.optionalEmail]],
       notes: ['', [Validators.required]],
     });
   }
@@ -186,6 +186,9 @@ export class formOrderServiceComponent {
     }
     if (formValue.dependsOnAppointment === false) {
       delete formValue.appointmentId;
+    }
+    if (formValue.notifyTo === '') {
+      delete formValue.notifyTo;
     }
     delete formValue.vehicleDisplay;
     delete formValue.appointmentDisplay;

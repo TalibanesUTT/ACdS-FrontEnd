@@ -72,7 +72,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Correo de notificación</mat-label>
         <input type="text" matInput formControlName="notifyTo" (input)="validateForm()" />
-        <mat-error *ngIf="formOrderService.get('notifyTo')?.hasError('invalidEmail')"> El correo es inválido </mat-error>
+        <mat-error *ngIf="formOrderService.get('notifyTo')?.hasError('invalidEmail')">El correo es inválido</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Servicios</mat-label>

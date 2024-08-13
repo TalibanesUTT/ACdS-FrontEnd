@@ -3,22 +3,13 @@
     <div style="width: 100%; display: flex; flex-direction: row; gap: 10px">
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Año</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="year"
-          min="1900"
-          max="2100"
-          placeholder="YYYY"
-          (input)="onYearInput($event)"
-          [readonly]="buttonDisabled"
-        />
+        <input matInput type="number" formControlName="year" min="1900" max="2100" placeholder="YYYY" (input)="onYearInput($event)" />
         <mat-error *ngIf="formFilterMonthAndYear.get('year')?.invalid"> Año inválido. Debe estar entre 1900 y 2024. </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Mes</mat-label>
         <mat-select formControlName="month" (selectionChange)="onMonthChange()" [disabled]="formFilterMonthAndYear.get('year')?.invalid ?? true">
-          <mat-option *ngFor="let month of months" [value]="month.value" [disabled]="buttonDisabled">{{ month.viewValue }}</mat-option>
+          <mat-option *ngFor="let month of months" [value]="month.value">{{ month.viewValue }}</mat-option>
         </mat-select>
         <mat-error *ngIf="formFilterMonthAndYear.get('month')?.invalid"> Mes inválido. </mat-error>
       </mat-form-field>

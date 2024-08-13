@@ -20,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import Swal from 'sweetalert2';
 import { ProfileService } from '../../../../services/profile.service';
 import { SweetAlert } from '../../../../shared/SweetAlert';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
@@ -172,6 +173,7 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   recoverPasswordModal(item: UserInterface) {
+    item.fromAdmin = true;
     Swal.fire({
       title: 'Restablecer contraseña',
       html: '¿Estás seguro que deseas restablecer la contraseña del usuario <b>' + item.email + '</b>?',
@@ -181,7 +183,11 @@ export class UsersTableComponent implements AfterViewInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.profileService.recoverPassword(item.email).subscribe(
+        const data = {
+          email: item.email,
+          fromAdmin: item.fromAdmin,
+        };
+        this.profileService.recoverPassword(data).subscribe(
           (res) => {
             SweetAlert.success('success', res.message);
           },
@@ -196,6 +202,7 @@ export class UsersTableComponent implements AfterViewInit {
 
 export interface UserInterface {
   phoneNumber: string;
+  fromAdmin: boolean;
   id: number;
   name: string;
   lastName: string;

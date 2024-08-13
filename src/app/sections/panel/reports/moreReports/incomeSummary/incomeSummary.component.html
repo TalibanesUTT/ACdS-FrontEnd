@@ -24,7 +24,9 @@
         <!-- Date Column -->
         <ng-container matColumnDef="Date">
           <th mat-header-cell *matHeaderCellDef>Fecha</th>
-          <td mat-cell *matCellDef="let element">{{ element.Date }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.Date | date : "dd/MM/yyyy" }}
+          </td>
         </ng-container>
 
         <!-- Vehicle Column -->
@@ -35,25 +37,25 @@
 
         <!-- Departure Date Column -->
         <ng-container matColumnDef="DepartureDate">
-          <th mat-header-cell *matHeaderCellDef>Fecha de Salida</th>
+          <th mat-header-cell *matHeaderCellDef>Fecha de salida</th>
           <td mat-cell *matCellDef="let element">{{ element.DepartureDate }}</td>
         </ng-container>
 
         <!-- Repair Days Column -->
         <ng-container matColumnDef="RepairDays">
-          <th mat-header-cell *matHeaderCellDef>Días de Reparación</th>
+          <th mat-header-cell *matHeaderCellDef>Días de reparación</th>
           <td mat-cell *matCellDef="let element">{{ element.RepairDays }}</td>
         </ng-container>
 
         <!-- Initial Mileage Column -->
         <ng-container matColumnDef="InitialMileage">
-          <th mat-header-cell *matHeaderCellDef>Kilometraje Inicial</th>
+          <th mat-header-cell *matHeaderCellDef>Kilometraje inicial</th>
           <td mat-cell *matCellDef="let element">{{ element.InitialMileage }}</td>
         </ng-container>
 
         <!-- Final Mileage Column -->
         <ng-container matColumnDef="FinalMileage">
-          <th mat-header-cell *matHeaderCellDef>Kilometraje Final</th>
+          <th mat-header-cell *matHeaderCellDef>Kilometraje final</th>
           <td mat-cell *matCellDef="let element">{{ element.FinalMileage }}</td>
         </ng-container>
 
@@ -71,7 +73,7 @@
 
         <!-- Total Cost Column -->
         <ng-container matColumnDef="TotalCost">
-          <th mat-header-cell *matHeaderCellDef>Costo Total</th>
+          <th mat-header-cell *matHeaderCellDef>Costo total</th>
           <td mat-cell *matCellDef="let element">${{ element.TotalCost }}</td>
         </ng-container>
 

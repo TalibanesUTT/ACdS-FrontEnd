@@ -27,8 +27,7 @@
     <div style="width: 100%" *ngIf="isAnnualSelected">
       <!-- <label for="yearOnly" style="margin-top: -0px">Selecciona el año</label> -->
       <input
-        type="text"
-        maxlength="4"
+        type="number"
         id="yearOnly"
         formControlName="yearOnly"
         style="width: 100%"
@@ -46,7 +45,14 @@
     <div *ngFor="let control of row" style="flex: 1 1 calc(33.33% - 10px); box-sizing: border-box">
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>{{ control.label }}</mat-label>
-        <input matInput [formControlName]="control.name" type="text" placeholder="0.00" [readonly]="true" />
+        <input
+          matInput
+          [formControlName]="control.name"
+          type="text"
+          placeholder="0.00"
+          [readonly]="true"
+          [ngClass]="{ 'bold-input': control.name === 'Profit' }"
+        />
       </mat-form-field>
     </div>
   </div>

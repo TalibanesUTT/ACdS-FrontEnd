@@ -59,4 +59,11 @@ export class CustomValidators {
     const pattern = /^[a-zA-Z0-9\s-]+$/;
     return pattern.test(control.value) ? null : { invalidAlphanumeric: true };
   };
+  static optionalEmail: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    if (control.value && control.value.trim() !== '') {
+      const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      return pattern.test(control.value) ? null : { invalidEmail: true };
+    }
+    return null; // Si el campo está vacío, no se aplica la validación
+  };
 }

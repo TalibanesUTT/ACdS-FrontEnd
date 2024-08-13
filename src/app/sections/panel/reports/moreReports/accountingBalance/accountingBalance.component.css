@@ -1,3 +1,6 @@
 .calendar {
   height: 50px;
 }
+.bold-input {
+  font-weight: bold;
+}
