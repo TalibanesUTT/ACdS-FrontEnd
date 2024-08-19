@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,8 @@ import { SweetAlert } from '../../../../shared/SweetAlert';
 import { formEditOrderServiceComponent } from '../forms/formEditOrderService/formOrderService.component';
 import { formOrderServiceComponent } from '../forms/formOrderService/formEditOrderService.component';
 import { ProfileService } from '../../../../services/profile.service';
+import { Subscription } from 'rxjs';
+import { WebSocketService } from '../../../../services/webSocket.service';
 @Component({
   selector: 'app-info-order-service',
   standalone: true,
@@ -59,7 +61,8 @@ import { ProfileService } from '../../../../services/profile.service';
   templateUrl: './infoOrderService.component.html',
   styleUrls: ['./infoOrderService.component.css'],
 })
-export class infoOrderServiceComponent {
+export class infoOrderServiceComponent implements OnInit, OnDestroy {
+  private statusUpdateSub: Subscription = new Subscription();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() itemOrderService!: IOrderService;
   @Input() menuOption!: string;
@@ -75,7 +78,8 @@ export class infoOrderServiceComponent {
     private fb: FormBuilder,
     private serviceOrderService: ServiceOrdersService,
     private vehicleService: VehiclesService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private wsService: WebSocketService
   ) {
     this.getProfile();
     this.formOrderService = this.newFormControls();
@@ -87,6 +91,14 @@ export class infoOrderServiceComponent {
     }
     this.getAllServices();
     this.getAllVehicles();
+
+    this.statusUpdateSub = this.wsService.onStatusUpdate().subscribe(data => {
+      if (this.itemOrderService.id === data.orderId) {
+        this.formOrderService.patchValue({
+          actualStatus: data.status,
+        });
+      }
+    });
   }
   getProfile() {
     this.profileService.getProfile().subscribe((res) => {
@@ -214,5 +226,9 @@ export class infoOrderServiceComponent {
   changeItemOrderService(event: IOrderService) {
     this.itemOrderService = event;
     this.populateForm(this.itemOrderService);
+  }
+
+  ngOnDestroy() {
+    this.statusUpdateSub.unsubscribe();
   }
 }

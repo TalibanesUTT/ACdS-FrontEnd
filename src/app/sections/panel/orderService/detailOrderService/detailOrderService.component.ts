@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,8 @@ import { SweetAlert } from '../../../../shared/SweetAlert';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../../services/profile.service';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
+import { WebSocketService } from '../../../../services/webSocket.service';
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -69,7 +71,8 @@ export const MY_DATE_FORMATS = {
   templateUrl: './detailOrderService.component.html',
   styleUrls: ['./detailOrderService.component.css'],
 })
-export class detailOrderServiceComponent {
+export class detailOrderServiceComponent implements OnInit, OnDestroy {
+  private statusUpdateSub: Subscription = new Subscription();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() itemOrderService!: IOrderService;
   @Input() menuOption!: string;
@@ -84,7 +87,11 @@ export class detailOrderServiceComponent {
   token = localStorage.getItem('token');
   lastDetail: IHistory | null = null;
 
-  constructor(private fb: FormBuilder, private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
+  constructor(
+    private fb: FormBuilder, 
+    private orderDetailService: ServiceOrdersService, 
+    private profileService: ProfileService,
+    private wsService: WebSocketService) {
     this.getProfile();
   }
 
@@ -99,6 +106,12 @@ export class detailOrderServiceComponent {
         this.textCondition = 'Guardar detalle ';
       }
     }
+
+    this.statusUpdateSub = this.wsService.onStatusUpdate().subscribe(data => {
+      if (this.itemOrderService.id === data.orderId) {
+        this.lastDetail = data.status;
+      }
+    });
   }
   getProfile() {
     this.profileService.getProfile().subscribe((response) => {
@@ -236,5 +249,9 @@ export class detailOrderServiceComponent {
         );
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.statusUpdateSub.unsubscribe();
   }
 }

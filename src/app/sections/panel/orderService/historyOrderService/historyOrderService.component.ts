@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,14 +19,14 @@ import { MatPaginatorIntlEspañol } from '../../../../shared/MatPaginatorIntl';
 import { IHistory, IOrderService, IService } from '../../../../interfaces/orderService';
 import { JsonPipe } from '@angular/common';
 import { ServiceOrdersService } from '../../../../services/serviceOrders.service';
-import { AppointmentService } from '../../../../services/appointments.service';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { VehiclesService } from '../../../../services/vehicles.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { MatTableDataSource } from '@angular/material/table';
 import { changeStatusOrderComponent } from '../dialog/changeStatusOrder/changeStatusOrder.component';
 import { ProfileService } from '../../../../services/profile.service';
+import { Subscription } from 'rxjs';
+import { WebSocketService } from '../../../../services/webSocket.service';
 
 @Component({
   selector: 'app-history-order-service',
@@ -59,7 +59,8 @@ import { ProfileService } from '../../../../services/profile.service';
   templateUrl: './historyOrderService.component.html',
   styleUrls: ['./historyOrderService.component.css'],
 })
-export class historyOrderServiceComponent {
+export class historyOrderServiceComponent implements OnInit, OnDestroy{
+  private statusUpdateSub: Subscription = new Subscription();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() itemOrderService!: IOrderService;
   @Input() menuOption!: string;
@@ -74,19 +75,31 @@ export class historyOrderServiceComponent {
   UserData: any = {};
   token = localStorage.getItem('token');
 
-  constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
+  constructor(
+    private orderDetailService: ServiceOrdersService, 
+    private profileService: ProfileService,
+    private wsService: WebSocketService) {
     this.getProfile();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
   ngOnInit() {
     if (this.itemOrderService && Array.isArray(this.itemOrderService.history)) {
       this.getHistory();
-      // this.dataSource.data = this.itemOrderService.history;
       this.evaluateButtonVisibility(this.itemOrderService.actualStatus);
       this.getProgressStyles(this.itemOrderService.actualStatus);
     }
+
+    this.statusUpdateSub = this.wsService.onStatusUpdate().subscribe(data => {
+      if (this.itemOrderService.id === data.orderId) {
+        this.itemOrderService.actualStatus = data.status;
+        this.getHistory();
+        this.resetValueShowButton();
+        this.evaluateButtonVisibility(data.status);
+      }
+    });
   }
 
   getHistory() {
@@ -109,6 +122,7 @@ export class historyOrderServiceComponent {
     this.showRollbackButton = true;
     this.showContinueButton = false;
   }
+
   evaluateButtonVisibility(status: string) {
     const currentStatus = status;
     const statuses = [
@@ -139,6 +153,10 @@ export class historyOrderServiceComponent {
 
     if (currentStatus === 'Recibido') {
       this.showRollbackButton = false;
+    }
+
+    if (currentStatus === 'Rechazado por el cliente') {
+      this.showOnHoldButton = false;
     }
 
     if (currentIndex >= statuses.indexOf('Aprobado')) {
@@ -255,13 +273,9 @@ export class historyOrderServiceComponent {
       height: heightActual,
       data: { text, form, type, id: this.itemOrderService.id },
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataSource.data = result.data.history;
-        this.resetValueShowButton();
-        this.evaluateButtonVisibility(result.data.actualStatus);
-        this.itemOrderService.actualStatus = result.data.actualStatus;
-      }
-    });
+  }
+
+  ngOnDestroy() {
+    this.statusUpdateSub.unsubscribe();
   }
 }
