@@ -53,7 +53,7 @@ import { ProfileService } from '../../../../services/profile.service';
     MatDateRangeInput,
     JsonPipe,
     MatTabsModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlEspañol }],
   templateUrl: './historyOrderService.component.html',
@@ -74,10 +74,7 @@ export class historyOrderServiceComponent {
   UserData: any = {};
   token = localStorage.getItem('token');
 
-  constructor(
-    private orderDetailService: ServiceOrdersService, 
-    private profileService: ProfileService
-  ) {
+  constructor(private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
     this.getProfile();
   }
   ngAfterViewInit() {
@@ -85,12 +82,22 @@ export class historyOrderServiceComponent {
   }
   ngOnInit() {
     if (this.itemOrderService && Array.isArray(this.itemOrderService.history)) {
-      this.dataSource.data = this.itemOrderService.history;
-      this.dataSource.paginator = this.paginator;
+      this.getHistory();
+      // this.dataSource.data = this.itemOrderService.history;
       this.evaluateButtonVisibility(this.itemOrderService.actualStatus);
       this.getProgressStyles(this.itemOrderService.actualStatus);
     }
   }
+
+  getHistory() {
+    if (this.itemOrderService.id !== undefined) {
+      this.orderDetailService.getHistoryStatus(this.itemOrderService.id).subscribe((response) => {
+        this.dataSource.data = response.data;
+        this.dataSource.paginator = this.paginator;
+      });
+    }
+  }
+
   getProfile() {
     this.profileService.getProfile().subscribe((data) => {
       this.UserData = data;
@@ -155,7 +162,7 @@ export class historyOrderServiceComponent {
   getProgressStyles(status: string) {
     let progress = 0;
     let color = '#e0e0e0'; // Default color
-  
+
     switch (status) {
       case 'Recibido':
         progress = 10;
@@ -206,7 +213,7 @@ export class historyOrderServiceComponent {
         color = '#FF0000';
         break;
     }
-  
+
     return {
       width: `${progress}%`,
       backgroundColor: color,

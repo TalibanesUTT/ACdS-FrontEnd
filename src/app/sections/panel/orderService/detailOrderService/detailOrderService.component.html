@@ -1,4 +1,5 @@
 <div class="container">
+  <!-- {{ dataSource | json }} -->
   <section style="display: flex; flex-direction: row; justify-content: end; height: 40px; margin-top: 15px" *ngIf="UserData?.role != 'customer'">
     <button class="buttonReset" *ngIf="dataSource?.detail === null" (click)="addDetailOrderService()">Añadir detalle de la orden de servicio</button>
   </section>
@@ -7,8 +8,13 @@
   </section>
   <form *ngIf="dataSource?.detail != null" [formGroup]="formDetailOrderService" style="height: 400px">
     <div style="display: flex; flex-direction: row; justify-content: space-between; height: 40px; margin-top: -40px; margin-bottom: 15px">
-      <h1>Detalle de la orden de servicio</h1>
-      <button class="buttonReset" (click)="closeForm()">Cerrar</button>
+      <div style="width: 100%; display: flex; flex-direction: row">
+        <h1>Detalle de la orden de servicio</h1>
+      </div>
+      <div *ngIf="lastDetail?.toString() === 'Emitido'" style="width: 100%; display: flex; flex-direction: row; gap: 10px; justify-content: end">
+        <button class="acceptButton" (click)="acceptOrder()">Aceptar 👍</button>
+        <button class="cancelButton" (click)="cancelOrder()">Rechazar 👎</button>
+      </div>
     </div>
 
     <section class="someInputs">

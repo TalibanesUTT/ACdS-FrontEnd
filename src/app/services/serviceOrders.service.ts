@@ -33,4 +33,11 @@ export class ServiceOrdersService {
   getAllService(): Observable<any> {
     return this.http.get<any>(this.API_URL + '/services', {});
   }
+  getOneServiceOrder(id: number): Observable<any> {
+    return this.http.get<any>(this.API_URL + '/service-orders/' + id, {});
+  }
+
+  getHistoryStatus(id: number): Observable<any> {
+    return this.http.get<any>(this.API_URL + '/service-orders/status/' + id, {});
+  }
 }

@@ -16,7 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDateRangeInput } from '@angular/material/datepicker';
 import { MatPaginatorIntlEspañol } from '../../../../shared/MatPaginatorIntl';
-import { IOrderService, IService } from '../../../../interfaces/orderService';
+import { IHistory, IOrderService, IService } from '../../../../interfaces/orderService';
 import { JsonPipe } from '@angular/common';
 import { ServiceOrdersService } from '../../../../services/serviceOrders.service';
 import { AppointmentService } from '../../../../services/appointments.service';
@@ -26,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SweetAlert } from '../../../../shared/SweetAlert';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../../services/profile.service';
+import Swal from 'sweetalert2';
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -81,6 +82,7 @@ export class detailOrderServiceComponent {
   showButton = false;
   readonly = true;
   token = localStorage.getItem('token');
+  lastDetail: IHistory | null = null;
 
   constructor(private fb: FormBuilder, private orderDetailService: ServiceOrdersService, private profileService: ProfileService) {
     this.getProfile();
@@ -88,6 +90,7 @@ export class detailOrderServiceComponent {
 
   ngOnInit() {
     if (this.itemOrderService) {
+      this.getHistory();
       this.dataSource = this.itemOrderService;
       if (this.dataSource.detail) {
         this.initializeForm();
@@ -175,5 +178,63 @@ export class detailOrderServiceComponent {
       this.readonly = false;
     }
     this.disableButtonForm = false;
+  }
+
+  getHistory() {
+    this.orderDetailService.getOneServiceOrder(this.itemOrderService.id || 0).subscribe((res) => {
+      console.log('hostory', res.data);
+      //obtener el ultimo detalle
+      this.lastDetail = res.data.actualStatus;
+    });
+  }
+
+  acceptOrder() {
+    let form = {
+      rollback: false,
+      cancel: false,
+      onHold: false,
+      // reject: false,
+    };
+    this.orderDetailService.postUpdateStatus(form, this.itemOrderService.id || 0).subscribe(
+      (res) => {
+        SweetAlert.success('Succes', res.message);
+        console.log('res', res);
+        this.lastDetail = res.data.actualStatus;
+        // this.showForm.emit('table');
+      },
+      (err) => {
+        SweetAlert.error('Error', err.error.error.message);
+      }
+    );
+  }
+  cancelOrder() {
+    let form = {
+      rollback: false,
+      cancel: false,
+      onHold: false,
+      reject: true,
+    };
+    Swal.fire({
+      title: 'Estás a punto de rechazar esta orden de servicio. ',
+      text: '¿Seguro que quieres hacerlo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orderDetailService.postUpdateStatus(form, this.itemOrderService.id || 0).subscribe(
+          (res) => {
+            SweetAlert.success('Succes', res.message);
+            console.log('res', res);
+            this.lastDetail = res.data.actualStatus;
+            // this.showForm.emit('table');
+          },
+          (err) => {
+            SweetAlert.error('Error', err.error.error.message);
+          }
+        );
+      }
+    });
   }
 }
